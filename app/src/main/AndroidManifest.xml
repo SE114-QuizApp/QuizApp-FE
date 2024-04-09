@@ -16,9 +16,12 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
+            android:name=".OnboardingActivity"
+            android:exported="false" />
+        <activity
             android:name=".SplashActivity"
-            android:theme="@style/Theme.Design.NoActionBar"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.Design.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
