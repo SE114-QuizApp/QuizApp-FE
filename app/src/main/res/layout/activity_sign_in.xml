@@ -11,9 +11,222 @@
         android:id="@+id/signInBackArrowImgView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="16sp"
+        android:layout_marginTop="16sp"
         android:src="@drawable/ic_arrow_back_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/signInSignInTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign In"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/signInGoogleFrameLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/border_20dp_white"
+        app:layout_constraintStart_toStartOf="@id/signInSignInTextView"
+        app:layout_constraintEnd_toEndOf="@id/signInSignInTextView"
+        app:layout_constraintTop_toBottomOf="@id/signInSignInTextView"
+        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintHeight_percent="0.075">
+        <LinearLayout
+            android:id="@+id/signInGoogleLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_google" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login with Google"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:layout_marginStart="10sp"/>
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/signInFacebookFrameLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/border_20dp_blue"
+        app:layout_constraintStart_toStartOf="@id/signInGoogleFrameLayout"
+        app:layout_constraintEnd_toEndOf="@id/signInGoogleFrameLayout"
+        app:layout_constraintTop_toBottomOf="@id/signInGoogleFrameLayout"
+        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintHeight_percent="0.075">
+        <LinearLayout
+            android:id="@+id/signInFacebookLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_facebook" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login with Google"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:layout_marginStart="10sp"/>
+        </LinearLayout>
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:alpha="0.5"
+        android:text="OR"
+        android:textColor="@color/mecha_metal"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/signInFacebookFrameLayout"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@id/signInFacebookFrameLayout"
+        app:layout_constraintTop_toBottomOf="@id/signInFacebookFrameLayout" />
+<!--Email address-->
+    <TextView
+        android:id="@+id/signInEmailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60sp"
+        android:text="Email Address"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/signInFacebookFrameLayout"
+        app:layout_constraintTop_toBottomOf="@id/signInFacebookFrameLayout" />
+    <LinearLayout
+        android:id="@+id/signInEmailEditTextLinearLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="5sp"
+        android:background="@drawable/border_20dp_white"
+        android:gravity="center_vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/signInEmailTextView"
+        app:layout_constraintHeight_percent="0.075"
+        app:layout_constraintWidth_percent="0.9">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_email"
+            android:layout_marginLeft="20sp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="20sp"
+            android:hint="Your Email Address ..."
+            android:textSize="18sp"
+            android:textColor="@color/mecha_metal"
+            android:background="@null"/>
+    </LinearLayout>
+<!--Password-->
+    <TextView
+        android:id="@+id/signInPasswordTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:text="Password"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/signInEmailEditTextLinearLayout"
+        app:layout_constraintTop_toBottomOf="@id/signInEmailEditTextLinearLayout" />
+    <LinearLayout
+        android:id="@+id/signInPasswordEditTextLinearLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="5sp"
+        android:background="@drawable/border_20dp_white"
+        android:gravity="center_vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/signInPasswordTextView"
+        app:layout_constraintHeight_percent="0.075"
+        app:layout_constraintWidth_percent="0.9">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_email"
+            android:layout_marginLeft="20sp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="20sp"
+            android:hint="Your Email Address ..."
+            android:textSize="18sp"
+            android:textColor="@color/mecha_metal"
+            android:background="@null"/>
+    </LinearLayout>
+<!--Sign In Button-->
+    <TextView
+        android:id="@+id/signInSignInButtonTextView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="20sp"
+        android:text="Sign In"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:background="@drawable/border_20dp_purple_hue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/signInPasswordEditTextLinearLayout"
+        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintHeight_percent="0.075"/>
+<!--Forgot Password-->
+    <TextView
+        android:id="@+id/signInForgotPasswordTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:clickable="true"
+        android:text="Forgot Password?"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="@color/purple_hue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/signInSignInButtonTextView"
+        />
+<!--Contract-->
+    <TextView
+        android:id="@+id/signInContractTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/mecha_metal"
+        android:textSize="16sp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/signInForgotPasswordTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
