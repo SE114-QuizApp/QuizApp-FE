@@ -24,6 +24,7 @@ public class SignInActivity extends AppCompatActivity {
     LinearLayout facebookSignInLnLayout;
     TextView contractStatement;
     TextView signInButton;
+    TextView forgotPasswordTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,18 @@ public class SignInActivity extends AppCompatActivity {
                 Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_normal);
                 signInButton.startAnimation(animation);
                 Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+//        Forgot Password
+        forgotPasswordTextView = findViewById(R.id.signInForgotPasswordTextView);
+        forgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_normal);
+                forgotPasswordTextView.startAnimation(animation);
+                Intent intent = new Intent(SignInActivity.this, ResetPasswordActivity.class);
                 startActivity(intent);
                 finish();
             }
