@@ -22,7 +22,7 @@ public class NewPasswordActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_normal);
                 backArrow.startAnimation(animation);
-                Intent intent = new Intent(NewPasswordActivity.this, OnboardingActivity.class);
+                Intent intent = new Intent(NewPasswordActivity.this, ResetPasswordActivity.class);
                 startActivity(intent);
                 finish();
             }
