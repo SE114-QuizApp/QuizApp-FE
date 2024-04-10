@@ -182,6 +182,7 @@
             android:layout_marginLeft="10sp"
             android:layout_marginRight="20sp"
             android:hint="Your Email Address ..."
+            android:inputType="textPassword"
             android:textSize="18sp"
             android:textColor="@color/mecha_metal"
             android:background="@null"/>
