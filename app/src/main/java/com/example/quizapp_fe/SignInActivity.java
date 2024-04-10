@@ -23,6 +23,7 @@ public class SignInActivity extends AppCompatActivity {
     LinearLayout googleSignInLnLayout;
     LinearLayout facebookSignInLnLayout;
     TextView contractStatement;
+    TextView signInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,18 @@ public class SignInActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_normal);
                 facebookSignInLnLayout.startAnimation(animation);
+            }
+        });
+//        Sign In Button
+        signInButton = findViewById(R.id.signInSignInButtonTextView);
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_normal);
+                signInButton.startAnimation(animation);
+                Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 //        Contract Statement

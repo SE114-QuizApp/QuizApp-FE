@@ -181,6 +181,7 @@
             android:layout_marginLeft="10sp"
             android:layout_marginRight="20sp"
             android:hint="Your Password ..."
+            android:inputType="textPassword"
             android:textSize="18sp"
             android:textColor="@color/mecha_metal"
             android:background="@null"/>
@@ -220,6 +221,7 @@
             android:layout_marginLeft="10sp"
             android:layout_marginRight="20sp"
             android:hint="Your Password Again ..."
+            android:inputType="textPassword"
             android:textSize="18sp"
             android:textColor="@color/mecha_metal"
             android:background="@null"/>
@@ -253,4 +255,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
