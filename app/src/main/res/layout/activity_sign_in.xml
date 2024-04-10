@@ -208,6 +208,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20sp"
         android:clickable="true"
+        android:padding="12sp"
         android:text="Forgot Password?"
         android:textStyle="bold"
         android:textSize="18sp"
