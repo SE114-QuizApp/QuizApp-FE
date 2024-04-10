@@ -1,9 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.QuizApp_FE" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.QuizApp_FE" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_hue</item>
+        <item name="colorPrimaryVariant">@color/purple_hue</item>
+        <item name="colorOnPrimary">@color/white</item>
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Status bar color-->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
     </style>
-
-    <style name="Theme.QuizApp_FE" parent="Base.Theme.QuizApp_FE" />
 </resources>
