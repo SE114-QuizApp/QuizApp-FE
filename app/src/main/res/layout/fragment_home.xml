@@ -13,5 +13,4 @@
         android:text="Hello from Home"
         android:textColor="@color/white"
         android:gravity="center"/>
-
 </FrameLayout>

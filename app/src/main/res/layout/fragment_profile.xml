@@ -13,5 +13,4 @@
         android:text="Hello from Profile"
         android:gravity="center"
         android:textColor="@color/white"/>
-
 </FrameLayout>

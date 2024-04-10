@@ -13,5 +13,4 @@
         android:text="Hello from Discovery"
         android:gravity="center"
         android:textColor="@color/white"/>
-
 </FrameLayout>
