@@ -59,14 +59,14 @@
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:textSize="16sp"
+                android:clickable="true"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/onboardingGreetingTextView"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHeight_percent="0.3"
                 app:layout_constraintWidth_percent="0.9"
-                android:background="@drawable/border_20dp_purple_hue"
-                />
+                android:background="@drawable/border_20dp_purple_hue" />
 
             <TextView
                 android:id="@+id/onboardingAccountAskingTextView"
