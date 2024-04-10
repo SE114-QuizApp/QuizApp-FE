@@ -213,7 +213,6 @@
         android:clickable="true"
         android:padding="12sp"
         android:text="Forgot Password?"
-        android:padding="12sp"
         android:textStyle="bold"
         android:textSize="18sp"
         android:textColor="@color/purple_hue"
