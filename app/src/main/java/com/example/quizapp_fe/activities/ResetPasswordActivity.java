@@ -1,4 +1,4 @@
-package com.example.quizapp_fe;
+package com.example.quizapp_fe.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,20 +9,22 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class NewPasswordActivity extends AppCompatActivity {
+import com.example.quizapp_fe.R;
 
+public class ResetPasswordActivity extends AppCompatActivity {
     ImageView backArrow;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_password);
-        backArrow = findViewById(R.id.newPasswordBackArrowImageView);
+        setContentView(R.layout.activity_reset_password);
+        backArrow = findViewById(R.id.resetPasswordBackArrowImageView);
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_normal);
                 backArrow.startAnimation(animation);
-                Intent intent = new Intent(NewPasswordActivity.this, ResetPasswordActivity.class);
+                Intent intent = new Intent(ResetPasswordActivity.this , SignInActivity.class);
                 startActivity(intent);
                 finish();
             }

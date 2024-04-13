@@ -1,4 +1,4 @@
-package com.example.quizapp_fe;
+package com.example.quizapp_fe.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +14,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.quizapp_fe.R;
 
 public class SignUpActivity extends AppCompatActivity {
 
