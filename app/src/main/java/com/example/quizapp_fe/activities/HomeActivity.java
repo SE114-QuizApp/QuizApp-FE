@@ -1,4 +1,4 @@
-package com.example.quizapp_fe;
+package com.example.quizapp_fe.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -7,7 +7,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
+import com.example.quizapp_fe.fragments.HomeFragment;
+import com.example.quizapp_fe.fragments.ProfileFragment;
+import com.example.quizapp_fe.R;
+import com.example.quizapp_fe.fragments.RankingFragment;
 import com.example.quizapp_fe.databinding.ActivityHomeBinding;
+import com.example.quizapp_fe.fragments.DiscoveryFragment;
 
 public class HomeActivity extends AppCompatActivity {
 

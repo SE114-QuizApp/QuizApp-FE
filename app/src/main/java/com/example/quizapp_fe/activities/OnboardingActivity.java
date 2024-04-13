@@ -1,4 +1,4 @@
-package com.example.quizapp_fe;
+package com.example.quizapp_fe.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+
+import com.example.quizapp_fe.R;
 
 public class OnboardingActivity extends AppCompatActivity {
 

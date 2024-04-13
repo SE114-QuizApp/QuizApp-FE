@@ -1,10 +1,12 @@
-package com.example.quizapp_fe;
+package com.example.quizapp_fe.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
+import com.example.quizapp_fe.R;
 
 public class SplashActivity extends AppCompatActivity {
 
