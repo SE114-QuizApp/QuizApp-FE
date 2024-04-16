@@ -22,6 +22,7 @@ import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.api.ErrorResponse;
 import com.example.quizapp_fe.api.account.auth.LoginWithPasswordApiResult;
 import com.example.quizapp_fe.api.account.registration.SignUpApi;
+import com.example.quizapp_fe.dialogs.LoadingDialog;
 import com.example.quizapp_fe.models.CredentialToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -44,11 +45,13 @@ public class SignUpActivity extends AppCompatActivity {
     EditText emailAddressETxt;
     EditText passwordETxt;
     EditText confirmPasswordETxt;
+    LoadingDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        loadingDialog = new LoadingDialog(SignUpActivity.this);
 //        Back Arrow
         backArrow = findViewById(R.id.signUpBackArrowImgView);
         backArrow.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +108,7 @@ public class SignUpActivity extends AppCompatActivity {
                 if (!checkValidation()) {
                     return;
                 }
+                loadingDialog.showLoading("Wait for sign up process...");
 
 //                Call SignUpApi
                 SignUpApi.api.signUpWithPassword(new SignUpApi.SignUpForm(userNameETxt.getText().toString(), firstNameETxt.getText().toString(), lastNameETxt.getText().toString(), emailAddressETxt.getText().toString(), passwordETxt.getText().toString())).enqueue(new Callback<LoginWithPasswordApiResult>() {
@@ -119,11 +123,14 @@ public class SignUpActivity extends AppCompatActivity {
                             Intent intent = new Intent(SignUpActivity.this, HomeActivity.class);
                             startActivity(intent);
                             finish();
+
+                            loadingDialog.dismiss();
                         } else {
                             Gson gson = new GsonBuilder().create();
                             assert response.errorBody() != null;
                             ErrorResponse error = gson.fromJson(response.errorBody().charStream(), ErrorResponse.class);
-                            Toast.makeText(SignUpActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                            loadingDialog.showError(error.getMessage());
+//                            Toast.makeText(SignUpActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
 

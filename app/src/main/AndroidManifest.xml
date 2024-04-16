@@ -44,10 +44,6 @@
         <activity
             android:name=".activities.OnboardingActivity"
             android:exported="false" />
-        <activity
-            android:name=".activities.SplashActivity"
-            android:exported="false"
-            />
     </application>
 
 </manifest>

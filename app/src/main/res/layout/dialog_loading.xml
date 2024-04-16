@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_marginHorizontal="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".dialogs.LoadingDialog"
+    android:background="@drawable/login_dialog_border"
+    android:gravity="center_horizontal"
+    android:padding="20dp">
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/loading_dialog_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="visible"
+        android:layout_marginBottom="30dp"
+        app:indicatorColor="@color/black"
+        android:indeterminate="true" />
+    <TextView
+        android:id="@+id/loading_dialog_message"
+        android:gravity="center"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="@string/loading" />
+    <Button
+        android:id="@+id/loading_dialog_close_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        style="@style/ThemeOverlay.Material3.Button"
+        android:text="@string/close"
+        android:visibility="gone"
+        />
+
+</LinearLayout>
