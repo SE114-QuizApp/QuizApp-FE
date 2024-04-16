@@ -21,6 +21,7 @@ import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.api.ErrorResponse;
 import com.example.quizapp_fe.api.account.auth.AuthenticationApi;
 import com.example.quizapp_fe.api.account.auth.LoginWithPasswordApiResult;
+import com.example.quizapp_fe.dialogs.LoadingDialog;
 import com.example.quizapp_fe.models.CredentialToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -39,14 +40,15 @@ public class SignInActivity extends AppCompatActivity {
     TextView contractStatement;
     TextView signInButton;
     TextView forgotPasswordTextView;
-
     TextView singInEmailEditText;
     TextView signInPasswordEditText;
+    LoadingDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+        loadingDialog = new LoadingDialog(SignInActivity.this);
 //        Back Arrow
         backArrow = findViewById(R.id.signInBackArrowImgView);
         backArrow.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +93,7 @@ public class SignInActivity extends AppCompatActivity {
                 if (!checkValidation()) {
                     return;
                 }
+                loadingDialog.showLoading("Signing in...");
 
                 AuthenticationApi.api.login(new AuthenticationApi.Credential(singInEmailEditText.getText().toString(), signInPasswordEditText.getText().toString())).enqueue(new Callback<LoginWithPasswordApiResult>() {
                     @Override
@@ -104,15 +107,16 @@ public class SignInActivity extends AppCompatActivity {
                             Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
                             startActivity(intent);
                             finish();
+                            loadingDialog.dismiss();
 
                         }else {
                             Gson gson = new GsonBuilder().create();
                             assert response.errorBody() != null;
                             ErrorResponse error = gson.fromJson(response.errorBody().charStream(), ErrorResponse.class);
-                            Toast.makeText(SignInActivity.this, error.getMessage(),
-                                    Toast.LENGTH_SHORT).show();
+                            loadingDialog.showError(error.getMessage());
+//                            Toast.makeText(SignInActivity.this, error.getMessage(),
+//                                    Toast.LENGTH_SHORT).show();
                         }
-
                     }
 
                     @Override

@@ -14,4 +14,7 @@
     <string name="privacy_policy">Privacy Policy</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="loading">Loading...</string>
+    <string name="an_error_occurred_please_try_again_later">An error occurred. Please try again later.</string>
+    <string name="close">Close</string>
 </resources>
