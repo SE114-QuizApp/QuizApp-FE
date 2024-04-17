@@ -1,8 +1,16 @@
 package com.example.quizapp_fe.api;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+
+import com.example.quizapp_fe.activities.OnboardingActivity;
+import com.example.quizapp_fe.dialogs.LoadingDialog;
+import com.example.quizapp_fe.models.CredentialToken;
 
 import java.io.IOException;
 
@@ -23,18 +31,31 @@ public class ApiClient {
     }
 
     public ApiClient(Context context) {
-        client = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.addInterceptor(new Interceptor() {
             @NonNull
             @Override
             public Response intercept(@NonNull Chain chain) throws IOException {
-//                String accessToken = CredentialToken.getInstance(context).getAccessToken();
-                String accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE2MjYwNjYwNzIsImV4cCI6MTYyNjA2NzY3Mn0.1";
+                String accessToken = CredentialToken.getInstance(context).getAccessToken();
                 Request newRequest = chain.request().newBuilder()
-                        .addHeader("Authorization", "Bearer " + accessToken)
-                        .build();
-                return chain.proceed(newRequest);
+                                          .addHeader("Authorization", "Bearer " + accessToken)
+                                          .build();
+
+                Response response = chain.proceed(newRequest);
+                System.out.println(response.code());
+                if (response.code() == 401) {
+                    CredentialToken.getInstance(context).clearCredential();
+                    Intent intent = new Intent(context, OnboardingActivity.class);
+                    intent.putExtra("message", "Your session has expired. Please login again.");
+                    context.startActivity(intent);
+                    ((Activity) context).finish();
+                }
+                return response;
             }
-        }).build();
+
+
+        });
+        client = builder.build();
     }
 
     public OkHttpClient getClient() {

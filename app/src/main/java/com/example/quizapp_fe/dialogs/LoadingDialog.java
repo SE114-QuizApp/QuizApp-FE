@@ -84,4 +84,14 @@ public class LoadingDialog extends Dialog {
         });
         show();
     }
+
+    public void showError(String error, View.OnClickListener onClickListener){
+        if(isShowing()) return;
+        this.setCancelable(true);
+        binding.getRoot().removeView(binding.loadingDialogProgress);
+        binding.loadingDialogMessage.setText(error);
+        binding.loadingDialogCloseBtn.setVisibility(View.VISIBLE);
+        binding.loadingDialogCloseBtn.setOnClickListener(onClickListener);
+        show();
+    }
 }

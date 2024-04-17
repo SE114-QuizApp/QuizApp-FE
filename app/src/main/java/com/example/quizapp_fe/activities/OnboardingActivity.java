@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.quizapp_fe.R;
 
@@ -19,6 +20,14 @@ public class OnboardingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
+
+        Intent intent = getIntent();
+        if(intent.hasExtra("message")){
+            String message = intent.getStringExtra("message");
+            if(message != null){
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            }
+        }
 //      Login
         logInTextView = findViewById(R.id.onboardingLoginTextView);
         logInTextView.setOnClickListener(new View.OnClickListener() {
