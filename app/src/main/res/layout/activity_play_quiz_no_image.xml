@@ -33,7 +33,6 @@
             app:iconGravity="textStart"
             app:iconPadding="6dp"
             app:iconSize="16dp"
-            app:iconStyle="bold"
             app:strokeColor="@color/dull_lavender"
             app:strokeWidth="1dp" />
 
@@ -63,7 +62,6 @@
             app:iconGravity="textStart"
             app:iconPadding="6dp"
             app:iconSize="16dp"
-            app:iconStyle="bold"
             app:strokeColor="@color/dull_lavender"
             app:strokeWidth="1dp"
             android:layout_gravity="right"/>
@@ -196,7 +194,5 @@
                     android:layout_marginStart="10sp"/>
             </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
-
 </LinearLayout>
