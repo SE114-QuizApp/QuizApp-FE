@@ -18,4 +18,8 @@
     <color name="dark_yellow">#ff9b57</color>
     <color name="red">#D20062</color>
     <color name="orange">#FB6D48</color>
+    <color name="iris">#5b4DC3</color>
+    <color name="antique_ruby">#79192A</color>
+    <color name="salmon_pink">#FF8FA2</color>
+
 </resources>
