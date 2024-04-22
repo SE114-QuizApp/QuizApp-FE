@@ -8,7 +8,7 @@
     <item
         android:id="@+id/bottomMenuDiscovery"
         android:title="Discovery"
-        android:icon="@drawable/ic_search_24"/>
+        android:icon="@drawable/ic_search_24_black"/>
     <item
         android:id="@+id/bottomMenuFab"
         android:title=""
