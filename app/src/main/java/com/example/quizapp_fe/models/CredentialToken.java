@@ -61,12 +61,26 @@ public class CredentialToken {
         editor.putString("refreshToken", refreshToken);
         editor.putString("username", userProfile.getUsername());
         editor.putString("mail", userProfile.getMail());
-        editor.putString("fistName", userProfile.getFistName());
+        editor.putString("fistName", userProfile.getFirstName());
         editor.putString("lastName", userProfile.getLastName());
         editor.putString("avatar", userProfile.getAvatar());
         editor.putString("userType", userProfile.getUserType());
         editor.putInt("point", userProfile.getPoint());
 
+        editor.apply();
+    }
+
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
+        MySharedPreferences mySharedPreferences = new MySharedPreferences(context);
+        SharedPreferences.Editor editor = mySharedPreferences.getEditor();
+        editor.putString("username", userProfile.getUsername());
+        editor.putString("mail", userProfile.getMail());
+        editor.putString("fistName", userProfile.getFirstName());
+        editor.putString("lastName", userProfile.getLastName());
+        editor.putString("avatar", userProfile.getAvatar());
+        editor.putString("userType", userProfile.getUserType());
+        editor.putInt("point", userProfile.getPoint());
         editor.apply();
     }
 
