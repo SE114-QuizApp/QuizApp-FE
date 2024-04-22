@@ -25,8 +25,7 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:padding="12dp"
-            android:src="@drawable/ic_arrow_back_24"
-            app:tint="@color/black"
+            android:src="@drawable/ic_arrow_back_24_black"
             android:scaleX="1.25"
             android:scaleY="1.25"
             />
