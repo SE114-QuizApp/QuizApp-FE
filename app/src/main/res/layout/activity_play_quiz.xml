@@ -82,6 +82,7 @@
             android:layout_marginBottom="20dp">
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progressTimeRemaining"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
@@ -92,6 +93,7 @@
                 app:indicatorColor="@color/pastel_pink"
                 android:progress="80"/>
             <TextView
+                android:id="@+id/countDownTimeQuestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
