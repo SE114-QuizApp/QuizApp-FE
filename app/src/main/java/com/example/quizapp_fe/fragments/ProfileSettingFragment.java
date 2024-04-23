@@ -95,6 +95,17 @@ public class ProfileSettingFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
+
+        btnChangeEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.homeMainContainerFrameLayout, new ChangeEmailFragment());
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
         return view;
     }
 

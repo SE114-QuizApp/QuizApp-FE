@@ -52,7 +52,7 @@ public UserProfile(String _id, String userName, String mail, String firstName, S
         return firstName;
     }
 
-    public void setFistName(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
