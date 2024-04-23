@@ -120,7 +120,6 @@
                 app:layout_constraintTop_toTopOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 <!--        White Content-->
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -130,66 +129,78 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/discoveryFragPinkCard"
             app:layout_constraintBottom_toBottomOf="parent">
-            <LinearLayout
-                android:id="@+id/discoveryFragYourScoreRelLayout"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="20sp"
-                android:background="@drawable/border_20dp_salmon_pink"
-                android:gravity="center_vertical"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintWidth_percent="0.95"
-                app:layout_constraintHeight_percent="0.2">
-
-                <ImageView
-                    android:layout_marginLeft="20sp"
-                    android:layout_width="50sp"
-                    android:layout_height="50sp"
-                    android:src="@drawable/ic_student_hat"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Your Score:"
-                    android:textStyle="bold"
-                    android:textSize="24sp"
-                    android:layout_marginLeft="20sp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:text="55"
-                    android:layout_marginLeft="30sp"/>
-                <ImageView
-                    android:layout_width="50sp"
-                    android:layout_height="50sp"
-                    android:src="@drawable/img_medal"
-                    android:layout_marginLeft="20sp"/>
-            </LinearLayout>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginTop="20sp"
-                android:text="Top categories of the week"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/discoveryFragYourScoreRelLayout"/>
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="match_parent"
                 android:layout_marginTop="20sp"
-                app:layout_constraintHeight_percent="0.6"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/discoveryFragCategoryRecyclerView"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:fillViewport="true">
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-                </androidx.recyclerview.widget.RecyclerView>
+                    <LinearLayout
+                        android:id="@+id/discoveryFragYourScoreRelLayout"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="20sp"
+                        android:background="@drawable/border_20dp_salmon_pink"
+                        android:gravity="center_vertical"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintWidth_percent="0.95"
+                        app:layout_constraintHeight_percent="0.15">
+
+                        <ImageView
+                            android:layout_marginLeft="20sp"
+                            android:layout_width="50sp"
+                            android:layout_height="50sp"
+                            android:src="@drawable/ic_student_hat"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Your Score:"
+                            android:textStyle="bold"
+                            android:textSize="24sp"
+                            android:layout_marginLeft="20sp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:text="55"
+                            android:layout_marginLeft="30sp"/>
+                        <ImageView
+                            android:layout_width="50sp"
+                            android:layout_height="50sp"
+                            android:src="@drawable/img_medal"
+                            android:layout_marginLeft="20sp"/>
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/discoveryFragTopCategoryTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="20sp"
+                        android:layout_marginLeft="20sp"
+                        android:text="Top categories of the week"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/discoveryFragYourScoreRelLayout"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/discoveryFragCategoryRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="20sp"
+                        android:paddingBottom="100sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/discoveryFragTopCategoryTextView">
+                    </androidx.recyclerview.widget.RecyclerView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </ScrollView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,8 +9,7 @@
     tools:context=".fragments.EditProfileFragment"
     android:background="@color/light_purple"
     android:gravity="center_horizontal"
-    android:paddingTop="10dp"
-    >
+    android:paddingTop="10dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
