@@ -2,15 +2,12 @@ package com.example.quizapp_fe.fragments;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +21,6 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -34,11 +30,14 @@ import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
 import com.example.quizapp_fe.R;
+import com.example.quizapp_fe.api.ErrorResponse;
+import com.example.quizapp_fe.api.account.profile.UpdateProfileApi;
 import com.example.quizapp_fe.dialogs.LoadingDialog;
 import com.example.quizapp_fe.entities.UserProfile;
 import com.example.quizapp_fe.models.CredentialToken;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -50,6 +49,7 @@ public class EditProfileFragment extends Fragment {
     EditText edtUsername;
     Spinner spinnerUserType;
     LoadingDialog loadingDialog;
+    String[] profileImageUpload;
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private ActivityResultLauncher<Intent> pickImageLauncher;
 
@@ -58,8 +58,6 @@ public class EditProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
-
-
 
         loadingDialog = new LoadingDialog(requireContext());
 
@@ -72,7 +70,7 @@ public class EditProfileFragment extends Fragment {
         edtLastName = view.findViewById(R.id.edtLastName);
         edtUsername = view.findViewById(R.id.edtUsername);
         spinnerUserType = view.findViewById(R.id.spinnerUserType);
-        final String[] profileImageUpload = {CredentialToken.getInstance(requireContext()).getUserProfile().getAvatar()};
+        profileImageUpload = new String[]{CredentialToken.getInstance(requireContext()).getUserProfile().getAvatar()};
 
         String[] items = new String[]{"Teacher", "Student"};
 
@@ -106,12 +104,6 @@ public class EditProfileFragment extends Fragment {
             }
         });
 
-        Map config = new HashMap();
-        config.put("cloud_name", "dfoiuc0jw");
-        config.put("api_key", "293427824815773");
-        config.put("api_secret", "a8h2AFQmgyegqDCbDhDiQESkuQg");
-        config.put("secure", true);
-        MediaManager.init(requireContext(), config);
         // Khởi tạo launcher để chọn hình ảnh
         pickImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
@@ -161,9 +153,46 @@ public class EditProfileFragment extends Fragment {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isValidData()){
-                    Toast.makeText(requireContext(), "Data is valid", Toast.LENGTH_SHORT).show();
+                if(!isDataChanged()){
+                    Toast.makeText(requireContext(), "Data is not changed", Toast.LENGTH_SHORT).show();
+                    return;
                 }
+                if(!isValidData()){
+                    return;
+                }
+                loadingDialog.showLoading();
+
+                UserProfile userProfile = CredentialToken.getInstance(requireContext()).getUserProfile();
+                String firstName = edtFirstName.getText().toString();
+                String lastName = edtLastName.getText().toString();
+                String username = edtUsername.getText().toString();
+                String userType = spinnerUserType.getSelectedItem().toString();
+                String avatar = profileImageUpload[0];
+
+
+                UpdateProfileApi.getAPI(requireContext()).update(new UpdateProfileApi.API.EditProfileRequest(firstName, lastName, username, avatar, userType)).enqueue(new retrofit2.Callback<UpdateProfileApi.API.EditProfileResponse>() {
+                    @Override
+                    public void onResponse(@NonNull retrofit2.Call<UpdateProfileApi.API.EditProfileResponse> call, @NonNull retrofit2.Response<UpdateProfileApi.API.EditProfileResponse> response) {
+                        if(response.isSuccessful()){
+                            UpdateProfileApi.API.EditProfileResponse result = response.body();
+                            assert result != null;
+                            CredentialToken.getInstance(requireContext()).setUserProfile(result.getUser());
+
+                            Toast.makeText(requireContext(), "Update success", Toast.LENGTH_SHORT).show();
+                            loadingDialog.dismiss();
+                        }else{
+                            Gson gson = new GsonBuilder().create();
+                            assert response.errorBody() != null;
+                            ErrorResponse error = gson.fromJson(response.errorBody().charStream(), ErrorResponse.class);
+                            loadingDialog.showError(error.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull retrofit2.Call<UpdateProfileApi.API.EditProfileResponse> call, @NonNull Throwable t) {
+                        Toast.makeText(requireContext(), "Update failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
@@ -184,6 +213,26 @@ public class EditProfileFragment extends Fragment {
             return false;
         }
         return true;
+    }
+
+    public boolean isDataChanged(){
+        UserProfile currentUser = CredentialToken.getInstance(requireContext()).getUserProfile();
+        if(!Objects.equals(currentUser.getAvatar(), profileImageUpload[0])){
+            return true;
+        }
+        if(!Objects.equals(currentUser.getFirstName(), edtFirstName.getText().toString())){
+            return true;
+        }
+        if(!Objects.equals(currentUser.getLastName(), edtLastName.getText().toString())){
+            return true;
+        }
+        if(!Objects.equals(currentUser.getUsername(), edtUsername.getText().toString())){
+            return true;
+        }
+        if(!Objects.equals(currentUser.getUserType(), spinnerUserType.getSelectedItem().toString())){
+            return true;
+        }
+        return false;
     }
 
     void InitData(){
