@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -26,6 +27,7 @@ public class PlayQuiz extends AppCompatActivity {
     private CircularProgressIndicator timeRemainProgress;
 
     private LinearLayout titleAndImageQuestion;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +42,7 @@ public class PlayQuiz extends AppCompatActivity {
         titleAndImageQuestion = findViewById(R.id.titleAndImageQuestion);
         countDownText = findViewById(R.id.countDownTimeQuestion);
         timeRemainProgress = findViewById(R.id.progressTimeRemaining);
-
+  
         boolean hasImage = true;
         if(hasImage == false) {
             ViewGroup parent = (ViewGroup) titleAndImageQuestion.getParent();

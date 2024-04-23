@@ -24,4 +24,26 @@ public class Quiz implements Serializable {
     private Grade grade;
 
 
+    public Quiz(String _id, String name, String description, String backgroundImage, int pointsPerQuestion,
+                int numberOfQuestions, boolean isPublic, ArrayList<String> tags, ArrayList<String> likesCount,
+                boolean isDraft, ArrayList<String> comments, ArrayList<Question> questionList, String createdAt,
+                String updatedAt, Creator creator, Category category, Grade grade) {
+        this._id = _id;
+        this.name = name;
+        this.description = description;
+        this.backgroundImage = backgroundImage;
+        this.pointsPerQuestion = pointsPerQuestion;
+        this.numberOfQuestions = numberOfQuestions;
+        this.isPublic = isPublic;
+        this.tags = tags;
+        this.likesCount = likesCount;
+        this.isDraft = isDraft;
+        this.comments = comments;
+        this.questionList = questionList;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.creator = creator;
+        this.category = category;
+        this.grade = grade;
+    }
 }
