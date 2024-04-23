@@ -40,4 +40,5 @@
         android:src="@drawable/ic_add_24"
         android:backgroundTint="@color/bg_selector"
         app:layout_anchor="@id/bottomAppBar"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
