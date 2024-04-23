@@ -9,12 +9,15 @@
     <color name="icy_plains">#CCE3FF</color>
     <color name="dull_lavender">#9087E5</color>
     <color name="medium_purple">#7C72E5</color>
+    <color name="light_purple">#E3DFFD</color>
     <color name="foundation_white">#EFEEFC</color>
     <color name="mecha_metal">#858494</color>
     <color name="medium_sea_green">#3CB371</color>
     <color name="wing_commander">#0056B2</color>
     <color name="medium_gray_purpil">#e1def9</color>
     <color name="dark_yellow">#ff9b57</color>
+    <color name="red">#D20062</color>
+    <color name="orange">#FB6D48</color>
     <color name="iris">#5b4DC3</color>
     <color name="antique_ruby">#79192A</color>
     <color name="salmon_pink">#FF8FA2</color>

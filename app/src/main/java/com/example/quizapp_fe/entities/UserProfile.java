@@ -4,20 +4,20 @@ import java.io.Serializable;
 
 public class UserProfile implements Serializable {
     private String _id;
-    private String username;
+    private String userName;
     private String mail;
-    private String fistName;
+    private String firstName;
     private String lastName;
     private String avatar;
     private String userType;
     private Integer point;
 
 
-public UserProfile(String _id, String username, String mail, String fistName, String lastName, String avatar, String userType, Integer point) {
+public UserProfile(String _id, String userName, String mail, String firstName, String lastName, String avatar, String userType, Integer point) {
         this._id = _id;
-        this.username = username;
+        this.userName = userName;
         this.mail = mail;
-        this.fistName = fistName;
+        this.firstName = firstName;
         this.lastName = lastName;
         this.avatar = avatar;
         this.userType = userType;
@@ -33,11 +33,11 @@ public UserProfile(String _id, String username, String mail, String fistName, St
     }
 
     public String getUsername() {
-        return username;
+        return userName;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.userName = username;
     }
 
     public String getMail() {
@@ -48,12 +48,12 @@ public UserProfile(String _id, String username, String mail, String fistName, St
         this.mail = mail;
     }
 
-    public String getFistName() {
-        return fistName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFistName(String fistName) {
-        this.fistName = fistName;
+    public void setFistName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
