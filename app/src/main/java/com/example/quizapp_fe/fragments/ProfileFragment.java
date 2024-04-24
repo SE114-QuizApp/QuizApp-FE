@@ -238,7 +238,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void getMe() {
-        GetMeApi.getAPI(getContext()).getMe().enqueue(new retrofit2.Callback<com.example.quizapp_fe.api.account.auth.LoginWithPasswordApiResult>() {
+        GetMeApi.getAPI(requireContext()).getMe().enqueue(new retrofit2.Callback<com.example.quizapp_fe.api.account.auth.LoginWithPasswordApiResult>() {
             @Override
             public void onResponse(retrofit2.Call<com.example.quizapp_fe.api.account.auth.LoginWithPasswordApiResult> call, retrofit2.Response<com.example.quizapp_fe.api.account.auth.LoginWithPasswordApiResult> response) {
                 if (response.isSuccessful()) {
@@ -264,7 +264,7 @@ public class ProfileFragment extends Fragment {
                     }
 
                 } else {
-                    Toast.makeText(getContext(), "Get Me failure",
+                    Toast.makeText(requireContext(), "Get Me failure",
                                    Toast.LENGTH_SHORT).show();
                 }
             }
@@ -272,7 +272,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onFailure(retrofit2.Call<com.example.quizapp_fe.api.account.auth.LoginWithPasswordApiResult> call, Throwable t) {
                 System.out.println(t.getMessage());
-                Toast.makeText(getContext(), "Call API failure",
+                Toast.makeText(requireContext(), "Call API failure",
                                Toast.LENGTH_SHORT).show();
             }
         });

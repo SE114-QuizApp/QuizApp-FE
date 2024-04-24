@@ -32,6 +32,7 @@ public class ApiEndpoint {
         public static final String GET_USER_BY_ID = USER + "/{id}";
         public static final String CHANGE_PASSWORD = USER + "/change-password";
         public static final String UPDATE_USER = USER + "/{id}";
+        public static final String GET_LIST_RANKING = USER + "/ranking";
         public static final String ADD_FRIEND = USER + "/addFriend/{friendId}";
         public static final String UNFRIEND = USER + "/unfriend/{friendId}";
     }
