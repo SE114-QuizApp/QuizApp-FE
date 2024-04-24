@@ -34,7 +34,7 @@ public class RankingUsers {
         this.users = users;
     }
 
-    public UserProfile getCurrentUser() {
+    public UserRank getCurrentUser() {
         return currentUser;
     }
 
