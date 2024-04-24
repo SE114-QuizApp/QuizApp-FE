@@ -1,0 +1,7 @@
+<!-- tab_inactive_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Border radius -->
+    <corners android:radius="20dp"/>
+    <!-- Màu nền khi tab không được chọn -->
+    <solid android:color="#4e42a9"/>
+</shape>
