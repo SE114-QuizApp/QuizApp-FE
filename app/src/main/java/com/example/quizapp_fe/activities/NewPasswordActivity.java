@@ -18,7 +18,7 @@ public class NewPasswordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_password);
-        backArrow = findViewById(R.id.newPasswordBackArrowImageView);
+        backArrow = findViewById(R.id.discoveryFragBackArrowImageView);
         backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
