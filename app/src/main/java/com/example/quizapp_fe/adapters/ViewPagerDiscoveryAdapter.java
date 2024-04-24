@@ -1,4 +1,4 @@
-package com.example.quizapp_fe;
+package com.example.quizapp_fe.adapters;
 
 
 import androidx.annotation.NonNull;

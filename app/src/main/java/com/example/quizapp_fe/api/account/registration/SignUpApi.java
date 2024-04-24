@@ -23,13 +23,16 @@ public interface SignUpApi {
         public String userName;
         public String firstName;
         public String lastName;
+        public String userType;
         public String mail;
+
         public String password;
 
         public SignUpForm(String userName, String firstName, String lastName, String mail, String password) {
             this.userName = userName;
             this.firstName = firstName;
             this.lastName = lastName;
+            this.userType = "Teacher";
             this.mail = mail;
             this.password = password;
         }

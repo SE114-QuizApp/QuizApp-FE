@@ -11,13 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.interfaces.CategoryCard;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryCardAdapter extends RecyclerView.Adapter<CategoryCardViewHolder> {
     private Context context;
-    private List<CategoryCard> dataList;
+    private ArrayList<CategoryCard> dataList;
 
-    public CategoryCardAdapter(Context context, List<CategoryCard> dataList) {
+    public CategoryCardAdapter(Context context, ArrayList<CategoryCard> dataList) {
         this.context = context;
         this.dataList = dataList;
     }
