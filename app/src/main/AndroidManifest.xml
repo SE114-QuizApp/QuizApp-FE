@@ -33,7 +33,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".QuizDetailActivity"
+            android:name=".activities.QuizDetailActivity"
             android:exported="false" />
         <activity
             android:name=".activities.DiscoverySearchActivity"
