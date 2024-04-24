@@ -18,12 +18,11 @@ import com.example.quizapp_fe.adapters.CategoryCardAdapter;
 import com.example.quizapp_fe.interfaces.CategoryCard;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class DiscoveryFragment extends Fragment {
 
     RecyclerView categoryRecyclerView;
-    List<CategoryCard> categoryCardList;
+    ArrayList<CategoryCard> categoryCardList;
     CategoryCardAdapter categoryCardAdapter;
     CategoryCard categoryCard;
     SearchView searchView;
