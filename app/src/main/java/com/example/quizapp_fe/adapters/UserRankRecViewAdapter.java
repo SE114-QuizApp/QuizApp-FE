@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.entities.UserRank;
+import com.example.quizapp_fe.models.CredentialToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +46,13 @@ public class UserRankRecViewAdapter extends RecyclerView.Adapter<UserRankRecView
         UserRank user = userList.get(position);
         holder.txtNumber.setText(String.valueOf(user.getRank() ));
         holder.txtName.setText(user.getUsername());
+        if (user.getId().equals(CredentialToken.getInstance(context).getUserProfile().getId())){
+            holder.txtName.setTextColor(context.getResources().getColor(R.color.dark_yellow, null));
+            holder.txtName.setText(String.format("%s (You)", user.getUsername()));
+        }
+        else {
+            holder.txtName.setTextColor(context.getResources().getColor(R.color.black, null));
+        }
         holder.txtScore.setText(String.valueOf(user.getPoint() + " points"));
         Glide.with(context)
                 .asBitmap()
@@ -71,6 +80,7 @@ public class UserRankRecViewAdapter extends RecyclerView.Adapter<UserRankRecView
             holder.imgMedal.setVisibility(View.GONE);
         }
 
+
     }
 
     @Override
@@ -85,6 +95,8 @@ public class UserRankRecViewAdapter extends RecyclerView.Adapter<UserRankRecView
         ImageView imgAvatar;
         ImageView imgMedal;
 
+        LinearLayout parent;
+
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtNumber = itemView.findViewById(R.id.txtNumber);
@@ -92,6 +104,7 @@ public class UserRankRecViewAdapter extends RecyclerView.Adapter<UserRankRecView
             txtScore = itemView.findViewById(R.id.txtScore);
             imgAvatar = itemView.findViewById(R.id.avatarImageView);
             imgMedal = itemView.findViewById(R.id.imgViewMedal);
+            parent = itemView.findViewById(R.id.user_ranking_card_view);
             // Initialize other views here
         }
     }

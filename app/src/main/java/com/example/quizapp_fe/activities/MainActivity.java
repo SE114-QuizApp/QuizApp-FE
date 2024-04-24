@@ -1,5 +1,7 @@
 package com.example.quizapp_fe.activities;
 
+
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,4 +36,6 @@ public class MainActivity extends AppCompatActivity {
         }, 2000);
 
     }
+
+
 }

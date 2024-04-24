@@ -22,6 +22,7 @@ import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.api.account.profile.GetMeApi;
 import com.example.quizapp_fe.dialogs.LoadingDialog;
 import com.example.quizapp_fe.models.CredentialToken;
+import com.example.quizapp_fe.models.RankingUsers;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -77,10 +78,17 @@ public class ProfileFragment extends Fragment {
         setDataPieChart();
 
         TextView txtPoints = view.findViewById(R.id.txtPoints);
-        txtPoints.setText(String.format("%d", (int) (Math.random() * 5) + 45));
+
 
         TextView txtRank = view.findViewById(R.id.txtRank);
-        txtRank.setText(String.format("%d", (int) (Math.random() * 1) + 4));
+        if(RankingUsers.getInstance().getCurrentUser() == null){
+            txtPoints.setText("0");
+            txtRank.setText("0");
+        }else{
+            txtPoints.setText(String.format("%d", RankingUsers.getInstance().getCurrentUser().getPoint()));
+            txtRank.setText(String.format("%d", RankingUsers.getInstance().getCurrentUser().getRank()));
+        }
+
 
         TextView txtFollowing = view.findViewById(R.id.txtFollowing);
         txtFollowing.setText(String.format("%d", (int) (Math.random() * 2) + 8));

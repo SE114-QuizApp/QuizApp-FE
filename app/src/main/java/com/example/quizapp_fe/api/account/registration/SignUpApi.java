@@ -23,6 +23,7 @@ public interface SignUpApi {
         public String userName;
         public String firstName;
         public String lastName;
+        public String userType;
         public String mail;
         public String password;
 
@@ -30,6 +31,7 @@ public interface SignUpApi {
             this.userName = userName;
             this.firstName = firstName;
             this.lastName = lastName;
+            this.userType = "Teacher";
             this.mail = mail;
             this.password = password;
         }
