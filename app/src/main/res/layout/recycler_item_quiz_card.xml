@@ -1,12 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/border_20dp_white"
     android:layout_width="match_parent"
+    android:layout_marginHorizontal="5dp"
+    android:layout_marginVertical="10dp"
+    android:paddingHorizontal="10sp"
     android:layout_height="100dp">
 
     <ImageView
-        android:layout_width="32dp"
-        android:layout_height="32dp" />
-
-</LinearLayout>
+        android:id="@+id/quizCardItemImageView"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/img_lookup"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/quizCardItemImageView">
+        <TextView
+            android:id="@+id/quizCardItemTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginTop="10dp"
+            android:text="Cau truc du lieu va giai thuat"/>
+        <TextView
+            android:id="@+id/quizCardItemCreatorTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5sp"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            android:text="Phuc Lam"/>
+        <TextView
+            android:id="@+id/quizCardItemStatusTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            android:text="UpdateCreated: 2 days ago"/>
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/quizCardItemForwardArrow"
+        android:layout_marginTop="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_forward_ios_48"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
