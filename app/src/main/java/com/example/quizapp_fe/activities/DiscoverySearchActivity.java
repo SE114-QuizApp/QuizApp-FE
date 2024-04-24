@@ -2,13 +2,12 @@ package com.example.quizapp_fe.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
 
 import com.example.quizapp_fe.R;
-import com.example.quizapp_fe.ViewPagerDiscoveryAdapter;
+import com.example.quizapp_fe.adapters.ViewPagerDiscoveryAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
