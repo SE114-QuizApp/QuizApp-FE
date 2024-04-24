@@ -22,10 +22,6 @@ public class CategoryCardAdapter extends RecyclerView.Adapter<CategoryCardViewHo
         this.dataList = dataList;
     }
 
-    public CategoryCardAdapter(List<CategoryCard> dataList) {
-        this.dataList = dataList;
-    }
-
     @NonNull
     @Override
     public CategoryCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
