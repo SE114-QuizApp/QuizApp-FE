@@ -13,7 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.quizapp_fe.R;
-import com.example.quizapp_fe.activities.DiscoverySearch;
+
+import com.example.quizapp_fe.activities.DiscoverySearchActivity;
 import com.example.quizapp_fe.adapters.CategoryCardAdapter;
 import com.example.quizapp_fe.interfaces.CategoryCard;
 
@@ -24,7 +25,6 @@ public class DiscoveryFragment extends Fragment {
     RecyclerView categoryRecyclerView;
     ArrayList<CategoryCard> categoryCardList;
     CategoryCardAdapter categoryCardAdapter;
-    CategoryCard categoryCard;
     SearchView searchView;
 
 
@@ -47,7 +47,7 @@ public class DiscoveryFragment extends Fragment {
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), DiscoverySearch.class);
+                Intent intent = new Intent(view.getContext(), DiscoverySearchActivity.class);
                 startActivity(intent);
             }
         });

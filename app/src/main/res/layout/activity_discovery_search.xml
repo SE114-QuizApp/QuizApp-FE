@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.DiscoverySearch"
+    tools:context=".activities.DiscoverySearchActivity"
     android:background="@color/purple_hue">
     <!--        Back Arrow  -->
     <ImageView
@@ -81,5 +81,20 @@
                 android:layout_height="wrap_content"
                 android:text="Categories"/>
         </com.google.android.material.tabs.TabLayout>
-    </com.google.android.material.tabs.TabLayout>
+<!--        Main content-->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="20sp"
+            android:fillViewport="true"
+            app:layout_constraintHeight_percent="0.85"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/discoverySearchTabLayout">
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/discoverySearchViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
