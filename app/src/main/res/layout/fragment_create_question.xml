@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_create_quiz"
+    android:id="@+id/fragment_create_question"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/purple_hue"
     android:orientation="vertical"
     android:paddingHorizontal="8dp"
     android:paddingBottom="8dp"
-    tools:context=".fragments.CreateQuizFragment">
+    tools:context=".fragments.CreateQuestionFragment">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -58,15 +58,28 @@
             android:layout_alignParentTop="true"
             android:paddingHorizontal="16dp">
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="8dp">
 
-                <LinearLayout
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/questionNumberScrollView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <LinearLayout
+                    android:id="@+id/coverImageContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/answer_rounded"
                     android:gravity="center"
                     android:orientation="vertical"
@@ -89,6 +102,68 @@
 
                 </LinearLayout>
 
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+
+                    <LinearLayout
+                        android:id="@+id/durationQuestionContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_border_8"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="4dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_timer_outline_24"
+                            app:tint="@color/purple_hue" />
+
+                        <TextView
+                            android:id="@+id/tvDurationQuestion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="20 sec"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/typeQuestionContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:background="@drawable/rounded_border_8"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="4dp">
+
+                        <TextView
+                            android:id="@+id/tvTypeQuestion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="Multiple answer"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:rotation="90"
+                            android:src="@drawable/ic_chevron_right_24"
+                            app:tint="@color/purple_hue" />
+                    </LinearLayout>
+                </FrameLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -98,7 +173,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Title"
+                        android:text="Add Question"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -124,7 +199,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Description"
+                        android:text="Add Answer"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -134,38 +209,80 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/rounded_border_16"
-                        android:gravity="top"
-                        android:hint="Enter quiz description"
-                        android:lines="3"
+                        android:hint="Add answer 1"
+                        android:maxLines="1"
+                        android:paddingVertical="12dp"
+                        android:paddingLeft="20dp"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/rounded_border_16"
+                        android:hint="Add asnwer 2"
+                        android:maxLines="1"
+                        android:paddingVertical="12dp"
+                        android:paddingLeft="20dp"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/rounded_border_16"
+                        android:hint="Add answer 3"
+                        android:maxLines="1"
+                        android:paddingVertical="12dp"
+                        android:paddingLeft="20dp"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/rounded_border_16"
+                        android:hint="Add answer 4"
+                        android:maxLines="1"
                         android:paddingVertical="12dp"
                         android:paddingLeft="20dp"
                         android:textSize="16sp" />
                 </LinearLayout>
-
-
             </LinearLayout>
         </ScrollView>
 
-        <FrameLayout
+        <LinearLayout
             android:id="@+id/bottomContainer"
             android:layout_width="match_parent"
             android:layout_height="84dp"
             android:layout_alignParentBottom="true"
             android:background="@drawable/creator_quiz_bottom_container"
+            android:orientation="horizontal"
             android:paddingHorizontal="14dp"
             android:paddingVertical="8dp">
 
             <Button
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:backgroundTint="@color/purple_hue"
+                android:layout_weight="1"
                 android:paddingVertical="18dp"
                 android:text="Add Question"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                android:textStyle="bold"
                 app:cornerRadius="18dp" />
-        </FrameLayout>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="1"
+                android:paddingVertical="18dp"
+                android:text="Save"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:cornerRadius="18dp" />
+        </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.databinding.ActivityCreatorQuizBinding;
 import com.example.quizapp_fe.fragments.ChooseCategoryFragment;
+import com.example.quizapp_fe.fragments.CreateQuestionFragment;
 
 public class CreatorQuizActivity extends AppCompatActivity {
     ActivityCreatorQuizBinding binding;
