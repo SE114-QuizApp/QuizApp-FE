@@ -9,19 +9,17 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <!-- Devices running Android 12L (API level 32) or lower  -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" /> <!-- Devices running Android 12L (API level 32) or lower -->
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
-    <!-- Devices running Android 13 (API level 33) or higher -->
+        android:maxSdkVersion="32" /> <!-- Devices running Android 13 (API level 33) or higher -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
-
-    <!-- To handle the reselection within the app on devices running Android 14
-         or higher if your app targets Android 14 (API level 34) or higher.  -->
+    <!--
+ To handle the reselection within the app on devices running Android 14
+         or higher if your app targets Android 14 (API level 34) or higher.
+    -->
     <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
-
 
     <application
         android:allowBackup="true"
@@ -35,7 +33,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activities.PlayQuizNoImage"
+            android:name=".activities.ReviewAnswers"
+            android:exported="false" />
+        <activity
+            android:name=".activities.DiscoverySearch"
+            android:exported="false" />
+        <activity
+            android:name=".activities.PlayQuiz"
             android:exported="false" />
         <activity
             android:name=".activities.ResetPasswordActivity"
@@ -65,16 +69,15 @@
         <activity
             android:name=".activities.OnboardingActivity"
             android:exported="false" />
-
         <activity
             android:name=".activities.CreatorQuizActivity"
             android:exported="false" />
-
-        <service android:name="com.example.quizapp_fe.services.UploadListner" />
+      
+        <service android:name=".services.UploadListner" />
+      
         <meta-data
             android:name="cloudinaryCallbackService"
             android:value="com.example.quizapp_fe.services.UploadListner" />
-
     </application>
 
 </manifest>
