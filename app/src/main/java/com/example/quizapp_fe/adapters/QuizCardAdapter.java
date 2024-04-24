@@ -1,14 +1,18 @@
 package com.example.quizapp_fe.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quizapp_fe.R;
+import com.example.quizapp_fe.activities.QuizDetailActivity;
 import com.example.quizapp_fe.interfaces.QuizCard;
 
 import java.util.ArrayList;
@@ -16,6 +20,10 @@ import java.util.ArrayList;
 public class QuizCardAdapter extends RecyclerView.Adapter<QuizCardViewHolder> {
     Context context;
     ArrayList<QuizCard> dataList;
+    public void setSearchList(ArrayList<QuizCard> dataSearchArrayList) {
+        this.dataList = dataSearchArrayList;
+        notifyDataSetChanged();
+    }
     public QuizCardAdapter(Context context, ArrayList<QuizCard> dataList) {
         this.context = context;
         this.dataList = dataList;
@@ -31,6 +39,15 @@ public class QuizCardAdapter extends RecyclerView.Adapter<QuizCardViewHolder> {
     public void onBindViewHolder(@NonNull QuizCardViewHolder holder, int position) {
         QuizCard quizCard = dataList.get(position);
         holder.bind(quizCard);
+        holder.quizCardForwardArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.animation_normal);
+                holder.quizCardForwardArrow.startAnimation(animation);
+                Intent intent = new Intent(context, QuizDetailActivity.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

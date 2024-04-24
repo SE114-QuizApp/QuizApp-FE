@@ -1,6 +1,8 @@
 package com.example.quizapp_fe.adapters;
 
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +18,7 @@ public class QuizCardViewHolder extends RecyclerView.ViewHolder {
     TextView quizCardItemTitle;
     TextView quizCardItemCreator;
     TextView quizCardItemStatus;
+    ImageView quizCardForwardArrow;
 
     public QuizCardViewHolder(@NonNull View itemView) {
         super(itemView);
