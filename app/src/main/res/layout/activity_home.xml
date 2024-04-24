@@ -39,5 +39,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_add_24"
         android:backgroundTint="@color/bg_selector"
+        android:id="@+id/btnCreatorQuiz"
         app:layout_anchor="@id/bottomAppBar"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

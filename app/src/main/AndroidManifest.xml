@@ -33,10 +33,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activities.DiscoverySearchActivity"
+            android:name=".activities.ReviewAnswers"
             android:exported="false" />
         <activity
-            android:name=".activities.PlayQuizNoImage"
+            android:name=".activities.DiscoverySearch"
+            android:exported="false" />
+        <activity
+            android:name=".activities.PlayQuiz"
             android:exported="false" />
         <activity
             android:name=".activities.ResetPasswordActivity"
@@ -66,9 +69,11 @@
         <activity
             android:name=".activities.OnboardingActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".activities.CreatorQuizActivity"
+            android:exported="false" />
+      
         <service android:name=".services.UploadListner" />
-
         <meta-data
             android:name="cloudinaryCallbackService"
             android:value="com.example.quizapp_fe.services.UploadListner" />

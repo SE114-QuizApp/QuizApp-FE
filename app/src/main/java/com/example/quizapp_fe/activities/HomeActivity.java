@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.quizapp_fe.fragments.HomeFragment;
@@ -23,6 +24,8 @@ public class HomeActivity extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
+
         replaceFragment(new HomeFragment());
         binding.bottomNavigationView.setBackground(null);
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -37,6 +40,12 @@ public class HomeActivity extends AppCompatActivity {
                 replaceFragment(new ProfileFragment());
             }
             return true;
+        });
+
+        binding.btnCreatorQuiz.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, CreatorQuizActivity.class);
+            startActivity(intent);
+            finish();
         });
     }
 

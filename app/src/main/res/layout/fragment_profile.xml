@@ -38,7 +38,9 @@
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:padding="12dp"
-                    android:src="@drawable/ic_arrow_back_24_white"
+                    android:src="@drawable/ic_arrow_back_24_black"
+                    android:scaleX="1.25"
+                    android:scaleY="1.25"
                     app:tint="@color/white" />
 
                 <TextView
@@ -154,7 +156,9 @@
                             android:text="0"
                             android:textColor="@color/white"
                             android:textSize="20sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:id="@+id/txtPoints"
+                            />
                     </LinearLayout>
 
                     <LinearLayout
@@ -184,6 +188,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/txtRank"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -220,6 +225,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/txtFollowing"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -237,6 +243,14 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginHorizontal="10dp"
                  />
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:id="@+id/idPieChart"
+                    />
             </LinearLayout>
 
 
