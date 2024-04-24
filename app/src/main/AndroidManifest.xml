@@ -69,9 +69,12 @@
         <activity
             android:name=".activities.OnboardingActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".activities.CreatorQuizActivity"
+            android:exported="false" />
+      
         <service android:name=".services.UploadListner" />
-
+      
         <meta-data
             android:name="cloudinaryCallbackService"
             android:value="com.example.quizapp_fe.services.UploadListner" />
