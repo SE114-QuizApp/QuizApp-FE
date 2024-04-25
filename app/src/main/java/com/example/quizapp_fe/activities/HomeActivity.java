@@ -1,18 +1,34 @@
 package com.example.quizapp_fe.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
+import com.example.quizapp_fe.adapters.UserRankRecViewAdapter;
+import com.example.quizapp_fe.api.user.getListRanking.GetListRankingApi;
+import com.example.quizapp_fe.entities.UserProfile;
+import com.example.quizapp_fe.entities.UserRank;
 import com.example.quizapp_fe.fragments.HomeFragment;
 import com.example.quizapp_fe.fragments.ProfileFragment;
 import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.fragments.RankingFragment;
 import com.example.quizapp_fe.databinding.ActivityHomeBinding;
 import com.example.quizapp_fe.fragments.DiscoveryFragment;
+import com.example.quizapp_fe.models.CredentialToken;
+import com.example.quizapp_fe.models.RankingUsers;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -22,6 +38,8 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        getRankingData();
 
         replaceFragment(new HomeFragment());
         binding.bottomNavigationView.setBackground(null);
@@ -38,6 +56,12 @@ public class HomeActivity extends AppCompatActivity {
             }
             return true;
         });
+
+        binding.btnCreatorQuiz.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, CreatorQuizActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -45,5 +69,37 @@ public class HomeActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.homeMainContainerFrameLayout, fragment);
         fragmentTransaction.commit();
+    }
+
+    void getRankingData(){
+        GetListRankingApi.getAPI(HomeActivity.this).getListRanking().enqueue(new Callback<ArrayList<UserRank>>() {
+            @Override
+            public void onResponse(@NonNull Call<ArrayList<UserRank>> call, @NonNull Response<ArrayList<UserRank>> response) {
+
+                if (response.isSuccessful()){
+                    ArrayList<UserRank> userList = response.body();
+                    assert userList != null;
+                    RankingUsers.getInstance().setUsers(userList);
+                    UserProfile currentUser = CredentialToken.getInstance(HomeActivity.this).getUserProfile();
+                    //find in userList the current user and set rank for it
+                    UserRank currentUserRank = null;
+                    for (UserRank user : userList) {
+                        if (user.getId().equals(currentUser.getId())){
+                            currentUserRank = new UserRank(currentUser, user.getRank());
+                            RankingUsers.getInstance().setCurrentUser(currentUserRank);
+                            break;
+                        }
+                    }
+
+                }else {
+                    Toast.makeText(HomeActivity.this, "Get ranking data failure", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<UserRank>> call, Throwable t) {
+                Toast.makeText(HomeActivity.this, "Call api failure", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

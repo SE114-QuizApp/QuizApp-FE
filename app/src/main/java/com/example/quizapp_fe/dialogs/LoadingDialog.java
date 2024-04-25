@@ -56,7 +56,7 @@ public class LoadingDialog extends Dialog {
     }
 
     public void showError(String error){
-        if(isShowing()) return;
+        if(isShowing()) dismiss();
         this.setCancelable(true);
         binding.getRoot().removeView(binding.loadingDialogProgress);
         binding.loadingDialogMessage.setText(error);
@@ -71,7 +71,7 @@ public class LoadingDialog extends Dialog {
     }
 
     public void showError(){
-        if(isShowing()) return;
+        if(isShowing()) dismiss();
         this.setCancelable(true);
         binding.getRoot().removeView(binding.loadingDialogProgress);
         binding.loadingDialogMessage.setText(R.string.an_error_occurred_please_try_again_later);
@@ -86,7 +86,7 @@ public class LoadingDialog extends Dialog {
     }
 
     public void showError(String error, View.OnClickListener onClickListener){
-        if(isShowing()) return;
+        if(isShowing()) dismiss();
         this.setCancelable(true);
         binding.getRoot().removeView(binding.loadingDialogProgress);
         binding.loadingDialogMessage.setText(error);
