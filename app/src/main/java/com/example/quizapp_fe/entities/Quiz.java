@@ -46,4 +46,12 @@ public class Quiz implements Serializable {
         this.category = category;
         this.grade = grade;
     }
+
+    public ArrayList<Question> getQuestionList() {
+        return questionList;
+    }
+
+    public int getNumberOfQuestions() {
+        return numberOfQuestions;
+    }
 }

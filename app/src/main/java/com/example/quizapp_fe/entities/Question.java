@@ -20,4 +20,19 @@ public class Question implements Serializable {
     private int correctAnswerCount;
     private ArrayList<String> answerCorrect;
 
+    public String getContent() {
+        return content;
+    }
+
+    public int getAnswerTime() {
+        return answerTime;
+    }
+
+    public String getBackgroundImage() {
+        return backgroundImage;
+    }
+
+    public ArrayList<Answer> getAnswerList() {
+        return answerList;
+    }
 }

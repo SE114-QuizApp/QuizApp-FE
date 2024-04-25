@@ -31,13 +31,13 @@
       "content": "Có nên học môn cấu trúc dữ liệu và giải thuật không ?",
       "answerList": [
         {
-          "name": "a",
+          "name": "A",
           "body": "True",
           "isCorrect": true,
           "_id": "647d4157ec2aeb4204caa5fe"
         },
         {
-          "name": "b",
+          "name": "B",
           "body": "False",
           "isCorrect": false,
           "_id": "647d4157ec2aeb4204caa5ff"
@@ -66,7 +66,7 @@
       "pointType": "Standard",
       "answerTime": 10,
       "backgroundImage": "",
-      "content": "Giữa 2 thuật toán merge và Qick thì cái nào có đôi phức tạp cao",
+      "content": "Giữa 2 thuật toán merge sort và quick sort thì cái nào có đôi phức tạp cao hơn?",
       "answerList": [
         {
           "name": "A",
@@ -116,7 +116,7 @@
       "pointType": "Standard",
       "answerTime": 5,
       "backgroundImage": "",
-      "content": "Cây nhị phân tương đồng thuật toán nào",
+      "content": "Cây nhị phân tương đồng thuật toán nào?",
       "answerList": [
         {
           "name": "A",
