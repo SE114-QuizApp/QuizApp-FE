@@ -20,7 +20,7 @@
         android:textAlignment="center">
 
         <ImageView
-            android:id="@+id/btnBackArrow"
+            android:id="@+id/btnBackCreateQuestion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
@@ -273,6 +273,7 @@
                 app:cornerRadius="18dp" />
 
             <Button
+                android:id="@+id/btnSave"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="8dp"
