@@ -152,25 +152,34 @@
                 android:text="Which three players shared the Premier League Golden Boot in 2018-19"/>
 
             <LinearLayout
+                android:id="@+id/answerGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/answerLayerNo0"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="30dp"
-                android:background="@drawable/answer_rounded">
+                android:background="@drawable/answer_rounded_false">
                 <CheckBox
+                    android:id="@+id/checkBox_a"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:checked="true"
+                    android:checked="false"
                     android:text="Mohamed Salah"
                     app:useMaterialThemeColors="true"
-                    app:buttonTint="@color/purple_hue"
+                    app:buttonTint="@color/dull_lavender"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:layout_marginStart="10sp"/>
             </LinearLayout>
+
             <LinearLayout
+                android:id="@+id/answerLayerNo1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -178,6 +187,7 @@
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/answer_rounded_false">
                 <CheckBox
+                    android:id="@+id/checkBox_b"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:checked="false"
@@ -190,43 +200,47 @@
 
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/answerLayerNo2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/answer_rounded">
+                android:background="@drawable/answer_rounded_false">
                 <CheckBox
+                    android:id="@+id/checkBox_c"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:checked="true"
+                    android:checked="false"
                     android:text="Sadio Mane"
                     android:textStyle="bold"
                     app:useMaterialThemeColors="true"
-                    app:buttonTint="@color/purple_hue"
+                    app:buttonTint="@color/dull_lavender"
                     android:textSize="18sp"
                     android:layout_marginStart="10sp"/>
+
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/answerLayerNo3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/answer_rounded">
+                android:background="@drawable/answer_rounded_false">
                 <CheckBox
+                    android:id="@+id/checkBox_d"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:checked="true"
+                    android:checked="false"
                     android:text="Aubameyang"
                     android:textStyle="bold"
                     app:useMaterialThemeColors="true"
-                    app:buttonTint="@color/purple_hue"
+                    app:buttonTint="@color/dull_lavender"
                     android:textSize="18sp"
                     android:layout_marginStart="10sp"/>
             </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
-
 </LinearLayout>
