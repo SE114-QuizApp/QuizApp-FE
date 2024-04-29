@@ -18,4 +18,5 @@
     <string name="an_error_occurred_please_try_again_later">An error occurred. Please try again later.</string>
     <string name="close">Close</string>
     <string name="todo">TODO</string>
+    <string name="sample_description">Any time is a good time for a quiz and even better if that happened to be a football themed quiz!</string>
 </resources>

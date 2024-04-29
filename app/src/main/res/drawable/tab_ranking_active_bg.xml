@@ -1,0 +1,6 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Border radius -->
+    <corners android:radius="20dp"/>
+    <!-- Màu nền khi tab được chọn -->
+    <solid android:color="#8F87E5"/>
+</shape>

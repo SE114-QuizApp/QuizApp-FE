@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Style cho tab có nền màu #4e42a9 -->
+    <style name="TabStyle" parent="Widget.Design.TabLayout">
+        <!-- Màu nền cho container của tab -->
+        <item name="tabBackground">@drawable/tab_background</item>
+        <!-- Màu chữ khi tab không được chọn -->
+        <item name="tabTextColor">#FFFFFF</item>
+        <!-- Màu chữ khi tab được chọn -->
+        <item name="tabSelectedTextColor">#FFFFFF</item>
+        <item name="indicatorSize">0dp</item>
+
+    </style>
+
+</resources>

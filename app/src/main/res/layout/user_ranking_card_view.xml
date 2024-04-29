@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:id="@+id/user_ranking_card_view"
+    android:background="@drawable/border_20dp_white"
+    android:backgroundTint="@color/white"
+    android:gravity="center"
+    android:layout_marginHorizontal="6dp"
+    android:layout_marginVertical="10dp"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="4dp">
+    <LinearLayout
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/border_20dp_transparent">
+        <TextView
+            android:id="@+id/txtNumber"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="1"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_gravity="start"/>
+    </LinearLayout>
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/avatarImageView"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/circle_background"
+        android:src="@drawable/default_avatar"
+        android:scaleType="centerCrop"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="16dp"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tên Người Dùng"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_gravity="start"/>
+
+        <TextView
+            android:id="@+id/txtScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100 Điểm"
+            android:textSize="16sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_gravity="start"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imgViewMedal"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/gold_badge"
+        android:layout_gravity="center_vertical"
+        android:contentDescription="@string/todo"
+        android:visibility="gone"
+/>
+
+</LinearLayout>
