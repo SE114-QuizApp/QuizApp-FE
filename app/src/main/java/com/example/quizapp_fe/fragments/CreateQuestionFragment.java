@@ -5,7 +5,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -46,6 +48,10 @@ public class CreateQuestionFragment extends Fragment {
             numbers.add(i);
         }
 
+        numberQuestionAdapter = new NumberQuestionAdapter(numbers);
+        questionNumberRecyclerView.setAdapter(numberQuestionAdapter);
+
+        // get the durationQuestionContainer and set an onClickListener
         durationQuestion = view.findViewById(R.id.durationQuestionContainer);
         durationQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +60,7 @@ public class CreateQuestionFragment extends Fragment {
             }
         });
 
+        // get the typeQuestionContainer and set an onClickListener
         typeQuestion = view.findViewById(R.id.typeQuestionContainer);
         typeQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,9 +69,14 @@ public class CreateQuestionFragment extends Fragment {
             }
         });
 
+        ImageView btnBack = view.findViewById(R.id.btnBackCreateQuestion);
 
-        numberQuestionAdapter = new NumberQuestionAdapter(numbers);
-        questionNumberRecyclerView.setAdapter(numberQuestionAdapter);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requireActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
 
         return view;
     }

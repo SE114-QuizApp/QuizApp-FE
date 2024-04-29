@@ -55,7 +55,9 @@ public class Quiz implements Serializable {
         return numberOfQuestions;
     }
 
+
     public int getPointsPerQuestion() {
         return pointsPerQuestion;
     }
+
 }

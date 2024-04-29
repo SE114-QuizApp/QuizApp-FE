@@ -36,7 +36,7 @@
             android:name=".activities.ReviewAnswers"
             android:exported="false" />
         <activity
-            android:name=".activities.DiscoverySearch"
+            android:name=".activities.DiscoverySearchActivity"
             android:exported="false" />
         <activity
             android:name=".activities.PlayQuiz"

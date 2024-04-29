@@ -3,6 +3,7 @@ package com.example.quizapp_fe.activities;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -10,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -54,11 +56,14 @@ public class PlayQuiz extends AppCompatActivity {
     private TextView txtContentQuestionNoImage;
     private ImageView questionImage;
 
+
     private Button btnPoint;
+
     private CircularProgressIndicator pgTimeRemaining;
     private LinearProgressIndicator pgQuestionRemaining;
 
     private LinearLayout titleAndImageQuestion;
+
 
     private CheckBox cbAnswerA;
     private CheckBox cbAnswerB;
@@ -71,6 +76,7 @@ public class PlayQuiz extends AppCompatActivity {
     private LinearLayout lnAnswerD;
 
     private LinearLayout lnAnswerGroup;
+
 
     private Quiz quiz;
     private ArrayList<Question> questionList;
@@ -103,6 +109,7 @@ public class PlayQuiz extends AppCompatActivity {
         pgTimeRemaining = findViewById(R.id.progressTimeRemaining);
         pgQuestionRemaining = findViewById(R.id.progressQuestionRemaining);
         questionImage = findViewById(R.id.questionImage);
+
         btnPoint = findViewById((R.id.pointOfQuestion));
         lnAnswerGroup = findViewById(R.id.answerGroup);
 
@@ -121,6 +128,7 @@ public class PlayQuiz extends AppCompatActivity {
         changeStateCheckBox(lnAnswerC, cbAnswerC);
         changeStateCheckBox(lnAnswerD, cbAnswerD);
 
+
         // Đọc dữ liệu từ file json
         InputStream inputStream = getResources().openRawResource(R.raw.quiz);
         quiz = JsonHelper.loadQuizFromJson(inputStream);
@@ -129,6 +137,7 @@ public class PlayQuiz extends AppCompatActivity {
         pgQuestionRemaining.setMax((quiz.getNumberOfQuestions() * 10));
 
         displayQuestion(currentIndex);
+
 
         // Bắt đầu đếm ngược từ 10 giây
         startCountdown(currentQuestion.getAnswerTime() + 1);
@@ -146,6 +155,7 @@ public class PlayQuiz extends AppCompatActivity {
         // set init value
         pgQuestionRemaining.setProgress((currentQuestionIndex + 1) * 10, true);
         btnPoint.setText("0" + quiz.getPointsPerQuestion());
+
         txtIndexOfCurrentQuestion.setText("QUESTION " + (currentQuestionIndex + 1) + " OF " + quiz.getNumberOfQuestions());
         txtContentQuestion.setText(currentQuestion.getContent());
 
@@ -206,6 +216,7 @@ public class PlayQuiz extends AppCompatActivity {
                 CompoundButtonCompat.setButtonTintList(otherCheckBox, colorStateList);
             }
         }
+
     }
 
     private void startCountdown(long seconds) {
