@@ -84,7 +84,9 @@ public class PlayQuiz extends AppCompatActivity {
 
     private int currentIndex = 0;
 
+
     private Question currentQuestion;
+
 
     private ArrayList<Answer> answersList;
     private ArrayList<Answer> userAnswers;
@@ -127,6 +129,10 @@ public class PlayQuiz extends AppCompatActivity {
         lnAnswerD = findViewById(R.id.answerLayerNo3);
 
         userAnswers = new ArrayList<Answer>();
+
+        userAnswers = new ArrayList<Answer>();
+
+
 
         // Đọc dữ liệu từ file json
         InputStream inputStream = getResources().openRawResource(R.raw.quiz);
@@ -262,6 +268,7 @@ public class PlayQuiz extends AppCompatActivity {
                     // Nếu không còn câu hỏi nào navigate sang review answers
                     Intent intent = new Intent(PlayQuiz.this, ReviewAnswers.class);
 
+
                     UserAnswers model = new UserAnswers(userAnswers, questionList, totalPoints);
                     intent.putExtra("userAnswers", model);
 
@@ -315,10 +322,12 @@ public class PlayQuiz extends AppCompatActivity {
         boolean isCorrect = false;
 
         for (Answer answer : answersList) {
+
             // Lấy câu trả lời của user đổ vào mảng
             if (answer.getBody().equals(selectedAnswer)) {
                 boolean isAdded = userAnswers.add(answer);
             }
+
             if (answer.getBody().equals(selectedAnswer) && answer.isCorrect()) {
                 isCorrect = true;
                 break;

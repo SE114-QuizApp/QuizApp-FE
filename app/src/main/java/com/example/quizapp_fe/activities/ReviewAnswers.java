@@ -31,11 +31,13 @@ public class ReviewAnswers extends AppCompatActivity {
 
     private TextView txtNoCorrect;
     private TextView txtDescCorrect;
+
     private TextView txtTotalPoint;
     private LinearLayout lnAnswerReviewGroup;
     private ArrayList<Answer> userAnswerList;
     private ArrayList<Question> questionList;
     private int totalPoints;
+
 
 
     @Override
@@ -52,7 +54,9 @@ public class ReviewAnswers extends AppCompatActivity {
         // Init
         txtNoCorrect = findViewById(R.id.numberOfCorrectAnswer);
         txtDescCorrect = findViewById(R.id.descripCorrectAnswer);
+
         txtTotalPoint = findViewById(R.id.displayTotalPoints);
+
         lnAnswerReviewGroup = findViewById(R.id.answerReviewGroup);
 
         // Nhận dữ liệu từ Intent
@@ -60,6 +64,7 @@ public class ReviewAnswers extends AppCompatActivity {
         UserAnswers reviewAnswer = (UserAnswers) intent.getSerializableExtra("userAnswers");
         userAnswerList = reviewAnswer.getUserAnswersList();
         questionList = reviewAnswer.getQuestionsList();
+
         totalPoints = reviewAnswer.getTotalPoints();
 
         int cntCorrect = 0;
@@ -70,6 +75,7 @@ public class ReviewAnswers extends AppCompatActivity {
         }
         txtNoCorrect.setText(cntCorrect + "/" + userAnswerList.size());
         txtDescCorrect.setText("You answer " + cntCorrect + "\nout of " + userAnswerList.size() + "\nquestions");
+
         txtTotalPoint.setText("Total Points: " + totalPoints);
 
         for (int i = 0; i < questionList.size(); i++) {
@@ -81,7 +87,11 @@ public class ReviewAnswers extends AppCompatActivity {
         LinearLayout questionSummaryLinearLayout = new LinearLayout(this);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
+
                 LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        
+
         params.setMargins(55, 70, 55, 70);
         questionSummaryLinearLayout.setLayoutParams(params);
         questionSummaryLinearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -117,6 +127,7 @@ public class ReviewAnswers extends AppCompatActivity {
         TextView txtQuestion = new TextView(this);
         FrameLayout.LayoutParams txtLayoutParams = new FrameLayout.LayoutParams(
                 600,
+
                 FrameLayout.LayoutParams.WRAP_CONTENT
         );
         txtLayoutParams.leftMargin = 40;
@@ -133,7 +144,9 @@ public class ReviewAnswers extends AppCompatActivity {
         frameLayout.addView(txtQuestion);
 
         // Tạo ImageView
+
         if (!userAnswer.isCorrect()) {
+
             ImageView imgError = new ImageView(this);
             FrameLayout.LayoutParams imgLayoutParams = new FrameLayout.LayoutParams(
                     70, // Kích thước của ImageView
@@ -143,6 +156,7 @@ public class ReviewAnswers extends AppCompatActivity {
             imgError.setLayoutParams(imgLayoutParams);
             imgError.setImageResource(R.drawable.ic_error_outline); // Đặt hình ảnh
             frameLayout.addView(imgError);
+
         } else {
             ImageView imgError = new ImageView(this);
             FrameLayout.LayoutParams imgLayoutParams = new FrameLayout.LayoutParams(
@@ -162,7 +176,10 @@ public class ReviewAnswers extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
         txtAnswerLayoutParams.leftMargin = 160;
+
         txtAnswerLayoutParams.bottomMargin = 0;
+
+
         txtAnswer.setLayoutParams(txtAnswerLayoutParams);
         txtAnswer.setText("- " + userAnswer.getBody());
         txtAnswer.setTextSize(16);

@@ -12,6 +12,7 @@ public class UserAnswers implements Serializable {
     private ArrayList<Answer> userAnswersList;
     private ArrayList<Question> questionsList;
 
+
     private int totalPoints;
 
     public UserAnswers(ArrayList<Answer> userAnswers, ArrayList<Question> questionsList, int totalPoints) {
@@ -27,6 +28,7 @@ public class UserAnswers implements Serializable {
     public ArrayList<Question> getQuestionsList() {
         return questionsList;
     }
+
 
     public int getTotalPoints() {
         return totalPoints;
