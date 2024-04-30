@@ -130,7 +130,9 @@ public class PlayQuiz extends AppCompatActivity {
         changeStateCheckBox(lnAnswerC, cbAnswerC);
         changeStateCheckBox(lnAnswerD, cbAnswerD);
 
+
         userAnswers = new ArrayList<Answer>();
+
 
 
         // Đọc dữ liệu từ file json
@@ -295,10 +297,12 @@ public class PlayQuiz extends AppCompatActivity {
         boolean isCorrect = false;
 
         for (Answer answer : answersList) {
+
             // Lấy câu trả lời của user đổ vào mảng
             if(answer.getBody().equals(selectedAnswer)) {
                 boolean isAdded = userAnswers.add(answer);
             }
+
             if (answer.getBody().equals(selectedAnswer) && answer.isCorrect()) {
                 isCorrect = true;
                 break;
