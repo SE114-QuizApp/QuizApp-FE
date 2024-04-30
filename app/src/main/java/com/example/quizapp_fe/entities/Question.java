@@ -39,4 +39,17 @@ public class Question implements Serializable {
     public int getQuestionIndex() {
         return questionIndex;
     }
+
+
+    public String getOptionQuestion() {
+        return optionQuestion;
+    }
+
+    public int getMaxCorrectAnswer() {
+        return maxCorrectAnswer;
+    }
+
+    public int getCorrectAnswerCount() {
+        return correctAnswerCount;
+    }
 }
