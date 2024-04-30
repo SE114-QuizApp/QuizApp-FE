@@ -84,11 +84,12 @@ public class PlayQuiz extends AppCompatActivity {
 
     private int currentIndex = 0;
 
-   private Question currentQuestion;
+    private Question currentQuestion;
 
-   private ArrayList<Answer> answersList;
-   private ArrayList<Answer> userAnswers;
-
+    private ArrayList<Answer> answersList;
+    private ArrayList<Answer> userAnswers;
+    private int totalPoints;
+    private int numberOfAnswerSelection = 0;
 
 
     @Override
@@ -125,13 +126,7 @@ public class PlayQuiz extends AppCompatActivity {
         lnAnswerC = findViewById(R.id.answerLayerNo2);
         lnAnswerD = findViewById(R.id.answerLayerNo3);
 
-        changeStateCheckBox(lnAnswerA, cbAnswerA);
-        changeStateCheckBox(lnAnswerB, cbAnswerB);
-        changeStateCheckBox(lnAnswerC, cbAnswerC);
-        changeStateCheckBox(lnAnswerD, cbAnswerD);
-
         userAnswers = new ArrayList<Answer>();
-
 
         // Đọc dữ liệu từ file json
         InputStream inputStream = getResources().openRawResource(R.raw.quiz);
@@ -142,20 +137,23 @@ public class PlayQuiz extends AppCompatActivity {
 
         displayQuestion(currentIndex);
 
+        changeStateCheckBox(lnAnswerA, cbAnswerA);
+        changeStateCheckBox(lnAnswerB, cbAnswerB);
+        changeStateCheckBox(lnAnswerC, cbAnswerC);
+        changeStateCheckBox(lnAnswerD, cbAnswerD);
 
         // Bắt đầu đếm ngược từ 10 giây
         startCountdown(currentQuestion.getAnswerTime() + 1);
     }
 
-    private void displayQuestion(int currentQuestionIndex)
-    {
+    private void displayQuestion(int currentQuestionIndex) {
         // Lấy dữ liệu từng câu question và answer
         currentQuestion = questionList.get(currentQuestionIndex);
         answersList = currentQuestion.getAnswerList();
 
+        numberOfAnswerSelection = 0;
+        resetCbChecked();
         resetCbState();
-
-
         // set init value
         pgQuestionRemaining.setProgress((currentQuestionIndex + 1) * 10, true);
         btnPoint.setText("0" + quiz.getPointsPerQuestion());
@@ -163,7 +161,7 @@ public class PlayQuiz extends AppCompatActivity {
         txtIndexOfCurrentQuestion.setText("QUESTION " + (currentQuestionIndex + 1) + " OF " + quiz.getNumberOfQuestions());
         txtContentQuestion.setText(currentQuestion.getContent());
 
-        if(currentQuestion.getBackgroundImage().equals("")) {
+        if (currentQuestion.getBackgroundImage().equals("")) {
 
             ViewGroup parent = (ViewGroup) titleAndImageQuestion.getParent();
             int index = parent.indexOfChild(titleAndImageQuestion);
@@ -173,15 +171,14 @@ public class PlayQuiz extends AppCompatActivity {
             // Cho hiện TextView không image
             txtContentQuestionNoImage.setVisibility(View.VISIBLE);
             txtContentQuestionNoImage.setText(currentQuestion.getContent());
-        }
-        else {
-            File imgFile = new  File(currentQuestion.getBackgroundImage());
+        } else {
+            File imgFile = new File(currentQuestion.getBackgroundImage());
             Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             questionImage.setImageBitmap(bitmap);
         }
 
         // Nếu số answer == 2 hoặc 4
-        if(answersList.size() == 2) {
+        if (answersList.size() == 2) {
 
             // Ẩn 2 đáp án sau
             lnAnswerC.setVisibility(View.GONE);
@@ -190,9 +187,7 @@ public class PlayQuiz extends AppCompatActivity {
             // set answer
             cbAnswerA.setText(answersList.get(0).getBody());
             cbAnswerB.setText(answersList.get(1).getBody());
-        }
-        else if(answersList.size() == 4)
-        {
+        } else if (answersList.size() == 4) {
             lnAnswerC.setVisibility(View.VISIBLE);
             lnAnswerD.setVisibility(View.VISIBLE);
 
@@ -201,10 +196,16 @@ public class PlayQuiz extends AppCompatActivity {
             cbAnswerB.setText(answersList.get(1).getBody());
             cbAnswerC.setText(answersList.get(2).getBody());
             cbAnswerD.setText(answersList.get(3).getBody());
-        }
-        else {
+        } else {
             // do nothing
         }
+    }
+
+    private void resetCbChecked() {
+        cbAnswerA.setChecked(false);
+        cbAnswerB.setChecked(false);
+        cbAnswerC.setChecked(false);
+        cbAnswerD.setChecked(false);
     }
 
     private void resetCbState() {
@@ -241,16 +242,27 @@ public class PlayQuiz extends AppCompatActivity {
                 // Đếm ngược hoàn thành
                 txtCountDown.setText("0");
 
-                if(currentIndex < quiz.getNumberOfQuestions() - 1) {
+                // Kiểm tra xem người dùng đã chọn đáp án chưa
+                boolean isAnswerSelected = false;
+                if (cbAnswerA.isChecked() || cbAnswerB.isChecked() || cbAnswerC.isChecked() || cbAnswerD.isChecked()) {
+                    isAnswerSelected = true;
+                }
+
+                // Nếu người dùng chưa chọn đáp án nào, thêm một answer rỗng
+                if (!isAnswerSelected) {
+                    Answer emptyAnswer = new Answer("", "", false);
+                    userAnswers.add(emptyAnswer);
+                }
+
+                if (currentIndex < quiz.getNumberOfQuestions() - 1) {
                     currentIndex += 1;
                     displayQuestion(currentIndex);
                     startCountdown(currentQuestion.getAnswerTime() + 1);
-                }
-                else {
+                } else {
                     // Nếu không còn câu hỏi nào navigate sang review answers
                     Intent intent = new Intent(PlayQuiz.this, ReviewAnswers.class);
 
-                    UserAnswers model = new UserAnswers(userAnswers, questionList);
+                    UserAnswers model = new UserAnswers(userAnswers, questionList, totalPoints);
                     intent.putExtra("userAnswers", model);
 
                     startActivity(intent);
@@ -264,7 +276,7 @@ public class PlayQuiz extends AppCompatActivity {
         cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
+                if (isChecked) {
                     Drawable roundedDrawable = ContextCompat.getDrawable(getBaseContext(), R.drawable.answer_rounded);
                     ln.setBackground(roundedDrawable);
 
@@ -276,8 +288,16 @@ public class PlayQuiz extends AppCompatActivity {
                     // Kiểm tra đáp án
                     checkAnswer(ln, cb);
 
-                    // Tắt các CheckBox khác
-                    disableOtherCheckBoxes(ln, cb);
+                    if (currentQuestion.getOptionQuestion().equals("Single")) {
+                        // Tắt các CheckBox khác
+                        disableOtherCheckBoxes(ln, cb);
+                    }
+                    else {
+                        numberOfAnswerSelection += 1;
+                        if(numberOfAnswerSelection == currentQuestion.getCorrectAnswerCount()) {
+                            disableOtherCheckBoxes(ln, cb);
+                        }
+                    }
                 } else {
                     Drawable roundedFalseDrawable = ContextCompat.getDrawable(getBaseContext(), R.drawable.answer_rounded_false);
                     ln.setBackground(roundedFalseDrawable);
@@ -296,7 +316,7 @@ public class PlayQuiz extends AppCompatActivity {
 
         for (Answer answer : answersList) {
             // Lấy câu trả lời của user đổ vào mảng
-            if(answer.getBody().equals(selectedAnswer)) {
+            if (answer.getBody().equals(selectedAnswer)) {
                 boolean isAdded = userAnswers.add(answer);
             }
             if (answer.getBody().equals(selectedAnswer) && answer.isCorrect()) {
@@ -306,12 +326,14 @@ public class PlayQuiz extends AppCompatActivity {
         }
 
         if (isCorrect) {
+            totalPoints += quiz.getPointsPerQuestion();
             Drawable trueDrawable = ContextCompat.getDrawable(getBaseContext(), R.drawable.bg_answer_checked_true);
             linearLayout.setBackground(trueDrawable);
             int color = ContextCompat.getColor(getBaseContext(), R.color.green_lime);
             ColorStateList colorStateList = ColorStateList.valueOf(color);
             CompoundButtonCompat.setButtonTintList(checkBox, colorStateList);
         } else {
+            totalPoints += 0;
             Drawable falseDrawable = ContextCompat.getDrawable(getBaseContext(), R.drawable.border_20dp_salmon_pink);
             linearLayout.setBackground(falseDrawable);
             int color = ContextCompat.getColor(getBaseContext(), R.color.pastel_pink);
@@ -323,7 +345,7 @@ public class PlayQuiz extends AppCompatActivity {
     private void disableOtherCheckBoxes(LinearLayout selectedAnswerLayout, CheckBox selectedAnswerCb) {
         for (int i = 0; i < lnAnswerGroup.getChildCount(); i++) {
             View childView = lnAnswerGroup.getChildAt(i);
-            if (childView instanceof LinearLayout && childView != selectedAnswerLayout) {
+            if (childView instanceof LinearLayout) {
                 LinearLayout otherAnswerLayout = (LinearLayout) childView;
                 CheckBox otherCheckBox = (CheckBox) otherAnswerLayout.getChildAt(0);
                 otherCheckBox.setEnabled(false);

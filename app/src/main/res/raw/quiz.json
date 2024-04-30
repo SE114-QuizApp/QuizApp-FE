@@ -4,7 +4,7 @@
   "description": "Môn học mở mang trí tuệ ha",
   "backgroundImage": "",
   "pointsPerQuestion": 1,
-  "numberOfQuestions": 3,
+  "numberOfQuestions": 4,
   "isPublic": true,
   "tags": [
     "Science",
@@ -104,6 +104,56 @@
       "__v": 0
     },
     {
+      "_id": "647d4170ec2aeb4204caa62b",
+      "creatorId": "645669996e2607839bc293eb",
+      "quizId": "647d555eec2aeb4204cab642",
+      "tags": [
+        ""
+      ],
+      "questionType": "Quiz",
+      "optionQuestion": "Multiple",
+      "isPublic": true,
+      "pointType": "Standard",
+      "answerTime": 10,
+      "backgroundImage": "",
+      "content": "Ai là người đẹp trai nhất?",
+      "answerList": [
+        {
+          "name": "A",
+          "body": "Phuoc",
+          "isCorrect": true,
+          "_id": "647d41dfec2aeb4204caa653"
+        },
+        {
+          "name": "B",
+          "body": "Duy",
+          "isCorrect": false,
+          "_id": "647d41dfec2aeb4204caa654"
+        },
+        {
+          "name": "C",
+          "body": "Ronaldo",
+          "isCorrect": true,
+          "_id": "647d41dfec2aeb4204caa655"
+        },
+        {
+          "name": "D",
+          "body": "Nhat",
+          "isCorrect": false,
+          "_id": "647d41dfec2aeb4204caa656"
+        }
+      ],
+      "questionIndex": 3,
+      "maxCorrectAnswer": 2,
+      "correctAnswerCount": 2,
+      "answerCorrect": [
+        "A","C"
+      ],
+      "createdAt": "2023-06-05T01:59:12.106Z",
+      "updatedAt": "2023-12-11T08:52:40.997Z",
+      "__v": 0
+    },
+    {
       "_id": "647d4202ec2aeb4204caa668",
       "creatorId": "645669996e2607839bc293eb",
       "quizId": "647d555eec2aeb4204cab642",
@@ -143,7 +193,7 @@
           "_id": "647d427fec2aeb4204caa69d"
         }
       ],
-      "questionIndex": 3,
+      "questionIndex": 4,
       "maxCorrectAnswer": 1,
       "correctAnswerCount": 1,
       "answerCorrect": [

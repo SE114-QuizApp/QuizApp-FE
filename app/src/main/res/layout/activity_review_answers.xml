@@ -131,21 +131,35 @@
                 </FrameLayout>
             </FrameLayout>
         </LinearLayout>
-        <TextView
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Your Answers"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your Answers"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_gravity="left" />
+            <TextView
+                android:id="@+id/displayTotalPoints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Points: 8"
+                android:textColor="@color/dark_yellow"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_gravity="right" />
+        </FrameLayout>
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <LinearLayout
             android:id="@+id/answerReviewGroup"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/answer_rounded"
             android:orientation="vertical"
             android:layout_marginBottom="20dp">
