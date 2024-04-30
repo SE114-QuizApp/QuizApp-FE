@@ -35,4 +35,8 @@ public class Question implements Serializable {
     public ArrayList<Answer> getAnswerList() {
         return answerList;
     }
+
+    public int getQuestionIndex() {
+        return questionIndex;
+    }
 }
