@@ -47,16 +47,9 @@ public class DiscoveryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_discovery, container, false);
-        callApi();
         categoryRecyclerView = view.findViewById(R.id.discoveryFragCategoryRecyclerView);
         categoryCardList = new ArrayList<>();
-        categoryCardList.add(new CategoryCard(R.drawable.ic_music_24, "Music", "14 Quizzes" ));
-        categoryCardList.add(new CategoryCard(R.drawable.ic_music_24, "Music", "14 Quizzes" ));
-        categoryCardList.add(new CategoryCard(R.drawable.ic_music_24, "Music", "14 Quizzes" ));
-        categoryCardList.add(new CategoryCard(R.drawable.ic_music_24, "Music", "14 Quizzes" ));
-        categoryCardAdapter = new CategoryCardAdapter(view.getContext(), categoryCardList);
-        categoryRecyclerView.setAdapter(categoryCardAdapter);
-        categoryRecyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 2));
+        callApi();
 
         searchView = view.findViewById(R.id.discoveryFragSearchView);
         searchView.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +66,40 @@ public class DiscoveryFragment extends Fragment {
             @Override
             public void onResponse(Call<DiscoverQuizzes> call, Response<DiscoverQuizzes> response) {
                 Log.e("DISCOVER", "Success");
-                
+                if (response.isSuccessful()) {
+                    DiscoverQuizzes discoverQuizzes = response.body();
+
+                    CategoryCard englishCategoryCard = new CategoryCard(
+                            R.drawable.ic_english_24,
+                            discoverQuizzes.getEnglish().get(0).getCategory().getName(),
+                            discoverQuizzes.getEnglish().size() + " Quizzes"
+                    );
+
+                    CategoryCard mathCategoryCard = new CategoryCard(
+                            R.drawable.ic_math_24_black,
+                            discoverQuizzes.getMath().get(0).getCategory().getName(),
+                            discoverQuizzes.getMath().size() + " Quizzes"
+                    );
+
+                    CategoryCard computerCategoryCard = new CategoryCard(
+                            R.drawable.ic_computer_24,
+                            discoverQuizzes.getComputer().get(0).getCategory().getName(),
+                            discoverQuizzes.getComputer().size() + " Quizzes"
+                    );
+
+                    categoryCardList.add(englishCategoryCard);
+                    categoryCardList.add(mathCategoryCard);
+                    categoryCardList.add(computerCategoryCard);
+
+                    categoryCardAdapter = new CategoryCardAdapter(requireContext(), categoryCardList);
+                    categoryRecyclerView.setAdapter(categoryCardAdapter);
+                    categoryRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
+                } else {
+
+                }
+
+
+
             }
 
             @Override
