@@ -10,7 +10,17 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+<<<<<<< HEAD
 import com.example.quizapp_fe.R;
+=======
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.example.quizapp_fe.adapters.UserRankRecViewAdapter;
+import com.example.quizapp_fe.api.quiz.get.GetDiscoverQuizzesApi;
+>>>>>>> 74d335324380ac9a4ebf1242e8829cb1f4bd676f
 import com.example.quizapp_fe.api.user.getListRanking.GetListRankingApi;
 import com.example.quizapp_fe.databinding.ActivityHomeBinding;
 import com.example.quizapp_fe.entities.UserProfile;
@@ -20,6 +30,7 @@ import com.example.quizapp_fe.fragments.HomeFragment;
 import com.example.quizapp_fe.fragments.ProfileFragment;
 import com.example.quizapp_fe.fragments.RankingFragment;
 import com.example.quizapp_fe.models.CredentialToken;
+import com.example.quizapp_fe.models.DiscoverQuizzes;
 import com.example.quizapp_fe.models.RankingUsers;
 
 import java.util.ArrayList;
@@ -38,6 +49,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         getRankingData();
+
 
         replaceFragment(new HomeFragment());
         binding.bottomNavigationView.setBackground(null);
@@ -60,6 +72,9 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+//        getDiscoveryData();
+
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -97,6 +112,21 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ArrayList<UserRank>> call, Throwable t) {
                 Toast.makeText(HomeActivity.this, "Call api failure", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    void getDiscoveryData() {
+        GetDiscoverQuizzesApi.getAPI(HomeActivity.this).getDiscoverQuizzes().enqueue(new Callback<DiscoverQuizzes>() {
+            @Override
+            public void onResponse(Call<DiscoverQuizzes> call, Response<DiscoverQuizzes> response) {
+                Toast.makeText(HomeActivity.this, "Call Discover API Successful", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<DiscoverQuizzes> call, Throwable t) {
+                Toast.makeText(HomeActivity.this, "Call Discover API Fail", Toast.LENGTH_SHORT).show();
+                Log.e("DISCOVER", "Call Discover API Fail");
             }
         });
     }
