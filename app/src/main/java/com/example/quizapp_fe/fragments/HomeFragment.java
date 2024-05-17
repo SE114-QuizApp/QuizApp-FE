@@ -2,12 +2,12 @@ package com.example.quizapp_fe.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,16 +16,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.activities.TeacherQuizActivity;
 import com.example.quizapp_fe.adapters.LiveQuizAdapter;
+import com.example.quizapp_fe.api.quiz.get.GetPublicQuizzesApi;
+import com.example.quizapp_fe.entities.Quiz;
 import com.example.quizapp_fe.interfaces.LiveQuizCard;
+import com.example.quizapp_fe.models.CredentialToken;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class HomeFragment extends Fragment {
-    RecyclerView liveQuizRecyclerView;
+     RecyclerView liveQuizRecyclerView;
     ArrayList<LiveQuizCard> liveQuizCardList;
     LiveQuizAdapter liveQuizAdapter;
 
     TextView seeAllButtonTextView;
+    String teacherId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,25 +43,48 @@ public class HomeFragment extends Fragment {
         liveQuizRecyclerView = view.findViewById(R.id.homeFragLiveQuizzesRecylerView);
         seeAllButtonTextView = view.findViewById(R.id.homeFragSeeAllTextView);
         liveQuizCardList = new ArrayList<>();
-        liveQuizCardList.add(new LiveQuizCard(R.drawable.img_sample_quiz, "Statistic Math Quiz", "Math - 12 Quizzes"));
-        liveQuizCardList.add(new LiveQuizCard(R.drawable.img_sample_quiz, "Statistic Math Quiz", "Math - 12 Quizzes"));
-        liveQuizCardList.add(new LiveQuizCard(R.drawable.img_sample_quiz, "Statistic Math Quiz", "Math - 12 Quizzes"));
-        liveQuizCardList.add(new LiveQuizCard(R.drawable.img_sample_quiz, "Statistic Math Quiz", "Math - 12 Quizzes"));
-        liveQuizCardList.add(new LiveQuizCard(R.drawable.img_sample_quiz, "Statistic Math Quiz", "Math - 12 Quizzes"));
-        liveQuizCardList.add(new LiveQuizCard(R.drawable.img_sample_quiz, "Statistic Math Quiz", "Math - 12 Quizzes"));
-        liveQuizAdapter = new LiveQuizAdapter(view.getContext(),liveQuizCardList);
-        liveQuizRecyclerView.setAdapter(liveQuizAdapter);
-        liveQuizRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        teacherId = CredentialToken.getInstance(requireContext()).getUserProfile().getId();
+        callAPIGetQuiz(teacherId);
+
 
         seeAllButtonTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Animation animation = AnimationUtils.loadAnimation(v.getContext(), R.anim.animation_fade_in);
-                seeAllButtonTextView.startAnimation(animation);
                 Intent intent = new Intent(v.getContext(), TeacherQuizActivity.class);
                 startActivity(intent);
             }
         });
         return view;
+    }
+
+    private void callAPIGetQuiz(String teacherId) {
+        GetPublicQuizzesApi.getTeacherQuizAPI(requireContext()).getTeacherQuiz(teacherId).enqueue(new Callback<ArrayList<Quiz>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Quiz>> call, Response<ArrayList<Quiz>> response) {
+                if (response.isSuccessful()){
+                    ArrayList<Quiz> teacherQuizList = response.body();
+                    assert  teacherQuizList != null;
+                    for (int i = 0; i < teacherQuizList.size(); i++){
+                        String quizTitle;
+                        String quizSubTitle;
+                        String quizImage;
+                        quizTitle = teacherQuizList.get(i).getName();
+                        quizSubTitle = teacherQuizList.get(i).getDescription();
+                        quizImage = teacherQuizList.get(i).getBackgroundImage();
+                        LiveQuizCard liveQuizCard = new LiveQuizCard(quizImage,quizTitle,quizSubTitle);
+                        liveQuizCardList.add(liveQuizCard);
+                        liveQuizAdapter = new LiveQuizAdapter(requireContext(),liveQuizCardList);
+                        liveQuizRecyclerView.setAdapter(liveQuizAdapter);
+                        liveQuizRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Quiz>> call, Throwable t) {
+                Toast.makeText(requireContext(), "Call API Failed", Toast.LENGTH_SHORT).show();
+                Log.e("HomeFrament", "failed");
+            }
+        });
     }
 }

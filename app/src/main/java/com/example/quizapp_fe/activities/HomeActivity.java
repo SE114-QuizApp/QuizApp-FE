@@ -1,26 +1,24 @@
 package com.example.quizapp_fe.activities;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.Toast;
-
-import com.example.quizapp_fe.adapters.UserRankRecViewAdapter;
+import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.api.user.getListRanking.GetListRankingApi;
+import com.example.quizapp_fe.databinding.ActivityHomeBinding;
 import com.example.quizapp_fe.entities.UserProfile;
 import com.example.quizapp_fe.entities.UserRank;
+import com.example.quizapp_fe.fragments.DiscoveryFragment;
 import com.example.quizapp_fe.fragments.HomeFragment;
 import com.example.quizapp_fe.fragments.ProfileFragment;
-import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.fragments.RankingFragment;
-import com.example.quizapp_fe.databinding.ActivityHomeBinding;
-import com.example.quizapp_fe.fragments.DiscoveryFragment;
 import com.example.quizapp_fe.models.CredentialToken;
 import com.example.quizapp_fe.models.RankingUsers;
 
