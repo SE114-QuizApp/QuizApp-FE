@@ -115,7 +115,6 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<DiscoverQuizzes> call, Response<DiscoverQuizzes> response) {
                 Toast.makeText(HomeActivity.this, "Call Discover API Successful", Toast.LENGTH_SHORT).show();
-                Log.e("DISCOVER", response.body().getEnglish().get(1).get_id());
             }
 
             @Override
