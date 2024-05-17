@@ -33,7 +33,7 @@ public class LiveQuizAdapter extends RecyclerView.Adapter<LiveQuizViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull LiveQuizViewHolder holder, int position) {
         LiveQuizCard liveQuizCard = liveQuizList.get(position);
-        holder.bind(liveQuizCard);
+        holder.bind(liveQuizCard, context);
     }
 
     @Override

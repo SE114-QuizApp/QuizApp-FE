@@ -20,6 +20,8 @@ public class Quiz implements Serializable {
     private String createdAt;
     private String updatedAt;
     private Creator creator;
+    private  int correctAnswerCount;
+    private ArrayList<Answer> answerCorrect;
     private Category category;
     private Grade grade;
 
@@ -27,7 +29,7 @@ public class Quiz implements Serializable {
     public Quiz(String _id, String name, String description, String backgroundImage, int pointsPerQuestion,
                 int numberOfQuestions, boolean isPublic, ArrayList<String> tags, ArrayList<String> likesCount,
                 boolean isDraft, ArrayList<String> comments, ArrayList<Question> questionList, String createdAt,
-                String updatedAt, Creator creator, Category category, Grade grade) {
+                String updatedAt, Creator creator, int correctAnswerCount, ArrayList<Answer> answerCorrect, Category category, Grade grade) {
         this._id = _id;
         this.name = name;
         this.description = description;
@@ -43,6 +45,8 @@ public class Quiz implements Serializable {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.creator = creator;
+        this.correctAnswerCount = correctAnswerCount;
+        this.answerCorrect = answerCorrect;
         this.category = category;
         this.grade = grade;
     }
@@ -60,4 +64,18 @@ public class Quiz implements Serializable {
         return pointsPerQuestion;
     }
 
+    public String get_id() {
+        return _id;
+    }
+    public String getBackgroundImage() {
+        return backgroundImage;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }
