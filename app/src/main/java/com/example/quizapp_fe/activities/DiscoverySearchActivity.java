@@ -57,7 +57,6 @@ public class DiscoverySearchActivity extends AppCompatActivity {
                 backArrowImageView.startAnimation(animation);
                 Intent intent = new Intent(DiscoverySearchActivity.this, HomeActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
     }
