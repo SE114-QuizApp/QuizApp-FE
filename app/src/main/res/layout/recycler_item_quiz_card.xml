@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/quizCardItemImageView"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:scaleType="fitCenter"
         android:src="@drawable/img_lookup"
         app:layout_constraintTop_toTopOf="parent"
@@ -41,7 +41,7 @@
             android:textStyle="italic"
             android:text="Phuc Lam"/>
         <TextView
-            android:id="@+id/quizCardItemStatusTextView"
+            android:id="@+id/quizCardItemCategoryTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
