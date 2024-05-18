@@ -7,13 +7,13 @@ public class QuizCard {
     private int quizCardImage;
     private String titleText;
     private String creatorText;
-    private String statusText;
+    private String category;
 
-    public QuizCard(int quizCardImage, String titleText, String creatorText, String statusText) {
+    public QuizCard(int quizCardImage, String titleText, String creatorText, String category) {
         this.quizCardImage = quizCardImage;
         this.titleText = titleText;
         this.creatorText = creatorText;
-        this.statusText = statusText;
+        this.category = category;
     }
 
     public int getQuizCardImage() {
@@ -28,7 +28,7 @@ public class QuizCard {
         return creatorText;
     }
 
-    public String getStatusText() {
-        return statusText;
+    public String getCategoryText() {
+        return category;
     }
 }
