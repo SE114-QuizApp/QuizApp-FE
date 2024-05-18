@@ -3,8 +3,6 @@ package com.example.quizapp_fe.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -16,7 +14,6 @@ import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.adapters.LiveQuizAdapter;
 import com.example.quizapp_fe.api.quiz.get.GetPublicQuizzesApi;
 import com.example.quizapp_fe.entities.Quiz;
-import com.example.quizapp_fe.fragments.HomeFragment;
 import com.example.quizapp_fe.interfaces.LiveQuizCard;
 import com.example.quizapp_fe.models.CredentialToken;
 
@@ -48,16 +45,10 @@ public class TeacherQuizActivity extends AppCompatActivity {
         teacherId = CredentialToken.getInstance(TeacherQuizActivity.this).getUserProfile().getId();
         quizCardList = new ArrayList<>();
         callApiGetQuiz(teacherId);
-//        quizCardAdapter = new LiveQuizAdapter(this.getBaseContext(),quizCardList);
-//        listQuizRecyclerView.setAdapter(quizCardAdapter);
-//        listQuizRecyclerView.setLayoutManager(new LinearLayoutManager(this.getBaseContext()));
-
         imgButtonBackArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Animation animation = AnimationUtils.loadAnimation(v.getContext(), R.anim.animation_fade_in);
-                imgButtonBackArrow.startAnimation(animation);
-                Intent intent = new Intent(v.getContext(), HomeFragment.class);
+                Intent intent = new Intent(v.getContext(), HomeActivity.class);
                 startActivity(intent);
             }
         });
