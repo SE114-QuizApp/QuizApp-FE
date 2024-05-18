@@ -38,16 +38,7 @@ public class QuizCardAdapter extends RecyclerView.Adapter<QuizCardViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull QuizCardViewHolder holder, int position) {
         QuizCard quizCard = dataList.get(position);
-        holder.bind(quizCard);
-        holder.quizCardForwardArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.animation_normal);
-                holder.quizCardForwardArrow.startAnimation(animation);
-                Intent intent = new Intent(context, QuizDetailActivity.class);
-                context.startActivity(intent);
-            }
-        });
+        holder.bind(quizCard, context);
     }
 
     @Override
