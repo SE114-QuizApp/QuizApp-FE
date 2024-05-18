@@ -14,8 +14,10 @@ import com.example.quizapp_fe.fragments.UserFragment;
 
 public class ViewPagerDiscoveryAdapter extends FragmentStateAdapter {
 
+
     public ViewPagerDiscoveryAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
+
     }
 
     @NonNull
