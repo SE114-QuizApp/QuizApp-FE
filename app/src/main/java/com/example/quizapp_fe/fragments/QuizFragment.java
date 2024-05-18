@@ -39,6 +39,7 @@ public class QuizFragment extends Fragment {
         quizCardArrayList = new ArrayList<>();
         callApi();
 
+
         return view;
     }
 
@@ -53,10 +54,11 @@ public class QuizFragment extends Fragment {
                         String name = discoverQuizzes.getEnglish().get(i).getCreator().getFirstName() +
                                 " " +
                                 discoverQuizzes.getEnglish().get(i).getCreator().getLastName();
-                        QuizCard quizCard = new QuizCard(R.drawable.ic_english_24,
-                                         discoverQuizzes.getEnglish().get(i).getName(),
-                                         name,
-                                         "English");
+                        QuizCard quizCard = new QuizCard( discoverQuizzes.getEnglish().get(i).get_id(),
+                                                          discoverQuizzes.getEnglish().get(i).getBackgroundImage(),
+                                                          discoverQuizzes.getEnglish().get(i).getName(),
+                                                          name,
+                                                          "English");
                         quizCardArrayList.add(quizCard);
                     }
 //                    Math
@@ -64,7 +66,8 @@ public class QuizFragment extends Fragment {
                         String name = discoverQuizzes.getMath().get(i).getCreator().getFirstName() +
                                 " " +
                                 discoverQuizzes.getMath().get(i).getCreator().getLastName();
-                        QuizCard quizCard = new QuizCard(R.drawable.ic_math_24_black,
+                        QuizCard quizCard = new QuizCard(discoverQuizzes.getMath().get(i).get_id(),
+                                                         discoverQuizzes.getMath().get(i).getBackgroundImage(),
                                                          discoverQuizzes.getMath().get(i).getName(),
                                                          name,
                                                          "Math");
@@ -75,13 +78,15 @@ public class QuizFragment extends Fragment {
                         String name = discoverQuizzes.getComputer().get(i).getCreator().getFirstName() +
                                 " " +
                                 discoverQuizzes.getComputer().get(i).getCreator().getLastName();
-                        QuizCard quizCard = new QuizCard(R.drawable.ic_computer_24,
+                        QuizCard quizCard = new QuizCard(discoverQuizzes.getComputer().get(i).get_id(),
+                                                         discoverQuizzes.getComputer().get(i).getBackgroundImage(),
                                                          discoverQuizzes.getComputer().get(i).getName(),
                                                          name,
-                                                         "English");
+                                                         "Computer");
                         quizCardArrayList.add(quizCard);
                     }
 //
+
                     quizCardAdapter = new QuizCardAdapter(requireContext(), quizCardArrayList);
                     recyclerView.setAdapter(quizCardAdapter);
                     recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 1));

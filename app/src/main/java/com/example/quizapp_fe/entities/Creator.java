@@ -7,4 +7,8 @@ public class Creator {
     private String firstName;
     private String lastName;
     private String userName;
+
+    public String getFullName() {
+        return lastName + " " + firstName;
+    }
 }

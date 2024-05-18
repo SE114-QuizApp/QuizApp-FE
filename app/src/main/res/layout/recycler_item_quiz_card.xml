@@ -10,9 +10,10 @@
 
     <ImageView
         android:id="@+id/quizCardItemImageView"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:scaleType="fitCenter"
+        android:layout_marginLeft="10sp"
         android:src="@drawable/img_lookup"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"

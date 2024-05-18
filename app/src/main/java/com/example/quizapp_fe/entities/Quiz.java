@@ -78,4 +78,17 @@ public class Quiz implements Serializable {
     public String getDescription() {
         return description;
     }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public String getTotalPoints() {
+        int totalPoints = this.pointsPerQuestion * this.numberOfQuestions;
+        return Integer.toString(totalPoints);
+    }
+
+    public Creator getCreator() {
+        return creator;
+    }
 }
