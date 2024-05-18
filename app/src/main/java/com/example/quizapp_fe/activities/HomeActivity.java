@@ -12,10 +12,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.quizapp_fe.R;
-<<<<<<< HEAD
-=======
 
->>>>>>> 49620168dfca81259a36e43207b9880a78adfbc0
 import android.util.Log;
 import android.widget.Toast;
 
