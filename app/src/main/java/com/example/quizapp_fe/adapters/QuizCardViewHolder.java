@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.activities.QuizDetailActivity;
 import com.example.quizapp_fe.interfaces.QuizCard;
@@ -35,7 +36,11 @@ public class QuizCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(QuizCard quizCard, Context context) {
-        quizCardItemImageView.setImageResource(quizCard.getQuizCardImage());
+        Glide.with(context)
+                     .asBitmap()
+                     .load(quizCard.getQuizCardImage())
+                     .error(R.drawable.img_sample_quiz)
+                     .into(quizCardItemImageView);
         quizCardItemTitle.setText(quizCard.getTitleText());
         quizCardItemCreator.setText(quizCard.getCreatorText());
         quizCardCategory.setText(quizCard.getCategoryText());
@@ -46,6 +51,7 @@ public class QuizCardViewHolder extends RecyclerView.ViewHolder {
                 Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.animation_normal);
                 quizCardForwardArrow.startAnimation(animation);
                 Intent intent = new Intent(context, QuizDetailActivity.class);
+                intent.putExtra("quizId", quizCard.getQuizCardId());
                 context.startActivity(intent);
             }
         });
