@@ -1,5 +1,6 @@
 package com.example.quizapp_fe.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quizapp_fe.R;
+import com.example.quizapp_fe.activities.HomeActivity;
 import com.example.quizapp_fe.activities.TeacherQuizActivity;
 import com.example.quizapp_fe.adapters.LiveQuizAdapter;
 import com.example.quizapp_fe.api.quiz.get.GetPublicQuizzesApi;
@@ -31,7 +33,8 @@ public class HomeFragment extends Fragment {
      RecyclerView liveQuizRecyclerView;
     ArrayList<LiveQuizCard> liveQuizCardList;
     LiveQuizAdapter liveQuizAdapter;
-
+    TeacherQuizActivity teacherQuizActivity;
+    HomeActivity homeActivity;
     TextView seeAllButtonTextView;
     String teacherId;
 
@@ -50,7 +53,8 @@ public class HomeFragment extends Fragment {
         seeAllButtonTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), TeacherQuizActivity.class);
+                Context context1 = getActivity();
+                Intent intent = new Intent(context1, TeacherQuizActivity.class);
                 startActivity(intent);
             }
         });
