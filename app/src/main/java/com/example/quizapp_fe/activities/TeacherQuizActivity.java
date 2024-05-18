@@ -43,7 +43,10 @@ public class TeacherQuizActivity extends AppCompatActivity {
         listQuizRecyclerView = findViewById(R.id.teacherQuizListQuizRecyclerView);
         imgButtonBackArrow = findViewById(R.id.teacherQuizBackArrowImageButton);
 
+        Intent intent = getIntent();
+
         teacherId = CredentialToken.getInstance(TeacherQuizActivity.this).getUserProfile().getId();
+        quizCardList = new ArrayList<>();
         callApiGetQuiz(teacherId);
 //        quizCardAdapter = new LiveQuizAdapter(this.getBaseContext(),quizCardList);
 //        listQuizRecyclerView.setAdapter(quizCardAdapter);
@@ -76,9 +79,9 @@ public class TeacherQuizActivity extends AppCompatActivity {
                         quizImage = teacherQuizList.get(i).getBackgroundImage();
                         LiveQuizCard liveQuizCard = new LiveQuizCard(quizImage, quizTitle, quizSubTitle);
                         quizCardList.add(liveQuizCard);
-                        quizCardAdapter = new LiveQuizAdapter(TeacherQuizActivity.this, quizCardList);
+                        quizCardAdapter = new LiveQuizAdapter(getBaseContext(), quizCardList);
                         listQuizRecyclerView.setAdapter(quizCardAdapter);
-                        listQuizRecyclerView.setLayoutManager(new LinearLayoutManager(TeacherQuizActivity.this));
+                        listQuizRecyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
                     }
                 }
             }
