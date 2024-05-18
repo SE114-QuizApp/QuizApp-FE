@@ -12,6 +12,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.quizapp_fe.R;
+
+import android.util.Log;
+import android.widget.Toast;
+
+import com.example.quizapp_fe.adapters.UserRankRecViewAdapter;
+
 import com.example.quizapp_fe.api.quiz.get.GetDiscoverQuizzesApi;
 import com.example.quizapp_fe.api.user.getListRanking.GetListRankingApi;
 import com.example.quizapp_fe.databinding.ActivityHomeBinding;

@@ -13,10 +13,16 @@ import android.view.ViewGroup;
 import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.adapters.CategoryCardAdapter;
 import com.example.quizapp_fe.adapters.QuizCardAdapter;
+import com.example.quizapp_fe.api.quiz.get.GetDiscoverQuizzesApi;
 import com.example.quizapp_fe.interfaces.CategoryCard;
 import com.example.quizapp_fe.interfaces.QuizCard;
+import com.example.quizapp_fe.models.DiscoverQuizzes;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class QuizFragment extends Fragment {
 
@@ -31,15 +37,61 @@ public class QuizFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_quiz, container, false);
         recyclerView = view.findViewById(R.id.quizFragRecyclerView);
         quizCardArrayList = new ArrayList<>();
-        quizCardArrayList.add(new QuizCard(R.drawable.img_sample_quiz, "Nhap mon lap trinh", "Phuc Lam", "UpdateCreated: 2 days"));
-        quizCardArrayList.add(new QuizCard(R.drawable.img_sample_quiz, "Cau truc du lieu va giai thuat", "Phuc Thinh", "UpdateCreated: 2 days"));
-        quizCardArrayList.add(new QuizCard(R.drawable.img_sample_quiz, "Nhap mon lap trinh", "Phuc Lam", "UpdateCreated: 2 days"));
-        quizCardArrayList.add(new QuizCard(R.drawable.img_sample_quiz, "Nhap mon lap trinh", "Phuc Lam", "UpdateCreated: 2 days"));
-        quizCardArrayList.add(new QuizCard(R.drawable.img_sample_quiz, "Nhap mon lap trinh", "Phuc Lam", "UpdateCreated: 2 days"));
-        quizCardArrayList.add(new QuizCard(R.drawable.img_sample_quiz, "Nhap mon lap trinh", "Phuc Lam", "UpdateCreated: 2 days"));
-        quizCardAdapter = new QuizCardAdapter(view.getContext(), quizCardArrayList);
-        recyclerView.setAdapter(quizCardAdapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 1));
+        callApi();
+
         return view;
+    }
+
+    public void callApi() {
+        GetDiscoverQuizzesApi.getAPI(requireContext()).getDiscoverQuizzes().enqueue(new Callback<DiscoverQuizzes>() {
+            @Override
+            public void onResponse(Call<DiscoverQuizzes> call, Response<DiscoverQuizzes> response) {
+                if (response.isSuccessful()){
+                    DiscoverQuizzes discoverQuizzes = response.body();
+//                    English
+                    for(int i =0 ;i< discoverQuizzes.getEnglish().size(); i++) {
+                        String name = discoverQuizzes.getEnglish().get(i).getCreator().getFirstName() +
+                                " " +
+                                discoverQuizzes.getEnglish().get(i).getCreator().getLastName();
+                        QuizCard quizCard = new QuizCard(R.drawable.ic_english_24,
+                                         discoverQuizzes.getEnglish().get(i).getName(),
+                                         name,
+                                         "English");
+                        quizCardArrayList.add(quizCard);
+                    }
+//                    Math
+                    for(int i =0 ;i< discoverQuizzes.getMath().size(); i++) {
+                        String name = discoverQuizzes.getMath().get(i).getCreator().getFirstName() +
+                                " " +
+                                discoverQuizzes.getMath().get(i).getCreator().getLastName();
+                        QuizCard quizCard = new QuizCard(R.drawable.ic_math_24_black,
+                                                         discoverQuizzes.getMath().get(i).getName(),
+                                                         name,
+                                                         "Math");
+                        quizCardArrayList.add(quizCard);
+                    }
+//                    Computer
+                    for(int i =0 ;i< discoverQuizzes.getComputer().size(); i++) {
+                        String name = discoverQuizzes.getComputer().get(i).getCreator().getFirstName() +
+                                " " +
+                                discoverQuizzes.getComputer().get(i).getCreator().getLastName();
+                        QuizCard quizCard = new QuizCard(R.drawable.ic_computer_24,
+                                                         discoverQuizzes.getComputer().get(i).getName(),
+                                                         name,
+                                                         "English");
+                        quizCardArrayList.add(quizCard);
+                    }
+//
+                    quizCardAdapter = new QuizCardAdapter(requireContext(), quizCardArrayList);
+                    recyclerView.setAdapter(quizCardAdapter);
+                    recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 1));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DiscoverQuizzes> call, Throwable t) {
+
+            }
+        });
     }
 }

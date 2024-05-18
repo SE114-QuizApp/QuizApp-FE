@@ -32,7 +32,7 @@ public class UserCardAdapter extends RecyclerView.Adapter<UserCardViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull UserCardViewHolder holder, int position) {
         UserCard userCard = dataList.get(position);
-        holder.bind(userCard);
+        holder.bind(userCard, context);
     }
 
     @Override

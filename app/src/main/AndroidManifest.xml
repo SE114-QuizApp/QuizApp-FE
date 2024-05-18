@@ -35,6 +35,8 @@
         <activity
             android:name=".activities.ReviewAnswers"
             android:exported="false" />
+        <activity android:name=".activities.QuizDetailActivity"
+            android:exported="false" />
         <activity android:name=".activities.TeacherQuizActivity"
             android:exported="false"/>
         <activity
