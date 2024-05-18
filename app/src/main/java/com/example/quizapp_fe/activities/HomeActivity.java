@@ -2,6 +2,7 @@ package com.example.quizapp_fe.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -10,17 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-<<<<<<< HEAD
 import com.example.quizapp_fe.R;
-=======
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.example.quizapp_fe.adapters.UserRankRecViewAdapter;
 import com.example.quizapp_fe.api.quiz.get.GetDiscoverQuizzesApi;
->>>>>>> 74d335324380ac9a4ebf1242e8829cb1f4bd676f
 import com.example.quizapp_fe.api.user.getListRanking.GetListRankingApi;
 import com.example.quizapp_fe.databinding.ActivityHomeBinding;
 import com.example.quizapp_fe.entities.UserProfile;
