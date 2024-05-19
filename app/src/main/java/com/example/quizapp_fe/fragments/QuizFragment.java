@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,9 @@ import com.example.quizapp_fe.adapters.QuizCardAdapter;
 import com.example.quizapp_fe.api.quiz.get.GetDiscoverQuizzesApi;
 import com.example.quizapp_fe.interfaces.CategoryCard;
 import com.example.quizapp_fe.interfaces.QuizCard;
+import com.example.quizapp_fe.interfaces.UserCard;
 import com.example.quizapp_fe.models.DiscoverQuizzes;
+import com.example.quizapp_fe.services.SearchListener;
 
 import java.util.ArrayList;
 
@@ -24,12 +27,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class QuizFragment extends Fragment {
+public class QuizFragment extends Fragment implements SearchListener {
 
     RecyclerView recyclerView;
     ArrayList<QuizCard> quizCardArrayList;
     QuizCardAdapter quizCardAdapter;
-
+    ArrayList<QuizCard> originalQuizCardArrayList;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -85,8 +88,7 @@ public class QuizFragment extends Fragment {
                                                          "Computer");
                         quizCardArrayList.add(quizCard);
                     }
-//
-
+                    originalQuizCardArrayList = new ArrayList<>(quizCardArrayList);
                     quizCardAdapter = new QuizCardAdapter(requireContext(), quizCardArrayList);
                     recyclerView.setAdapter(quizCardAdapter);
                     recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 1));
@@ -98,5 +100,20 @@ public class QuizFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onSearchQuery(String query) {
+        performSearch(query);
+    }
+
+    private void performSearch(String query) {
+        quizCardArrayList.clear();
+        for (QuizCard quizCard : originalQuizCardArrayList) {
+            if (quizCard.getTitleText().toLowerCase().contains(query.toLowerCase())) {
+                quizCardArrayList.add(quizCard);
+            }
+        }
+        quizCardAdapter.notifyDataSetChanged();
     }
 }
