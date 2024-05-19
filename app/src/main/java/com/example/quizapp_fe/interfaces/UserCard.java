@@ -1,17 +1,17 @@
 package com.example.quizapp_fe.interfaces;
 
 public class UserCard {
-    private int userCardImage;
+    private String userCardImage;
     private String userCardName;
     private String userCardEmail;
 
-    public UserCard(int userCardImage, String userCardName, String userCardEmail) {
+    public UserCard(String userCardImage, String userCardName, String userCardEmail) {
         this.userCardImage = userCardImage;
         this.userCardName = userCardName;
         this.userCardEmail = userCardEmail;
     }
 
-    public int getUserCardImage() {
+    public String getUserCardImage() {
         return userCardImage;
     }
 
