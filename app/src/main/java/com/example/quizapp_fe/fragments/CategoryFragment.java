@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,9 @@ import com.example.quizapp_fe.adapters.CategoryCardAdapter;
 import com.example.quizapp_fe.api.quiz.get.GetDiscoverQuizzesApi;
 import com.example.quizapp_fe.api.user.getListRanking.GetListRankingApi;
 import com.example.quizapp_fe.interfaces.CategoryCard;
+import com.example.quizapp_fe.interfaces.QuizCard;
 import com.example.quizapp_fe.models.DiscoverQuizzes;
+import com.example.quizapp_fe.services.SearchListener;
 
 import java.util.ArrayList;
 
@@ -24,12 +27,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CategoryFragment extends Fragment {
+public class CategoryFragment extends Fragment implements SearchListener {
 
     RecyclerView recyclerView;
     ArrayList<CategoryCard> categoryCardArrayList;
     CategoryCardAdapter categoryCardAdapter;
-
+    ArrayList<CategoryCard> originalCategoryCardArrayList;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -72,6 +75,8 @@ public class CategoryFragment extends Fragment {
                     categoryCardArrayList.add(mathCategoryCard);
                     categoryCardArrayList.add(computerCategoryCard);
 
+                    originalCategoryCardArrayList = new ArrayList<>(categoryCardArrayList);
+
                     categoryCardAdapter = new CategoryCardAdapter(requireContext(), categoryCardArrayList);
                     recyclerView.setAdapter(categoryCardAdapter);
                     recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
@@ -84,5 +89,21 @@ public class CategoryFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onSearchQuery(String query) {
+        Log.e("CategoryFragment", "SearchFrom CategoryFragment");
+        performSearch(query);
+    }
+
+    private void performSearch(String query) {
+        categoryCardArrayList.clear();
+        for (CategoryCard categoryCard : originalCategoryCardArrayList) {
+            if (categoryCard.getCategoryCardTitle().toLowerCase().contains(query.toLowerCase())) {
+                originalCategoryCardArrayList.add(categoryCard);
+            }
+        }
+        categoryCardAdapter.notifyDataSetChanged();
     }
 }

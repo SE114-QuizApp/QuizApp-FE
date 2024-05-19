@@ -17,6 +17,7 @@ import com.example.quizapp_fe.adapters.UserCardAdapter;
 import com.example.quizapp_fe.api.user.getAllUsers.GetAllUsersApi;
 import com.example.quizapp_fe.entities.User;
 import com.example.quizapp_fe.interfaces.UserCard;
+import com.example.quizapp_fe.services.SearchListener;
 
 import java.util.ArrayList;
 
@@ -24,11 +25,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UserFragment extends Fragment {
+public class UserFragment extends Fragment implements SearchListener {
 
     RecyclerView recyclerView;
     ArrayList<UserCard> userCardArrayList;
     UserCardAdapter userCardAdapter;
+    ArrayList<UserCard> originalUserCardArrayList;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class UserFragment extends Fragment {
         recyclerView = view.findViewById(R.id.userFragRecyclerView);
         userCardArrayList = new ArrayList<>();
         callApi();
+
         return view;
     }
 
@@ -52,9 +55,9 @@ public class UserFragment extends Fragment {
                                 usersList.get(i).getUserName(),
                                 usersList.get(i).getMail()));
                     }
-//                    userCardArrayList.add(new UserCard(usersList.get(0).getAvatar(),
-//                                                       usersList.get(0).getUserName(),
-//                                                       usersList.get(0).getMail()));
+
+                    originalUserCardArrayList = new ArrayList<>(userCardArrayList);
+
                     userCardAdapter = new UserCardAdapter(requireContext(), userCardArrayList);
                     recyclerView.setAdapter(userCardAdapter);
                     recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 1));
@@ -66,5 +69,20 @@ public class UserFragment extends Fragment {
                 Log.e("USERFRAG", "Call All User Api Fail");
             }
         });
+    }
+
+    @Override
+    public void onSearchQuery(String query) {
+        performSearch(query);
+    }
+
+    private void performSearch(String query) {
+        userCardArrayList.clear();
+        for (UserCard userCard : originalUserCardArrayList) {
+            if (userCard.getUserCardName().toLowerCase().contains(query.toLowerCase())) {
+                userCardArrayList.add(userCard);
+            }
+        }
+        userCardAdapter.notifyDataSetChanged();
     }
 }
