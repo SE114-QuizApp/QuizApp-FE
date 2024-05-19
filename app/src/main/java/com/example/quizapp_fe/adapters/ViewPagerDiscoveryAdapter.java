@@ -1,6 +1,8 @@
 package com.example.quizapp_fe.adapters;
 
 
+import android.util.SparseArray;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -13,8 +15,7 @@ import com.example.quizapp_fe.fragments.QuizFragment;
 import com.example.quizapp_fe.fragments.UserFragment;
 
 public class ViewPagerDiscoveryAdapter extends FragmentStateAdapter {
-
-
+    private SparseArray<Fragment> registeredFragments = new SparseArray<>();
     public ViewPagerDiscoveryAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
 
@@ -23,20 +24,30 @@ public class ViewPagerDiscoveryAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
+        Fragment fragment = null;
         switch (position) {
             case 0:
-                return new UserFragment();
+                fragment = new UserFragment();
+                break;
             case 1:
-                return new QuizFragment();
+                fragment = new QuizFragment();
+                break;
             case 2:
-                return new CategoryFragment();
+                fragment = new CategoryFragment();
+                break;
             default:
-                return new UserFragment();
+                fragment = new QuizFragment();
         }
+        registeredFragments.put(position, fragment);
+        return fragment;
     }
 
     @Override
     public int getItemCount() {
         return 3;
+    }
+
+    public Fragment getFragment(int position) {
+        return registeredFragments.get(position);
     }
 }
