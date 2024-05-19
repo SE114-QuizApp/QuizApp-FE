@@ -25,6 +25,10 @@ public class Quiz implements Serializable {
     private Category category;
     private Grade grade;
 
+    public Quiz()
+    {
+
+    }
 
     public Quiz(String _id, String name, String description, String backgroundImage, int pointsPerQuestion,
                 int numberOfQuestions, boolean isPublic, ArrayList<String> tags, ArrayList<String> likesCount,
