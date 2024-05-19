@@ -181,7 +181,7 @@ public class ReviewAnswers extends AppCompatActivity {
 
 
         txtAnswer.setLayoutParams(txtAnswerLayoutParams);
-        txtAnswer.setText("- " + userAnswer.getBody());
+        txtAnswer.setText(userAnswer.getBody());
         txtAnswer.setTextSize(16);
 
         // Thêm FrameLayout và TextView vào LinearLayout

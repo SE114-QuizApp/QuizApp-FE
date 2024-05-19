@@ -16,8 +16,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -35,7 +38,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.widget.CompoundButtonCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.quizapp_fe.R;
+import com.example.quizapp_fe.api.quiz.get.GetQuizByIdApi;
 import com.example.quizapp_fe.entities.Answer;
 import com.example.quizapp_fe.entities.Question;
 import com.example.quizapp_fe.entities.Quiz;
@@ -48,6 +53,10 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PlayQuiz extends AppCompatActivity {
     private TextView txtCountDown;
@@ -130,27 +139,63 @@ public class PlayQuiz extends AppCompatActivity {
 
         userAnswers = new ArrayList<Answer>();
 
-        userAnswers = new ArrayList<Answer>();
+        // Nhận dữ liệu từ Intent
+        Intent intent = getIntent();
+        String quizId = (String) intent.getSerializableExtra("quizId");
+        Log.e("PlayQuiz", quizId);
+        // Gọi hàm renderQuizInformation và chờ đến khi hoàn tất để tiếp tục
+        renderQuizInformation(quizId, () -> {
+            questionList = quiz.getQuestionList();
+            pgQuestionRemaining.setMax((quiz.getNumberOfQuestions() * 10));
+            displayQuestion(currentIndex);
 
+            changeStateCheckBox(lnAnswerA, cbAnswerA);
+            changeStateCheckBox(lnAnswerB, cbAnswerB);
+            changeStateCheckBox(lnAnswerC, cbAnswerC);
+            changeStateCheckBox(lnAnswerD, cbAnswerD);
 
+            // Bắt đầu đếm ngược từ 10 giây
+            startCountdown(currentQuestion.getAnswerTime() + 1);
+        });
 
         // Đọc dữ liệu từ file json
-        InputStream inputStream = getResources().openRawResource(R.raw.quiz);
-        quiz = JsonHelper.loadQuizFromJson(inputStream);
-        questionList = quiz.getQuestionList();
-
-        pgQuestionRemaining.setMax((quiz.getNumberOfQuestions() * 10));
-
-        displayQuestion(currentIndex);
-
-        changeStateCheckBox(lnAnswerA, cbAnswerA);
-        changeStateCheckBox(lnAnswerB, cbAnswerB);
-        changeStateCheckBox(lnAnswerC, cbAnswerC);
-        changeStateCheckBox(lnAnswerD, cbAnswerD);
-
-        // Bắt đầu đếm ngược từ 10 giây
-        startCountdown(currentQuestion.getAnswerTime() + 1);
+//        InputStream inputStream = getResources().openRawResource(R.raw.quiz);
+//        quiz = JsonHelper.loadQuizFromJson(inputStream);
+//        questionList = quiz.getQuestionList();
+//
+//        pgQuestionRemaining.setMax((quiz.getNumberOfQuestions() * 10));
+//
+//        displayQuestion(currentIndex);
+//
+//        changeStateCheckBox(lnAnswerA, cbAnswerA);
+//        changeStateCheckBox(lnAnswerB, cbAnswerB);
+//        changeStateCheckBox(lnAnswerC, cbAnswerC);
+//        changeStateCheckBox(lnAnswerD, cbAnswerD);
+//
+//        // Bắt đầu đếm ngược từ 10 giây
+//        startCountdown(currentQuestion.getAnswerTime() + 1);
     }
+
+    public void renderQuizInformation(String inputQuizId, final Runnable callback) {
+        GetQuizByIdApi.getAPI(PlayQuiz.this).getQuizById(inputQuizId).enqueue(new Callback<Quiz>() {
+            @Override
+            public void onResponse(Call<Quiz> call, Response<Quiz> response) {
+                Log.e("QuizDetail", "Call API Success By " + inputQuizId);
+                if(response.isSuccessful()) {
+                    quiz = response.body();
+                    if (callback != null) {
+                        callback.run();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Quiz> call, Throwable t) {
+                Log.e("QuizDetail", "Call API Failure" + inputQuizId);
+            }
+        });
+    }
+
 
     private void displayQuestion(int currentQuestionIndex) {
         // Lấy dữ liệu từng câu question và answer
@@ -162,7 +207,7 @@ public class PlayQuiz extends AppCompatActivity {
         resetCbState();
         // set init value
         pgQuestionRemaining.setProgress((currentQuestionIndex + 1) * 10, true);
-        btnPoint.setText("0" + quiz.getPointsPerQuestion());
+        btnPoint.setText(quiz.getPointsPerQuestion() + "");
 
         txtIndexOfCurrentQuestion.setText("QUESTION " + (currentQuestionIndex + 1) + " OF " + quiz.getNumberOfQuestions());
         txtContentQuestion.setText(currentQuestion.getContent());
@@ -178,9 +223,12 @@ public class PlayQuiz extends AppCompatActivity {
             txtContentQuestionNoImage.setVisibility(View.VISIBLE);
             txtContentQuestionNoImage.setText(currentQuestion.getContent());
         } else {
-            File imgFile = new File(currentQuestion.getBackgroundImage());
-            Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            questionImage.setImageBitmap(bitmap);
+            String imageUrl = currentQuestion.getBackgroundImage();
+            Glide.with(this)
+                 .load(imageUrl)
+                 .placeholder(R.drawable.loading_image_background) // Hình ảnh hiển thị khi đang tải
+                 .error(R.drawable.error_image_background) // Hình ảnh hiển thị khi có lỗi
+                 .into(questionImage);
         }
 
         // Nếu số answer == 2 hoặc 4
