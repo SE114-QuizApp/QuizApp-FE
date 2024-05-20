@@ -23,6 +23,6 @@ public class CategoryCardViewHolder extends RecyclerView.ViewHolder {
     public void bind(CategoryCard categoryCard) {
         categoryImageView.setImageResource(categoryCard.getCategoryCardImage());
         categoryTitleTextView.setText(categoryCard.getCategoryCardTitle());
-        categoryContentTextView.setText(categoryCard.getGetCategoryCardContent());
+        categoryContentTextView.setText(categoryCard.getCategoryCardContent());
     }
 }
