@@ -3,12 +3,12 @@ package com.example.quizapp_fe.interfaces;
 public class CategoryCard {
     private int categoryCardImage;
     private String categoryCardTitle;
-    private String getCategoryCardContent;
+    private String categoryCardContent;
 
-    public CategoryCard(int categoryCardImage, String categoryCardTitle, String getCategoryCardContent) {
+    public CategoryCard(int categoryCardImage, String categoryCardTitle, String categoryCardContent) {
         this.categoryCardImage = categoryCardImage;
         this.categoryCardTitle = categoryCardTitle;
-        this.getCategoryCardContent = getCategoryCardContent;
+        this.categoryCardContent = categoryCardContent;
     }
 
     public int getCategoryCardImage() {
@@ -19,7 +19,7 @@ public class CategoryCard {
         return categoryCardTitle;
     }
 
-    public String getGetCategoryCardContent() {
-        return getCategoryCardContent;
+    public String getCategoryCardContent() {
+        return categoryCardContent;
     }
 }
