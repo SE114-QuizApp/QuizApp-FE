@@ -154,7 +154,7 @@ public class ReviewAnswers extends AppCompatActivity {
             );
             imgLayoutParams.gravity = Gravity.END | Gravity.CENTER_VERTICAL; // Đặt vị trí của ImageView
             imgError.setLayoutParams(imgLayoutParams);
-            imgError.setImageResource(R.drawable.ic_error_outline); // Đặt hình ảnh
+            imgError.setImageResource(R.drawable.error_answer_ic); // Đặt hình ảnh
             frameLayout.addView(imgError);
 
         } else {
@@ -181,7 +181,13 @@ public class ReviewAnswers extends AppCompatActivity {
 
 
         txtAnswer.setLayoutParams(txtAnswerLayoutParams);
-        txtAnswer.setText(userAnswer.getBody());
+        if(userAnswer.getBody().equals(""))
+        {
+            txtAnswer.setText("-");
+        }
+        else {
+            txtAnswer.setText("-Answer: " + userAnswer.getBody());
+        }
         txtAnswer.setTextSize(16);
 
         // Thêm FrameLayout và TextView vào LinearLayout

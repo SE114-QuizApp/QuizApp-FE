@@ -12,6 +12,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -85,6 +86,20 @@ public class PlayQuiz extends AppCompatActivity {
     private LinearLayout lnAnswerC;
     private LinearLayout lnAnswerD;
 
+    private LinearLayout lnStatusAnswerA;
+    private LinearLayout lnStatusAnswerB;
+    private LinearLayout lnStatusAnswerC;
+    private LinearLayout lnStatusAnswerD;
+
+    private ImageView imgStatusAnswerA;
+    private ImageView imgStatusAnswerB;
+    private ImageView imgStatusAnswerC;
+    private ImageView imgStatusAnswerD;
+
+    private TextView txtStatusAnswerA;
+    private TextView txtStatusAnswerB;
+    private TextView txtStatusAnswerC;
+    private TextView txtStatusAnswerD;
     private LinearLayout lnAnswerGroup;
 
 
@@ -137,6 +152,21 @@ public class PlayQuiz extends AppCompatActivity {
         lnAnswerC = findViewById(R.id.answerLayerNo2);
         lnAnswerD = findViewById(R.id.answerLayerNo3);
 
+        lnStatusAnswerA = findViewById(R.id.statusLinearA);
+        lnStatusAnswerB = findViewById(R.id.statusLinearB);
+        lnStatusAnswerC = findViewById(R.id.statusLinearC);
+        lnStatusAnswerD = findViewById(R.id.statusLinearD);
+
+        imgStatusAnswerA = findViewById(R.id.statusImageA);
+        imgStatusAnswerB = findViewById(R.id.statusImageB);
+        imgStatusAnswerC = findViewById(R.id.statusImageC);
+        imgStatusAnswerD = findViewById(R.id.statusImageD);
+
+        txtStatusAnswerA = findViewById(R.id.statusAnswerA);
+        txtStatusAnswerB = findViewById(R.id.statusAnswerB);
+        txtStatusAnswerC = findViewById(R.id.statusAnswerC);
+        txtStatusAnswerD = findViewById(R.id.statusAnswerD);
+
         userAnswers = new ArrayList<Answer>();
 
         // Nhận dữ liệu từ Intent
@@ -147,33 +177,18 @@ public class PlayQuiz extends AppCompatActivity {
         renderQuizInformation(quizId, () -> {
             questionList = quiz.getQuestionList();
             pgQuestionRemaining.setMax((quiz.getNumberOfQuestions() * 10));
+
+            resetCbState();
             displayQuestion(currentIndex);
 
-            changeStateCheckBox(lnAnswerA, cbAnswerA);
-            changeStateCheckBox(lnAnswerB, cbAnswerB);
-            changeStateCheckBox(lnAnswerC, cbAnswerC);
-            changeStateCheckBox(lnAnswerD, cbAnswerD);
+            changeStateCheckBox(lnAnswerA, cbAnswerA, 0);
+            changeStateCheckBox(lnAnswerB, cbAnswerB, 2);
+            changeStateCheckBox(lnAnswerC, cbAnswerC, 4);
+            changeStateCheckBox(lnAnswerD, cbAnswerD, 6);
 
             // Bắt đầu đếm ngược từ 10 giây
             startCountdown(currentQuestion.getAnswerTime() + 1);
         });
-
-        // Đọc dữ liệu từ file json
-//        InputStream inputStream = getResources().openRawResource(R.raw.quiz);
-//        quiz = JsonHelper.loadQuizFromJson(inputStream);
-//        questionList = quiz.getQuestionList();
-//
-//        pgQuestionRemaining.setMax((quiz.getNumberOfQuestions() * 10));
-//
-//        displayQuestion(currentIndex);
-//
-//        changeStateCheckBox(lnAnswerA, cbAnswerA);
-//        changeStateCheckBox(lnAnswerB, cbAnswerB);
-//        changeStateCheckBox(lnAnswerC, cbAnswerC);
-//        changeStateCheckBox(lnAnswerD, cbAnswerD);
-//
-//        // Bắt đầu đếm ngược từ 10 giây
-//        startCountdown(currentQuestion.getAnswerTime() + 1);
     }
 
     public void renderQuizInformation(String inputQuizId, final Runnable callback) {
@@ -210,7 +225,7 @@ public class PlayQuiz extends AppCompatActivity {
         btnPoint.setText(quiz.getPointsPerQuestion() + "");
 
         txtIndexOfCurrentQuestion.setText("QUESTION " + (currentQuestionIndex + 1) + " OF " + quiz.getNumberOfQuestions());
-        txtContentQuestion.setText(currentQuestion.getContent());
+        txtContentQuestion.setText(currentQuestion.getContent() + " (" + quiz.getPointsPerQuestion() + " points)");
 
         if (currentQuestion.getBackgroundImage().equals("")) {
 
@@ -260,13 +275,21 @@ public class PlayQuiz extends AppCompatActivity {
         cbAnswerB.setChecked(false);
         cbAnswerC.setChecked(false);
         cbAnswerD.setChecked(false);
+
+        lnStatusAnswerA.setVisibility(View.GONE);
+        lnStatusAnswerB.setVisibility(View.GONE);
+        lnStatusAnswerC.setVisibility(View.GONE);
+        lnStatusAnswerD.setVisibility(View.GONE);
+
     }
 
     private void resetCbState() {
-        for (int i = 0; i < lnAnswerGroup.getChildCount(); i++) {
+        for (int i = 1; i < lnAnswerGroup.getChildCount(); i +=2) {
             View childView = lnAnswerGroup.getChildAt(i);
             if (childView instanceof LinearLayout) {
                 LinearLayout otherAnswerLayout = (LinearLayout) childView;
+                Drawable initDrawable = ContextCompat.getDrawable(getBaseContext(), R.drawable.answer_rounded);
+                otherAnswerLayout.setBackground(initDrawable);
                 CheckBox otherCheckBox = (CheckBox) otherAnswerLayout.getChildAt(0);
                 otherCheckBox.setEnabled(true);
                 otherCheckBox.setChecked(false);
@@ -327,7 +350,7 @@ public class PlayQuiz extends AppCompatActivity {
         }.start();
     }
 
-    private void changeStateCheckBox(LinearLayout ln, CheckBox cb) {
+    private void changeStateCheckBox(LinearLayout ln, CheckBox cb, int index) {
         cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -341,16 +364,16 @@ public class PlayQuiz extends AppCompatActivity {
                     CompoundButtonCompat.setButtonTintList(cb, colorStateList);
 
                     // Kiểm tra đáp án
-                    checkAnswer(ln, cb);
+                    checkAnswer(ln, cb, index);
 
                     if (currentQuestion.getOptionQuestion().equals("Single")) {
                         // Tắt các CheckBox khác
-                        disableOtherCheckBoxes(ln, cb);
+                        disableAllCheckBoxes(ln, cb);
                     }
                     else {
                         numberOfAnswerSelection += 1;
                         if(numberOfAnswerSelection == currentQuestion.getCorrectAnswerCount()) {
-                            disableOtherCheckBoxes(ln, cb);
+                            disableAllCheckBoxes(ln, cb);
                         }
                     }
                 } else {
@@ -365,7 +388,7 @@ public class PlayQuiz extends AppCompatActivity {
         });
     }
 
-    private void checkAnswer(LinearLayout linearLayout, CheckBox checkBox) {
+    private void checkAnswer(LinearLayout linearLayout, CheckBox checkBox, int index) {
         String selectedAnswer = checkBox.getText().toString();
         boolean isCorrect = false;
 
@@ -397,10 +420,93 @@ public class PlayQuiz extends AppCompatActivity {
             ColorStateList colorStateList = ColorStateList.valueOf(color);
             CompoundButtonCompat.setButtonTintList(checkBox, colorStateList);
         }
+        statusAnswerInfo(isCorrect, index);
+
+        // Hiển thị đáp án đúng
+        showCorrectAnswer();
     }
 
-    private void disableOtherCheckBoxes(LinearLayout selectedAnswerLayout, CheckBox selectedAnswerCb) {
-        for (int i = 0; i < lnAnswerGroup.getChildCount(); i++) {
+    private void statusAnswerInfo(boolean isCorrect, int index) {
+        View childView = lnAnswerGroup.getChildAt(index);
+
+        if (childView instanceof LinearLayout) {
+            LinearLayout otherAnswerLayout = (LinearLayout) childView;
+            View childImageView = otherAnswerLayout.getChildAt(0);
+            View childTextView = otherAnswerLayout.getChildAt(1);
+
+            if (childImageView instanceof ImageView && childTextView instanceof TextView) {
+                ImageView imgView = (ImageView) childImageView;
+                TextView textView = (TextView) childTextView;
+
+                otherAnswerLayout.setVisibility(View.VISIBLE);
+
+                if (isCorrect) {
+                    textView.setText("Congrat, Your answer is correct !");
+                    Drawable correctIcon = ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_true_answer);
+                    imgView.setImageDrawable(correctIcon);
+
+                    int colorSucA = ContextCompat.getColor(getBaseContext(), R.color.green_lime);
+                    textView.setTextColor(colorSucA);
+                } else {
+                    textView.setText("Unfortunately, your answer is wrong !");
+                    int colorSuc = ContextCompat.getColor(getBaseContext(), R.color.red_real);
+                    textView.setTextColor(colorSuc);
+
+                    Drawable correctIcon = ContextCompat.getDrawable(getBaseContext(), R.drawable.error_answer_ic);
+                    imgView.setImageDrawable(correctIcon);
+                }
+            } else {
+                // Xử lý trường hợp không đúng loại của các phần tử con
+                Log.e("statusAnswerInfo", "Expected ImageView and TextView but found different types.");
+            }
+        } else {
+            // Xử lý trường hợp không đúng loại của phần tử con
+            Log.e("statusAnswerInfo", "Expected LinearLayout but found different type.");
+        }
+    }
+
+
+    private void showCorrectAnswer() {
+        for (Answer answer : answersList) {
+            if(answer.isCorrect()) {
+                switch (answer.getName()) {
+                    case "a":
+                        Drawable trueDrawableA = ContextCompat.getDrawable(getBaseContext(), R.drawable.bg_answer_checked_true);
+                        lnAnswerA.setBackground(trueDrawableA);
+                        int colorA = ContextCompat.getColor(getBaseContext(), R.color.green_lime);
+                        ColorStateList colorStateListA = ColorStateList.valueOf(colorA);
+                        CompoundButtonCompat.setButtonTintList(cbAnswerA, colorStateListA);
+                        break;
+                    case "b":
+                        Drawable trueDrawableB = ContextCompat.getDrawable(getBaseContext(), R.drawable.bg_answer_checked_true);
+                        lnAnswerB.setBackground(trueDrawableB);
+                        int colorB = ContextCompat.getColor(getBaseContext(), R.color.green_lime);
+                        ColorStateList colorStateListB = ColorStateList.valueOf(colorB);
+                        CompoundButtonCompat.setButtonTintList(cbAnswerB, colorStateListB);
+                        break;
+                    case "c":
+                        Drawable trueDrawableC = ContextCompat.getDrawable(getBaseContext(), R.drawable.bg_answer_checked_true);
+                        lnAnswerC.setBackground(trueDrawableC);
+                        int colorC = ContextCompat.getColor(getBaseContext(), R.color.green_lime);
+                        ColorStateList colorStateListC = ColorStateList.valueOf(colorC);
+                        CompoundButtonCompat.setButtonTintList(cbAnswerC, colorStateListC);
+                        break;
+                    case "d":
+                        Drawable trueDrawableD = ContextCompat.getDrawable(getBaseContext(), R.drawable.bg_answer_checked_true);
+                        lnAnswerD.setBackground(trueDrawableD);
+                        int colorD = ContextCompat.getColor(getBaseContext(), R.color.green_lime);
+                        ColorStateList colorStateListD = ColorStateList.valueOf(colorD);
+                        CompoundButtonCompat.setButtonTintList(cbAnswerD, colorStateListD);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    private void disableAllCheckBoxes(LinearLayout selectedAnswerLayout, CheckBox selectedAnswerCb) {
+        for (int i = 1; i < lnAnswerGroup.getChildCount(); i+=2) {
             View childView = lnAnswerGroup.getChildAt(i);
             if (childView instanceof LinearLayout) {
                 LinearLayout otherAnswerLayout = (LinearLayout) childView;

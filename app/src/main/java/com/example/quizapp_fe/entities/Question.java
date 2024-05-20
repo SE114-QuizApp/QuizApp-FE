@@ -52,4 +52,8 @@ public class Question implements Serializable {
     public int getCorrectAnswerCount() {
         return correctAnswerCount;
     }
+
+    public ArrayList<String> getAnswerCorrect() {
+        return answerCorrect;
+    }
 }
