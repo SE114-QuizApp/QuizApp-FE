@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,7 +35,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HomeFragment extends Fragment {
-     RecyclerView liveQuizRecyclerView;
+    RecyclerView liveQuizRecyclerView;
     ArrayList<LiveQuizCard> liveQuizCardList;
     LiveQuizAdapter liveQuizAdapter;
     ImageButton editQuizImageButton;
@@ -42,6 +43,27 @@ public class HomeFragment extends Fragment {
     String teacherId;
     ImageView avatarImageView;
     TextView userNameTextView;
+    Context context;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.context = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (GetTeacherQuizzesApi.getTeacherQuizAPI(context).getTeacherQuiz(teacherId) != null) {
+            GetTeacherQuizzesApi.getTeacherQuizAPI(context).getTeacherQuiz(teacherId).cancel();
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,7 +75,7 @@ public class HomeFragment extends Fragment {
         avatarImageView = view.findViewById(R.id.homeFragAvatarImageView);
         userNameTextView = view.findViewById(R.id.homeFragUserNameTextView);
         liveQuizCardList = new ArrayList<>();
-        teacherId = CredentialToken.getInstance(requireContext()).getUserProfile().getId();
+        teacherId = CredentialToken.getInstance(context).getUserProfile().getId();
         callAPIGetQuiz(teacherId);
         setAvatar(teacherId);
         setUserName(teacherId);
@@ -62,10 +84,9 @@ public class HomeFragment extends Fragment {
         seeAllButtonTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Animation animation = AnimationUtils.loadAnimation(requireContext(), R.anim.animation_normal);
+                Animation animation = AnimationUtils.loadAnimation(context, R.anim.animation_normal);
                 seeAllButtonTextView.startAnimation(animation);
-                Context context1 = getActivity();
-                Intent intent = new Intent(context1, TeacherQuizActivity.class);
+                Intent intent = new Intent(context, TeacherQuizActivity.class);
                 startActivity(intent);
             }
         });
@@ -73,7 +94,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void callAPIGetQuiz(String teacherId) {
-        GetTeacherQuizzesApi.getTeacherQuizAPI(requireContext()).getTeacherQuiz(teacherId).enqueue(new Callback<ArrayList<Quiz>>() {
+         GetTeacherQuizzesApi.getTeacherQuizAPI(context).getTeacherQuiz(teacherId).enqueue(new Callback<ArrayList<Quiz>>() {
             @Override
             public void onResponse(Call<ArrayList<Quiz>> call, Response<ArrayList<Quiz>> response) {
                 if (response.isSuccessful()){
@@ -90,31 +111,31 @@ public class HomeFragment extends Fragment {
                         quizId = teacherQuizList.get(i).get_id();
                         LiveQuizCard liveQuizCard = new LiveQuizCard(quizImage,quizTitle,quizSubTitle,quizId);
                         liveQuizCardList.add(liveQuizCard);
-                        liveQuizAdapter = new LiveQuizAdapter(requireContext(),liveQuizCardList);
+                        liveQuizAdapter = new LiveQuizAdapter(context,liveQuizCardList);
                         liveQuizRecyclerView.setAdapter(liveQuizAdapter);
-                        liveQuizRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+                        liveQuizRecyclerView.setLayoutManager(new LinearLayoutManager(context));
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<Quiz>> call, Throwable t) {
-                Toast.makeText(requireContext(), "Call API Failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Call API Failed", Toast.LENGTH_SHORT).show();
                 Log.e("HomeFrament", "failed");
             }
         });
     }
     private void setAvatar(String teacherId) {
         String avatarUrl;
-        avatarUrl = CredentialToken.getInstance(requireContext()).getUserProfile().getAvatar();
-        Glide.with(requireContext()).load(avatarUrl).circleCrop().into(avatarImageView);
+        avatarUrl = CredentialToken.getInstance(context).getUserProfile().getAvatar();
+        Glide.with(context).load(avatarUrl).circleCrop().into(avatarImageView);
     }
     private void setUserName(String teacherId) {
         String userName;
         String firstName;
         String lastName;
-        firstName = CredentialToken.getInstance(requireContext()).getUserProfile().getFirstName();
-        lastName = CredentialToken.getInstance(requireContext()).getUserProfile().getLastName();
+        firstName = CredentialToken.getInstance(context).getUserProfile().getFirstName();
+        lastName = CredentialToken.getInstance(context).getUserProfile().getLastName();
         userName = firstName + " "  + lastName;
         userNameTextView.setText(userName);
     }
