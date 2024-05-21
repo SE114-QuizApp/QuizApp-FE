@@ -73,7 +73,7 @@ public class MonthRankingFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<UserRank>> call, Throwable t) {
+            public void onFailure(@NonNull Call<ArrayList<UserRank>> call, @NonNull Throwable t) {
                 Toast.makeText(requireContext(), "Call api failure", Toast.LENGTH_SHORT).show();
             }
         });
