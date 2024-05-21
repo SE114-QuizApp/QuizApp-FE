@@ -21,7 +21,7 @@ public class GetTeacherQuizzesApi {
 
     public interface QuizApi {
         @GET(ApiEndpoint.QuizApiEndpoint.GET_TEACHER_QUIZZES)
-        Call<ArrayList<Quiz>> getTeacherQuiz(@Path("teacherId") String teacherId);
+        Call<ArrayList<Quiz>>  getTeacherQuiz(@Path("teacherId") String teacherId);
     }
     public static QuizApi getTeacherQuizAPI(Context context) {
         return new Retrofit.Builder()

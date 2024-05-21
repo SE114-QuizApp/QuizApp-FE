@@ -31,7 +31,7 @@ public class TeacherQuizActivity extends AppCompatActivity {
 
     ImageButton imgButtonBackArrow;
     String teacherId;
-
+    ImageButton examineImageButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +52,6 @@ public class TeacherQuizActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
     private void callApiGetQuiz(String teacherId){
         GetTeacherQuizzesApi.getTeacherQuizAPI(TeacherQuizActivity.this).getTeacherQuiz(teacherId).enqueue(new Callback<ArrayList<Quiz>>() {
