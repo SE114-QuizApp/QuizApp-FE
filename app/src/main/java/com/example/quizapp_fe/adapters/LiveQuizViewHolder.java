@@ -49,6 +49,11 @@ public class LiveQuizViewHolder extends RecyclerView.ViewHolder {
                 context.startActivity(intent);
             }
         });
+        imgButtonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
     }
 }
