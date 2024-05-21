@@ -37,8 +37,8 @@ public class QuestionDetailViewHolder extends RecyclerView.ViewHolder {
     public void bind(Question question, Context context) {
         questionDetailNumericalOrderTextView.setText(Integer.toString(question.getQuestionIndex()));
         questionDetailContentTextView.setText(question.getContent());
-        questionDetailOptionQuestionTextView.setText(question.getOptionQuestion());
-        questionDetailAnswerTime.setText(Integer.toString(question.getAnswerTime()));
+        questionDetailOptionQuestionTextView.setText(question.getOptionQuestion() + " Option");
+        questionDetailAnswerTime.setText(Integer.toString(question.getAnswerTime()) + " Seconds");
 
         answerArrayList = new ArrayList<>();
 
