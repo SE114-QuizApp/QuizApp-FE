@@ -31,7 +31,8 @@ public class QuestionDetailAdapter extends RecyclerView.Adapter<QuestionDetailVi
 
     @Override
     public void onBindViewHolder(@NonNull QuestionDetailViewHolder holder, int position) {
-
+        Question question = dataList.get(position);
+        holder.bind(question, context);
     }
 
     @Override

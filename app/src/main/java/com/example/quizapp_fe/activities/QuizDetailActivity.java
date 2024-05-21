@@ -15,12 +15,18 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.quizapp_fe.R;
+import com.example.quizapp_fe.adapters.QuestionDetailAdapter;
 import com.example.quizapp_fe.api.quiz.get.GetQuizByIdApi;
+import com.example.quizapp_fe.entities.Question;
 import com.example.quizapp_fe.entities.Quiz;
+
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -39,6 +45,8 @@ public class QuizDetailActivity extends AppCompatActivity {
     private TextView quizDetailCreatorNameTextView;
     private AppCompatButton quizDetailPlaySoloButton;
     private RecyclerView quizDetailQuestionListRecyclerView;
+    private ArrayList<Question> questionArrayList;
+    private QuestionDetailAdapter questionDetailAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +65,8 @@ public class QuizDetailActivity extends AppCompatActivity {
             quizDetailCreatorNameTextView = findViewById(R.id.quizDetailCreatorNameTextView);
             quizDetailPlaySoloButton = findViewById(R.id.quizDetailPlaySoloButton);
             quizDetailQuestionListRecyclerView = findViewById(R.id.quizDetailQuestionListRecyclerView);
+
+            questionArrayList = new ArrayList<>();
 
             Bundle bundle = getIntent().getExtras();
             if(bundle != null) {
@@ -99,7 +109,16 @@ public class QuizDetailActivity extends AppCompatActivity {
                             .load(quiz.getCreator().getAvatar())
                             .error(R.drawable.img_office_man_512)
                             .into(quizDetailCreatorAvatarImageView);
+
                     quizDetailCreatorNameTextView.setText(quiz.getCreator().getFullName());
+
+                    for (int i = 0; i < quiz.getQuestionList().size(); i++) {
+                        Question question = quiz.getQuestionList().get(i);
+                        questionArrayList.add(question);
+                    }
+                    questionDetailAdapter = new QuestionDetailAdapter(QuizDetailActivity.this, questionArrayList);
+                    quizDetailQuestionListRecyclerView.setAdapter(questionDetailAdapter);
+                    quizDetailQuestionListRecyclerView.setLayoutManager(new GridLayoutManager(QuizDetailActivity.this, 1));
 
                     quizDetailPlaySoloButton.setOnClickListener(new View.OnClickListener() {
                         @Override
