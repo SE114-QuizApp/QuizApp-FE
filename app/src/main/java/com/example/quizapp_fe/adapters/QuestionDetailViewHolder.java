@@ -44,6 +44,9 @@ public class QuestionDetailViewHolder extends RecyclerView.ViewHolder {
 
         for (int i = 0; i < question.getAnswerList().size(); i++) {
             Answer answer = question.getAnswerList().get(i);
+            if (answer.getBody().equals("")) {
+                continue;
+            }
             answerArrayList.add(answer);
         }
 
