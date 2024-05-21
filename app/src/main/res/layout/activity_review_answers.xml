@@ -33,17 +33,17 @@
 
             <Button
                 android:id="@+id/backToHome"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
                 android:layout_gravity="right"
                 android:backgroundTint="@color/dark_yellow"
                 android:paddingVertical="12dp"
                 android:textSize="14dp"
-                app:cornerRadius="12dp"
+                app:cornerRadius="5dp"
                 app:icon="@drawable/ic_home_black"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
-                app:iconSize="24dp"
+                app:iconSize="16dp"
                 app:strokeColor="@color/dark_yellow"
                 app:strokeWidth="1dp" />
         </FrameLayout>
