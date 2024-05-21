@@ -170,6 +170,13 @@ public class PlayQuiz extends AppCompatActivity {
             // Bắt đầu đếm ngược từ 10 giây
             startCountdown(currentQuestion.getAnswerTime() + 1);
         });
+
+        // Thêm click listener cho các LinearLayout chứa CheckBox
+        // Thêm click listener cho các LinearLayout chứa CheckBox
+        lnAnswerA.setOnClickListener(v -> handleLinearLayoutClick(lnAnswerA, cbAnswerA, 0));
+        lnAnswerB.setOnClickListener(v -> handleLinearLayoutClick(lnAnswerB, cbAnswerB, 2));
+        lnAnswerC.setOnClickListener(v -> handleLinearLayoutClick(lnAnswerC, cbAnswerC, 4));
+        lnAnswerD.setOnClickListener(v -> handleLinearLayoutClick(lnAnswerD, cbAnswerD, 6));
     }
 
     public void renderQuizInformation(String inputQuizId, final Runnable callback) {
@@ -369,6 +376,40 @@ public class PlayQuiz extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void handleLinearLayoutClick(LinearLayout ln, CheckBox cb, int index) {
+        if (!cb.isEnabled()) return;
+        cb.setChecked(!cb.isChecked());
+        if (cb.isChecked()) {
+            Drawable roundedDrawable = ContextCompat.getDrawable(getBaseContext(), R.drawable.answer_rounded);
+            ln.setBackground(roundedDrawable);
+
+            // set color
+            int color = ContextCompat.getColor(getBaseContext(), R.color.purple_hue);
+            ColorStateList colorStateList = ColorStateList.valueOf(color);
+            CompoundButtonCompat.setButtonTintList(cb, colorStateList);
+
+            // Kiểm tra đáp án
+            checkAnswer(ln, cb, index);
+
+            if (currentQuestion.getOptionQuestion().equals("Single")) {
+                // Tắt các CheckBox khác
+                disableAllCheckBoxes(ln, cb);
+            } else {
+                numberOfAnswerSelection += 1;
+                if (numberOfAnswerSelection == currentQuestion.getCorrectAnswerCount()) {
+                    disableAllCheckBoxes(ln, cb);
+                }
+            }
+        } else {
+            Drawable roundedFalseDrawable = ContextCompat.getDrawable(getBaseContext(), R.drawable.answer_rounded_false);
+            ln.setBackground(roundedFalseDrawable);
+            // set color
+            int color = ContextCompat.getColor(getBaseContext(), R.color.dull_lavender);
+            ColorStateList colorStateList = ColorStateList.valueOf(color);
+            CompoundButtonCompat.setButtonTintList(cb, colorStateList);
+        }
     }
 
     private void checkAnswer(LinearLayout linearLayout, CheckBox checkBox, int index) {
