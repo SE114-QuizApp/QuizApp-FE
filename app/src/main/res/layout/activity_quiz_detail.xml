@@ -38,7 +38,7 @@
         android:background="@drawable/border_20dp_white"
         android:paddingVertical="20sp"
         android:paddingHorizontal="20sp"
-        app:layout_constraintHeight_percent="0.675"
+        app:layout_constraintHeight_percent="0.9"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -72,7 +72,7 @@
             android:paddingHorizontal="20sp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintHeight_percent="0.11"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/quizDetailQuizTitleTextView">
 <!--            Question Mark-->
@@ -187,17 +187,28 @@
             </LinearLayout>
         </LinearLayout>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/quizDetailQuestionListRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintWidth_percent="0.975"
+            app:layout_constraintHeight_percent="0.3"
+            app:layout_constraintTop_toBottomOf="@id/quizDetailUserInfoSectionLinearLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/quizDetailPlaySoloButton"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:text="Play Solo"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/medium_purple"
             android:background="@drawable/border_20dp_white"
             app:layout_constraintWidth_percent="0.95"
-            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintHeight_percent="0.1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
