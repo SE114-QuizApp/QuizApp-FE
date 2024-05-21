@@ -29,9 +29,11 @@
                 android:id="@+id/homeFragAvatarImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="25dp"
                 android:src="@drawable/ic_avatar"
+                app:layout_constraintHeight_max="80dp"
+                app:layout_constraintWidth_max="80dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
