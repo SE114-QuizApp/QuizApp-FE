@@ -16,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
-public class GetPublicQuizzesApi {
+public class GetTeacherQuizzesApi {
     static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
     public interface QuizApi {
