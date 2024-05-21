@@ -15,6 +15,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.quizapp_fe.R;
@@ -37,6 +38,7 @@ public class QuizDetailActivity extends AppCompatActivity {
     private CircleImageView quizDetailCreatorAvatarImageView;
     private TextView quizDetailCreatorNameTextView;
     private AppCompatButton quizDetailPlaySoloButton;
+    private RecyclerView quizDetailQuestionListRecyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +56,7 @@ public class QuizDetailActivity extends AppCompatActivity {
             quizDetailCreatorAvatarImageView = findViewById(R.id.quizDetailCreatorAvatarImageView);
             quizDetailCreatorNameTextView = findViewById(R.id.quizDetailCreatorNameTextView);
             quizDetailPlaySoloButton = findViewById(R.id.quizDetailPlaySoloButton);
+            quizDetailQuestionListRecyclerView = findViewById(R.id.quizDetailQuestionListRecyclerView);
 
             Bundle bundle = getIntent().getExtras();
             if(bundle != null) {
@@ -96,6 +99,7 @@ public class QuizDetailActivity extends AppCompatActivity {
                             .error(R.drawable.img_office_man_512)
                             .into(quizDetailCreatorAvatarImageView);
                     quizDetailCreatorNameTextView.setText(quiz.getCreator().getFullName());
+
                     quizDetailPlaySoloButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
