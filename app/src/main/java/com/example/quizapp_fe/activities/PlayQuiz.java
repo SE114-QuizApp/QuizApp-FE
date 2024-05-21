@@ -90,20 +90,11 @@ public class PlayQuiz extends AppCompatActivity {
     private LinearLayout lnStatusAnswerB;
     private LinearLayout lnStatusAnswerC;
     private LinearLayout lnStatusAnswerD;
-
-    private ImageView imgStatusAnswerA;
-    private ImageView imgStatusAnswerB;
-    private ImageView imgStatusAnswerC;
-    private ImageView imgStatusAnswerD;
-
-    private TextView txtStatusAnswerA;
-    private TextView txtStatusAnswerB;
-    private TextView txtStatusAnswerC;
-    private TextView txtStatusAnswerD;
     private LinearLayout lnAnswerGroup;
 
 
     private Quiz quiz;
+    private String quizId;
     private ArrayList<Question> questionList;
 
     private int currentIndex = 0;
@@ -157,21 +148,11 @@ public class PlayQuiz extends AppCompatActivity {
         lnStatusAnswerC = findViewById(R.id.statusLinearC);
         lnStatusAnswerD = findViewById(R.id.statusLinearD);
 
-        imgStatusAnswerA = findViewById(R.id.statusImageA);
-        imgStatusAnswerB = findViewById(R.id.statusImageB);
-        imgStatusAnswerC = findViewById(R.id.statusImageC);
-        imgStatusAnswerD = findViewById(R.id.statusImageD);
-
-        txtStatusAnswerA = findViewById(R.id.statusAnswerA);
-        txtStatusAnswerB = findViewById(R.id.statusAnswerB);
-        txtStatusAnswerC = findViewById(R.id.statusAnswerC);
-        txtStatusAnswerD = findViewById(R.id.statusAnswerD);
-
         userAnswers = new ArrayList<Answer>();
 
         // Nhận dữ liệu từ Intent
         Intent intent = getIntent();
-        String quizId = (String) intent.getSerializableExtra("quizId");
+        quizId = (String) intent.getSerializableExtra("quizId");
         Log.e("PlayQuiz", quizId);
         // Gọi hàm renderQuizInformation và chờ đến khi hoàn tất để tiếp tục
         renderQuizInformation(quizId, () -> {
@@ -341,7 +322,9 @@ public class PlayQuiz extends AppCompatActivity {
 
 
                     UserAnswers model = new UserAnswers(userAnswers, questionList, totalPoints);
+                    intent.putExtra("quizId", quizId);
                     intent.putExtra("userAnswers", model);
+                    intent.putExtra("quizName", quiz.getName());
 
                     startActivity(intent);
                 }
