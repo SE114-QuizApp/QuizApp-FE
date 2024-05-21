@@ -1,13 +1,18 @@
 package com.example.quizapp_fe.activities;
 
+import static java.lang.String.format;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.quizapp_fe.R;
+import com.example.quizapp_fe.api.account.profile.GetMeApi;
 import com.example.quizapp_fe.models.CredentialToken;
 import com.example.quizapp_fe.models.MediaMangerObject;
 
@@ -23,9 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         new Handler().postDelayed(() -> {
             if (!CredentialToken.getInstance(this).getUserId().isEmpty() && !CredentialToken.getInstance(this).getAccessToken().isEmpty()) {
-                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                startActivity(intent);
-                finish();
+                getMe();
             } else {
                 Intent intent = new Intent(MainActivity.this, OnboardingActivity.class);
                 startActivity(intent);
@@ -33,5 +36,39 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 2000);
 
+    }
+    private void getMe() {
+        GetMeApi.getAPI(this).getMe().enqueue(new retrofit2.Callback<com.example.quizapp_fe.api.account.auth.LoginWithPasswordApiResult>() {
+            @Override
+            public void onResponse(retrofit2.Call<com.example.quizapp_fe.api.account.auth.LoginWithPasswordApiResult> call, retrofit2.Response<com.example.quizapp_fe.api.account.auth.LoginWithPasswordApiResult> response) {
+                if (response.isSuccessful()) {
+                    assert response.body() != null;
+
+
+                    System.out.println(response.body().getUser().getUsername());
+                    System.out.printf("%s %s%n", response.body().getUser().getFirstName(), response.body().getUser().getLastName());
+                    CredentialToken.getInstance(MainActivity.this).setUserProfile(response.body().getUser());
+                    Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(MainActivity.this, "Call API failure",
+                                   Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainActivity.this, OnboardingActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<com.example.quizapp_fe.api.account.auth.LoginWithPasswordApiResult> call, Throwable t) {
+                System.out.println(t.getMessage());
+                Toast.makeText(MainActivity.this, "Call API failure",
+                               Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, OnboardingActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 }
