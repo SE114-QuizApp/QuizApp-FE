@@ -6,6 +6,7 @@ import static java.lang.String.*;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -87,6 +88,12 @@ public class ProfileFragment extends Fragment {
         }else{
             txtPoints.setText(String.format("%d", RankingUsers.getInstance().getCurrentUser().getPoint()));
             txtRank.setText(String.format("%d", RankingUsers.getInstance().getCurrentUser().getRank()));
+        }
+        if(CredentialToken.getInstance(requireContext()).getUserProfile() == null){
+            txtPoints.setText("0");
+            txtRank.setText("0");
+        }else{
+            txtPoints.setText(String.format("%d", CredentialToken.getInstance(requireContext()).getUserProfile().getPoint()));
         }
 
 
@@ -248,7 +255,7 @@ public class ProfileFragment extends Fragment {
     private void getMe() {
         GetMeApi.getAPI(requireContext()).getMe().enqueue(new retrofit2.Callback<com.example.quizapp_fe.api.account.auth.LoginWithPasswordApiResult>() {
             @Override
-            public void onResponse(retrofit2.Call<com.example.quizapp_fe.api.account.auth.LoginWithPasswordApiResult> call, retrofit2.Response<com.example.quizapp_fe.api.account.auth.LoginWithPasswordApiResult> response) {
+            public void onResponse(@NonNull retrofit2.Call<com.example.quizapp_fe.api.account.auth.LoginWithPasswordApiResult> call, @NonNull retrofit2.Response<com.example.quizapp_fe.api.account.auth.LoginWithPasswordApiResult> response) {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
 
@@ -267,8 +274,6 @@ public class ProfileFragment extends Fragment {
                              .load(response.body().getUser().getAvatar())
                              .circleCrop()
                              .into(imgAvatar);
-                    } else {
-                        imgAvatar.setImageResource(R.drawable.ic_user_24);
                     }
 
                 } else {
