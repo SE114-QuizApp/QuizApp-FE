@@ -53,11 +53,8 @@ public class ReviewAnswers extends AppCompatActivity {
     private Button btnPlayAgain;
     private Button btnBackHome;
     private LinearLayout lnAnswerReviewGroup;
-    private ArrayList<Answer> userAnswerList;
-    private ArrayList<Question> questionList;
+    private ArrayList<Question> userQuestionAnswerList;
     private int totalPoints;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +71,7 @@ public class ReviewAnswers extends AppCompatActivity {
         txtNoCorrect = findViewById(R.id.numberOfCorrectAnswer);
         txtDescCorrect = findViewById(R.id.descripCorrectAnswer);
         txtQuizName = findViewById(R.id.quizName);
-
         txtTotalPoint = findViewById(R.id.displayTotalPoints);
-
         lnAnswerReviewGroup = findViewById(R.id.answerReviewGroup);
         btnSubmitAnswer = findViewById(R.id.submitAnswer);
         btnPlayAgain = findViewById(R.id.playQuizAgain);
@@ -89,25 +84,26 @@ public class ReviewAnswers extends AppCompatActivity {
         UserAnswers reviewAnswer = (UserAnswers) intent.getSerializableExtra("userAnswers");
         String quizId = (String) intent.getSerializableExtra("quizId");
         String quizName = (String) intent.getSerializableExtra("quizName");
-        userAnswerList = reviewAnswer.getUserAnswersList();
-        questionList = reviewAnswer.getQuestionsList();
-
+        int numberOfQuestions = (int) intent.getSerializableExtra("numberOfQuestions");
+        userQuestionAnswerList = reviewAnswer.getUserQuestionList();
         totalPoints = reviewAnswer.getTotalPoints();
 
         int cntCorrect = 0;
-        for (Answer answer : userAnswerList) {
-            if (answer.isCorrect()) {
-                cntCorrect++;
+        for (Question question : userQuestionAnswerList) {
+            for (Answer answer : question.getAnswerList()) {
+                if (!answer.getName().equals("")) {
+                    cntCorrect += 1;
+                    break;
+                }
             }
         }
         txtQuizName.setText(quizName);
-        txtNoCorrect.setText(cntCorrect + "/" + userAnswerList.size());
-        txtDescCorrect.setText("You answer " + cntCorrect + "\nout of " + userAnswerList.size() + "\nquestions");
-
+        txtNoCorrect.setText(cntCorrect + "/" + numberOfQuestions);
+        txtDescCorrect.setText("You answered " + cntCorrect + " out of " + numberOfQuestions + " questions");
         txtTotalPoint.setText("Total Points: " + totalPoints);
 
-        for (int i = 0; i < questionList.size(); i++) {
-            lnAnswerReviewGroup.addView(rowLinearQuestion(questionList.get(i), userAnswerList.get(i)), i);
+        for (int i = 0; i < userQuestionAnswerList.size(); i++) {
+            lnAnswerReviewGroup.addView(rowLinearQuestion(userQuestionAnswerList.get(i), userQuestionAnswerList.get(i).getAnswerList()), i);
         }
 
         btnBackHome.setOnClickListener(new View.OnClickListener() {
@@ -136,18 +132,16 @@ public class ReviewAnswers extends AppCompatActivity {
                 UpdateUserPointApi.getAPI(ReviewAnswers.this).update(new UpdateUserPointApi.API.UpdatePointRequest(pointUpdate)).enqueue(new retrofit2.Callback<UpdateUserPointApi.API.UpdatePointResponse>() {
                     @Override
                     public void onResponse(@NonNull retrofit2.Call<UpdateUserPointApi.API.UpdatePointResponse> call, @NonNull retrofit2.Response<UpdateUserPointApi.API.UpdatePointResponse> response) {
-                        if(response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             UpdateUserPointApi.API.UpdatePointResponse result = response.body();
                             assert result != null;
                             CredentialToken.getInstance(ReviewAnswers.this).setUserProfile(result.getUser());
-
                             Toast.makeText(ReviewAnswers.this, "Update success", Toast.LENGTH_SHORT).show();
                             loadingDialog.dismiss();
-
                             Intent intent = new Intent(ReviewAnswers.this, QuizDetailActivity.class);
                             intent.putExtra("quizId", quizId);
                             startActivity(intent);
-                        }else{
+                        } else {
                             Gson gson = new GsonBuilder().create();
                             assert response.errorBody() != null;
                             ErrorResponse error = gson.fromJson(response.errorBody().charStream(), ErrorResponse.class);
@@ -164,15 +158,12 @@ public class ReviewAnswers extends AppCompatActivity {
         });
     }
 
-    public LinearLayout rowLinearQuestion(Question question, Answer userAnswer) {
+    public LinearLayout rowLinearQuestion(Question question, ArrayList<Answer> userAnswer) {
         LinearLayout questionSummaryLinearLayout = new LinearLayout(this);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        
-
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
         params.setMargins(55, 70, 55, 70);
         questionSummaryLinearLayout.setLayoutParams(params);
         questionSummaryLinearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -204,11 +195,10 @@ public class ReviewAnswers extends AppCompatActivity {
         btnOrder.setTypeface(null, Typeface.BOLD);
         btnOrder.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
 
-        // Tạo TextView
+        // Tạo TextView cho câu hỏi
         TextView txtQuestion = new TextView(this);
         FrameLayout.LayoutParams txtLayoutParams = new FrameLayout.LayoutParams(
                 600,
-
                 FrameLayout.LayoutParams.WRAP_CONTENT
         );
         txtLayoutParams.leftMargin = 40;
@@ -219,61 +209,52 @@ public class ReviewAnswers extends AppCompatActivity {
         txtQuestion.setTypeface(null, Typeface.BOLD);
         txtQuestion.setTextColor(getResources().getColor(R.color.black));
 
-
-        // Thêm Button, TextView vào FrameLayout
+        // Thêm Button và TextView vào FrameLayout
         frameLayout.addView(btnOrder);
         frameLayout.addView(txtQuestion);
 
-        // Tạo ImageView
-
-        if (!userAnswer.isCorrect()) {
-
-            ImageView imgError = new ImageView(this);
-            FrameLayout.LayoutParams imgLayoutParams = new FrameLayout.LayoutParams(
-                    70, // Kích thước của ImageView
-                    FrameLayout.LayoutParams.MATCH_PARENT
-            );
-            imgLayoutParams.gravity = Gravity.END | Gravity.CENTER_VERTICAL; // Đặt vị trí của ImageView
-            imgError.setLayoutParams(imgLayoutParams);
-            imgError.setImageResource(R.drawable.error_answer_ic); // Đặt hình ảnh
-            frameLayout.addView(imgError);
-
-        } else {
-            ImageView imgError = new ImageView(this);
-            FrameLayout.LayoutParams imgLayoutParams = new FrameLayout.LayoutParams(
-                    70, // Kích thước của ImageView
-                    FrameLayout.LayoutParams.MATCH_PARENT
-            );
-            imgLayoutParams.gravity = Gravity.END | Gravity.CENTER_VERTICAL; // Đặt vị trí của ImageView
-            imgError.setLayoutParams(imgLayoutParams);
-            imgError.setImageResource(R.drawable.ic_true_answer); // Đặt hình ảnh
-            frameLayout.addView(imgError);
-        }
-
-        // Tạo TextView bên ngoài FrameLayout
-        TextView txtAnswer = new TextView(this);
-        LinearLayout.LayoutParams txtAnswerLayoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        txtAnswerLayoutParams.leftMargin = 160;
-
-        txtAnswerLayoutParams.bottomMargin = 0;
-
-
-        txtAnswer.setLayoutParams(txtAnswerLayoutParams);
-        if(userAnswer.getBody().equals(""))
-        {
-            txtAnswer.setText("-");
-        }
-        else {
-            txtAnswer.setText("-Answer: " + userAnswer.getBody());
-        }
-        txtAnswer.setTextSize(16);
-
-        // Thêm FrameLayout và TextView vào LinearLayout
+        // Thêm FrameLayout vào LinearLayout
         questionSummaryLinearLayout.addView(frameLayout);
-        questionSummaryLinearLayout.addView(txtAnswer);
+
+        // Tạo các TextView và ImageView cho các câu trả lời
+        for (Answer answerRe : userAnswer) {
+            LinearLayout answerLayout = new LinearLayout(this);
+            LinearLayout.LayoutParams answerLayoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            answerLayout.setLayoutParams(answerLayoutParams);
+            answerLayout.setOrientation(LinearLayout.HORIZONTAL);
+            answerLayout.setPadding(160, 10, 0, 10);
+
+            // Tạo TextView cho đáp án
+            TextView txtAnswer = new TextView(this);
+            LinearLayout.LayoutParams txtAnswerLayoutParams = new LinearLayout.LayoutParams(
+                    0,
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    1f
+            );
+            txtAnswer.setLayoutParams(txtAnswerLayoutParams);
+            txtAnswer.setText(answerRe.getBody().isEmpty() ? "-" : "- Answer: " + answerRe.getBody());
+            txtAnswer.setTextSize(16);
+            txtAnswer.setTextColor(getResources().getColor(R.color.black));
+
+            // Tạo ImageView cho trạng thái đúng/sai của đáp án
+            ImageView imgResult = new ImageView(this);
+            LinearLayout.LayoutParams imgLayoutParams = new LinearLayout.LayoutParams(
+                    70,
+                    70
+            );
+            imgResult.setLayoutParams(imgLayoutParams);
+            imgResult.setImageResource(answerRe.isCorrect() ? R.drawable.ic_true_answer : R.drawable.error_answer_ic);
+
+            // Thêm TextView và ImageView vào answerLayout
+            answerLayout.addView(txtAnswer);
+            answerLayout.addView(imgResult);
+
+            // Thêm answerLayout vào questionSummaryLinearLayout
+            questionSummaryLinearLayout.addView(answerLayout);
+        }
 
         return questionSummaryLinearLayout;
     }

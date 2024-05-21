@@ -24,6 +24,14 @@ public class Question implements Serializable {
         return content;
     }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setQuestionIndex(int questionIndex) {
+        this.questionIndex = questionIndex;
+    }
+
     public int getAnswerTime() {
         return answerTime;
     }
@@ -55,5 +63,9 @@ public class Question implements Serializable {
 
     public ArrayList<String> getAnswerCorrect() {
         return answerCorrect;
+    }
+
+    public void setAnswerList(ArrayList<Answer> answerList) {
+        this.answerList = answerList;
     }
 }
