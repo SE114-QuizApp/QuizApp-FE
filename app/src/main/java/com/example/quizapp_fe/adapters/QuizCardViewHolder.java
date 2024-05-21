@@ -51,8 +51,6 @@ public class QuizCardViewHolder extends RecyclerView.ViewHolder {
         quizcardConstraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.animation_normal);
-                quizcardConstraintLayout.startAnimation(animation);
                 Intent intent = new Intent(context, QuizDetailActivity.class);
                 intent.putExtra("quizId", quizCard.getQuizCardId());
                 context.startActivity(intent);
