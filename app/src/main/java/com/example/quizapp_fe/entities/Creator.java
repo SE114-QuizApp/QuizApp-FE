@@ -11,4 +11,12 @@ public class Creator {
     public String getFullName() {
         return lastName + " " + firstName;
     }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
 }

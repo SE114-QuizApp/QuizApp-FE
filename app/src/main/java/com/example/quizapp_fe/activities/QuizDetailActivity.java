@@ -93,9 +93,10 @@ public class QuizDetailActivity extends AppCompatActivity {
                     quizDetailNumberOfQuestions.setText(quiz.getNumberOfQuestions() + " Questions");
                     quizDetailTotalPointsTextView.setText(quiz.getTotalPoints() + " Points");
                     quizDetailDescriptionTextView.setText(quiz.getDescription());
+
                     Glide.with(QuizDetailActivity.this)
                             .asBitmap()
-                            .load(quiz.getBackgroundImage())
+                            .load(quiz.getCreator().getAvatar())
                             .error(R.drawable.img_office_man_512)
                             .into(quizDetailCreatorAvatarImageView);
                     quizDetailCreatorNameTextView.setText(quiz.getCreator().getFullName());
@@ -120,3 +121,4 @@ public class QuizDetailActivity extends AppCompatActivity {
         });
     }
 }
+
