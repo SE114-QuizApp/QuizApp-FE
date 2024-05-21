@@ -1,5 +1,6 @@
 package com.example.quizapp_fe.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -21,7 +22,7 @@ import com.example.quizapp_fe.interfaces.LiveQuizCard;
 public class LiveQuizViewHolder extends RecyclerView.ViewHolder {
     ImageView imgViewQuizImage;
     TextView tvTitle, tvSubTitle;
-    ImageButton imgButtonEdit, imgButtonDelete;
+    ImageButton imgButtonEdit, imgButtonDelete, imgButtonExamine;
     public LiveQuizViewHolder(@NonNull View itemView) {
         super(itemView);
         imgViewQuizImage = itemView.findViewById(R.id.recyclerItemLiveQuizImageView);
@@ -29,22 +30,30 @@ public class LiveQuizViewHolder extends RecyclerView.ViewHolder {
         tvSubTitle = itemView.findViewById(R.id.recyclerItemLiveQuizSubTitleTextView);
         imgButtonEdit = itemView.findViewById(R.id.recyclerItemLiveQuizEditImageButton);
         imgButtonDelete = itemView.findViewById(R.id.recyclerItemLiveQuizDeleteImageButton);
+        imgButtonExamine = itemView.findViewById(R.id.recyclerItemLiveQuizExamineImageButton);
     }
 
     public void bind (LiveQuizCard liveQuizCard, Context context){
         Glide.with(context).asBitmap().load(liveQuizCard.getLiveQuizCardImage()).into(imgViewQuizImage);
         tvTitle.setText(liveQuizCard.getLiveQuizCardTitle());
         tvSubTitle.setText(liveQuizCard.getLiveQuizCardSubTitle());
-        imgButtonEdit.setOnClickListener(new View.OnClickListener() {
+        imgButtonExamine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(),R.anim.animation_normal);
-                imgButtonEdit.startAnimation(animation);
+                Animation animation = AnimationUtils.loadAnimation(context,R.anim.animation_normal);
+                imgButtonExamine.startAnimation(animation);
                 Intent intent = new Intent(context, QuizDetailActivity.class);
+                if (!(context instanceof Activity)) {
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);}
                 intent.putExtra("quizId", liveQuizCard.getLiveQuizCardId());
                 context.startActivity(intent);
             }
         });
+        imgButtonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
     }
 }

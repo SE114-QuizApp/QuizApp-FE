@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -25,6 +26,7 @@ public class QuizCardViewHolder extends RecyclerView.ViewHolder {
     TextView quizCardItemCreator;
     TextView quizCardCategory;
     ImageView quizCardForwardArrow;
+    ConstraintLayout quizcardConstraintLayout;
 
     public QuizCardViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -33,6 +35,7 @@ public class QuizCardViewHolder extends RecyclerView.ViewHolder {
         quizCardItemCreator = itemView.findViewById(R.id.quizCardItemCreatorTextView);
         quizCardCategory = itemView.findViewById(R.id.quizCardItemCategoryTextView);
         quizCardForwardArrow = itemView.findViewById(R.id.quizCardItemForwardArrow);
+        quizcardConstraintLayout = itemView.findViewById(R.id.quizcardConstraintLayout);
     }
 
     public void bind(QuizCard quizCard, Context context) {
@@ -45,11 +48,9 @@ public class QuizCardViewHolder extends RecyclerView.ViewHolder {
         quizCardItemCreator.setText(quizCard.getCreatorText());
         quizCardCategory.setText(quizCard.getCategoryText());
 
-        quizCardForwardArrow.setOnClickListener(new View.OnClickListener() {
+        quizcardConstraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.animation_normal);
-                quizCardForwardArrow.startAnimation(animation);
                 Intent intent = new Intent(context, QuizDetailActivity.class);
                 intent.putExtra("quizId", quizCard.getQuizCardId());
                 context.startActivity(intent);

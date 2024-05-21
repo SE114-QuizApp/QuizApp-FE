@@ -6,7 +6,9 @@
     android:layout_marginHorizontal="5dp"
     android:layout_marginVertical="10dp"
     android:paddingHorizontal="10sp"
-    android:layout_height="100dp">
+    android:layout_height="100dp"
+    android:id="@+id/quizcardConstraintLayout"
+    android:clickable="true">
 
     <ImageView
         android:id="@+id/quizCardItemImageView"
@@ -51,10 +53,10 @@
     </LinearLayout>
     <ImageView
         android:id="@+id/quizCardItemForwardArrow"
-        android:layout_marginTop="24dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:src="@drawable/ic_arrow_forward_ios_48"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
