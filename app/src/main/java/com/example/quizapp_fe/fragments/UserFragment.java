@@ -3,6 +3,7 @@ package com.example.quizapp_fe.fragments;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -52,6 +53,7 @@ public class UserFragment extends Fragment implements SearchListener {
         View view = inflater.inflate(R.layout.fragment_user, container, false);
         recyclerView = view.findViewById(R.id.userFragRecyclerView);
         userCardArrayList = new ArrayList<>();
+
         callApi();
 
         return view;

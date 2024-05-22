@@ -14,6 +14,11 @@ public class User implements Serializable {
     private String isVerified;
     private int point;
     private ArrayList<String> friends;
+
+    public ArrayList<String> getFriends() {
+        return friends;
+    }
+
     private ArrayList<String> follows;
 
     public User(String _id, String avatar, String userType, String firstName, String lastName, String userName, String mail, String isVerified, int point, ArrayList<String> friends, ArrayList<String> follows) {
