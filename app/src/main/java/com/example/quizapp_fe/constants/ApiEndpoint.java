@@ -35,6 +35,7 @@ public class ApiEndpoint {
         public static final String GET_LIST_RANKING = USER + "/ranking";
         public static final String ADD_FRIEND = USER + "/addFriend/{friendId}";
         public static final String UNFRIEND = USER + "/unfriend/{friendId}";
+        public static final String UPDATE_POINTS = USER + "/updatePoints";
     }
 
     public static class GameApiEndpoint {

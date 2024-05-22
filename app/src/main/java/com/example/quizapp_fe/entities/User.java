@@ -13,10 +13,10 @@ public class User implements Serializable {
     private String mail;
     private String isVerified;
     private int point;
-    private ArrayList<User> friends;
-    private ArrayList<User> follows;
+    private ArrayList<String> friends;
+    private ArrayList<String> follows;
 
-    public User(String _id, String avatar, String userType, String firstName, String lastName, String userName, String mail, String isVerified, int point, ArrayList<User> friends, ArrayList<User> follows) {
+    public User(String _id, String avatar, String userType, String firstName, String lastName, String userName, String mail, String isVerified, int point, ArrayList<String> friends, ArrayList<String> follows) {
         this._id = _id;
         this.avatar = avatar;
         this.userType = userType;
@@ -101,20 +101,5 @@ public class User implements Serializable {
     public void setPoint(int point) {
         this.point = point;
     }
-
-    public ArrayList<User> getFriends() {
-        return friends;
-    }
-
-    public void setFriends(ArrayList<User> friends) {
-        this.friends = friends;
-    }
-
-    public ArrayList<User> getFollows() {
-        return follows;
-    }
-
-    public void setFollows(ArrayList<User> follows) {
-        this.follows = follows;
-    }
+    
 }

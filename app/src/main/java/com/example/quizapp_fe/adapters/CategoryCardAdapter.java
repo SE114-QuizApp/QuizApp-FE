@@ -33,7 +33,7 @@ public class CategoryCardAdapter extends RecyclerView.Adapter<CategoryCardViewHo
     @Override
     public void onBindViewHolder(@NonNull CategoryCardViewHolder holder, int position) {
         CategoryCard categoryCard = dataList.get(position);
-        holder.bind(categoryCard);
+        holder.bind(categoryCard, context);
     }
 
     @Override

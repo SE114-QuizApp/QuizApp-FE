@@ -9,26 +9,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class UserAnswers implements Serializable {
-    private ArrayList<Answer> userAnswersList;
-    private ArrayList<Question> questionsList;
-
-
+    private ArrayList<Question> userQuestionList;
     private int totalPoints;
 
-    public UserAnswers(ArrayList<Answer> userAnswers, ArrayList<Question> questionsList, int totalPoints) {
-        this.userAnswersList = userAnswers;
-        this.questionsList = questionsList;
+    public UserAnswers(ArrayList<Question> userQuestionList, int totalPoints) {
+        this.userQuestionList = userQuestionList;
         this.totalPoints = totalPoints;
     }
 
-    public ArrayList<Answer> getUserAnswersList() {
-        return userAnswersList;
+    public ArrayList<Question> getUserQuestionList() {
+        return userQuestionList;
     }
-
-    public ArrayList<Question> getQuestionsList() {
-        return questionsList;
-    }
-
 
     public int getTotalPoints() {
         return totalPoints;
