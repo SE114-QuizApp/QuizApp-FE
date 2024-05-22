@@ -40,6 +40,10 @@ public class Question implements Serializable {
         return backgroundImage;
     }
 
+    public String getQuestionType() {
+        return questionType;
+    }
+
     public ArrayList<Answer> getAnswerList() {
         return answerList;
     }
