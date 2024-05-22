@@ -47,6 +47,8 @@ import java.util.Random;
 public class ProfileFragment extends Fragment {
     ImageView imgAvatar;
     TextView tvName;
+    TextView txtFollowing;
+    TextView txtPoints;
 
     // variable for our bar chart
     BarChart barChart;
@@ -64,6 +66,9 @@ public class ProfileFragment extends Fragment {
         loadingDialog = new LoadingDialog(requireContext());
         imgAvatar = view.findViewById(R.id.profile_image);
         tvName = view.findViewById(R.id.tvName);
+        txtFollowing = view.findViewById(R.id.txtFollowing);
+        txtPoints = view.findViewById(R.id.txtPoints);
+
         ImageView btnBack = view.findViewById(R.id.btnBack);
         ImageView btnSetting = view.findViewById(R.id.btnSetting);
 
@@ -78,7 +83,6 @@ public class ProfileFragment extends Fragment {
 
         setDataPieChart();
 
-        TextView txtPoints = view.findViewById(R.id.txtPoints);
 
 
         TextView txtRank = view.findViewById(R.id.txtRank);
@@ -92,13 +96,11 @@ public class ProfileFragment extends Fragment {
         if(CredentialToken.getInstance(requireContext()).getUserProfile() == null){
             txtPoints.setText("0");
             txtRank.setText("0");
+            txtFollowing.setText("0");
         }else{
             txtPoints.setText(String.format("%d", CredentialToken.getInstance(requireContext()).getUserProfile().getPoint()));
+            txtFollowing.setText(String.format("%d", CredentialToken.getInstance(requireContext()).getUserProfile().getFriends().size()));
         }
-
-
-        TextView txtFollowing = view.findViewById(R.id.txtFollowing);
-        txtFollowing.setText(String.format("%d", (int) (Math.random() * 2) + 8));
 
 
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -268,6 +270,9 @@ public class ProfileFragment extends Fragment {
                     } else {
                         tvName.setText(response.body().getUser().getUsername());
                     }
+                    txtPoints.setText(String.valueOf(response.body().getUser().getPoint()));
+                    txtFollowing.setText(String.valueOf(response.body().getUser().getFriends().size()));
+
 
                     if (response.body().getUser().getAvatar() != null) {
                         Glide.with(requireContext())

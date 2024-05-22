@@ -1,6 +1,7 @@
 package com.example.quizapp_fe.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class UserProfile implements Serializable {
     private String _id;
@@ -11,6 +12,7 @@ public class UserProfile implements Serializable {
     private String avatar;
     private String userType;
     private Integer point;
+    private ArrayList<String> friends;
 
 
 public UserProfile(String _id, String userName, String mail, String firstName, String lastName, String avatar, String userType, Integer point) {
@@ -88,6 +90,13 @@ public UserProfile(String _id, String userName, String mail, String firstName, S
         this.point = point;
     }
 
-
-
+    public ArrayList<String> getFriends() {
+        return friends;
+    }
+    public void setFriends(ArrayList<String> friends) {
+        this.friends = friends;
+    }
+    public void addFriend(String friend) {
+        this.friends.add(friend);
+    }
 }
