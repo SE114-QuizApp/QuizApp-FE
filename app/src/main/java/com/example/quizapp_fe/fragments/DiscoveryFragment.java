@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -13,6 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.activities.DiscoverySearchActivity;
@@ -33,6 +36,7 @@ public class DiscoveryFragment extends Fragment {
     ArrayList<CategoryCard> categoryCardList;
     CategoryCardAdapter categoryCardAdapter;
     SearchView searchView;
+    AppCompatButton discoveryFragExploreButton;
 
     private Context context;
 
@@ -54,6 +58,8 @@ public class DiscoveryFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_discovery, container, false);
         categoryRecyclerView = view.findViewById(R.id.discoveryFragCategoryRecyclerView);
+        discoveryFragExploreButton = view.findViewById(R.id.discoveryFragExploreButton);
+
         categoryCardList = new ArrayList<>();
         callApi();
 
@@ -65,6 +71,17 @@ public class DiscoveryFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        discoveryFragExploreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Animation animation = AnimationUtils.loadAnimation(view.getContext().getApplicationContext(), R.anim.animation_normal);
+                discoveryFragExploreButton.startAnimation(animation);
+                Intent intent = new Intent(view.getContext(), DiscoverySearchActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
 
