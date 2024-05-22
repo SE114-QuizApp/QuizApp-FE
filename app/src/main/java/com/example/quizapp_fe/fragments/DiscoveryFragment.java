@@ -16,12 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 
 import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.activities.DiscoverySearchActivity;
 import com.example.quizapp_fe.adapters.CategoryCardAdapter;
 import com.example.quizapp_fe.api.quiz.get.GetDiscoverQuizzesApi;
 import com.example.quizapp_fe.interfaces.CategoryCard;
+import com.example.quizapp_fe.models.CredentialToken;
 import com.example.quizapp_fe.models.DiscoverQuizzes;
 
 import java.util.ArrayList;
@@ -31,12 +33,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DiscoveryFragment extends Fragment {
-
+    String teacherId;
     RecyclerView categoryRecyclerView;
     ArrayList<CategoryCard> categoryCardList;
     CategoryCardAdapter categoryCardAdapter;
     SearchView searchView;
     AppCompatButton discoveryFragExploreButton;
+    TextView discoveryFragYourScoreTextView;
 
     private Context context;
 
@@ -59,6 +62,11 @@ public class DiscoveryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_discovery, container, false);
         categoryRecyclerView = view.findViewById(R.id.discoveryFragCategoryRecyclerView);
         discoveryFragExploreButton = view.findViewById(R.id.discoveryFragExploreButton);
+        discoveryFragYourScoreTextView = view.findViewById(R.id.discoveryFragYourScoreTextView);
+
+        teacherId = CredentialToken.getInstance(context).getUserId();
+
+        setPoint(teacherId);
 
         categoryCardList = new ArrayList<>();
         callApi();
@@ -83,6 +91,11 @@ public class DiscoveryFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void setPoint(String teacherId) {
+        int points = CredentialToken.getInstance(context).getUserProfile().getPoint();
+        discoveryFragYourScoreTextView.setText(Integer.toString(points));
     }
 
     private void callApi() {
