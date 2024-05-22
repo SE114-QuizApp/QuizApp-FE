@@ -7,6 +7,13 @@ public class LiveQuizCard {
 
     private String liveQuizCardId;
 
+    public LiveQuizCard(String liveQuizCardImage, String liveQuizCardTitle, String liveQuizCardId) {
+        this.liveQuizCardImage = liveQuizCardImage;
+        this.liveQuizCardTitle = liveQuizCardTitle;
+        this.liveQuizCardId = liveQuizCardId;
+        this.liveQuizCardSubTitle = "";
+    }
+
     public LiveQuizCard(String liveQuizCardImage, String liveQuizCardTitle, String liveQuizCardSubTitle, String liveQuizCardId) {
         this.liveQuizCardImage = liveQuizCardImage;
         this.liveQuizCardTitle = liveQuizCardTitle;
