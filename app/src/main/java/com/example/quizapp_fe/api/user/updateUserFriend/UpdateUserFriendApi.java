@@ -5,6 +5,7 @@ import android.content.Context;
 import com.example.quizapp_fe.api.ApiClient;
 import com.example.quizapp_fe.constants.ApiEndpoint;
 import com.example.quizapp_fe.entities.User;
+import com.example.quizapp_fe.entities.UserProfile;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -19,7 +20,7 @@ public class UpdateUserFriendApi {
 
     public interface UserFriendApi {
         @PUT(ApiEndpoint.UserApiEndpoint.ADD_FRIEND)
-        Call<User> updateUserFriend(@Path("friendId") String friendId);
+        Call<UserProfile> updateUserFriend(@Path("friendId") String friendId);
     }
 
     public static UserFriendApi putAPI(Context context) {
