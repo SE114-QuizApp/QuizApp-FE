@@ -20,8 +20,6 @@ public class Quiz implements Serializable {
     private String createdAt;
     private String updatedAt;
     private Creator creator;
-    private  int correctAnswerCount;
-    private ArrayList<Answer> answerCorrect;
     private Category category;
     private Grade grade;
 
@@ -49,8 +47,6 @@ public class Quiz implements Serializable {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.creator = creator;
-        this.correctAnswerCount = correctAnswerCount;
-        this.answerCorrect = answerCorrect;
         this.category = category;
         this.grade = grade;
     }
@@ -62,7 +58,6 @@ public class Quiz implements Serializable {
     public int getNumberOfQuestions() {
         return numberOfQuestions;
     }
-
 
     public int getPointsPerQuestion() {
         return pointsPerQuestion;
@@ -94,5 +89,61 @@ public class Quiz implements Serializable {
 
     public Creator getCreator() {
         return creator;
+    }
+
+    public void setNumberOfQuestions(int numberOfQuestions) {
+        this.numberOfQuestions = numberOfQuestions;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public Grade getGrade() {
+        return grade;
+    }
+
+    public ArrayList<String> getTags() {
+        return tags;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setGrade(Grade grade) {
+        this.grade = grade;
+    }
+
+    public void setPointsPerQuestion(int pointsPerQuestion) {
+        this.pointsPerQuestion = pointsPerQuestion;
+    }
+
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
+    }
+
+    public void setTags(ArrayList<String> tags) {
+        this.tags = tags;
+    }
+
+    public void setDraft(boolean draft) {
+        this.isDraft = isDraft;
+    }
+
+    public void setQuestionList(ArrayList<Question> questionList) {
+        this.questionList = questionList;
+    }
+
+    public void setBackgroundImage(String backgroundImage) {
+        this.backgroundImage = backgroundImage;
     }
 }
