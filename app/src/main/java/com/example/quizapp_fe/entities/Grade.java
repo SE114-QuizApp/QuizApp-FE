@@ -2,7 +2,7 @@ package com.example.quizapp_fe.entities;
 
 import java.io.Serializable;
 
-public class Grade  implements Serializable {
+public class Grade implements Serializable {
     private String name;
     private String _id;
 
@@ -10,8 +10,13 @@ public class Grade  implements Serializable {
         this.name = name;
         this._id = _id;
     }
+
     public Grade(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
 }
