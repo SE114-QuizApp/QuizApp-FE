@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.quizapp_fe.R;
+import com.example.quizapp_fe.activities.CreatorQuizActivity;
 import com.example.quizapp_fe.activities.DiscoverySearchActivity;
 import com.example.quizapp_fe.activities.TeacherQuizActivity;
 import com.example.quizapp_fe.adapters.LiveQuizAdapter;
@@ -209,6 +210,15 @@ public class HomeFragment extends Fragment {
                             layoutParamsAddNewImageButton.gravity = Gravity.CENTER;
                             addNewQuizImageButton.setLayoutParams(layoutParamsAddNewImageButton);
                             addNewQuizLinearLayout.addView(addNewQuizImageButton);
+                            addNewQuizImageButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(context, CreatorQuizActivity.class);
+                                    startActivity(intent);
+                                }
+                            });
+
+
 
                             addNewQuizTextView = new TextView(context);
                             addNewQuizTextView.setId(View.generateViewId());

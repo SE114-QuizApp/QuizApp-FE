@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.interfaces.UserCard;
+import com.example.quizapp_fe.models.CredentialToken;
 
 import java.util.ArrayList;
 

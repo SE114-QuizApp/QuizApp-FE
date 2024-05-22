@@ -6,6 +6,7 @@
     android:layout_marginHorizontal="5dp"
     android:layout_marginVertical="10dp"
     android:paddingHorizontal="10sp"
+    android:id="@+id/userCardContainer"
     android:layout_height="100dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -47,7 +48,7 @@
         android:layout_marginTop="32dp"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:src="@drawable/ic_follow_512"
+        android:src="@drawable/ic_user_plus"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
