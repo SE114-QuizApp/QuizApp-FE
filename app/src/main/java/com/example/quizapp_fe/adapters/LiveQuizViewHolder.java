@@ -36,7 +36,12 @@ public class LiveQuizViewHolder extends RecyclerView.ViewHolder {
     public void bind (LiveQuizCard liveQuizCard, Context context){
         Glide.with(context).asBitmap().load(liveQuizCard.getLiveQuizCardImage()).into(imgViewQuizImage);
         tvTitle.setText(liveQuizCard.getLiveQuizCardTitle());
-        tvSubTitle.setText(liveQuizCard.getLiveQuizCardSubTitle());
+        if (liveQuizCard.getLiveQuizCardSubTitle() == "") {
+            tvSubTitle.setVisibility(View.GONE);
+        } else {
+            tvSubTitle.setText(liveQuizCard.getLiveQuizCardSubTitle());
+        }
+
         imgButtonExamine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
