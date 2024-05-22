@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.quizapp_fe.R;
+import com.example.quizapp_fe.api.user.getUserById.GetUserByIdApi;
 import com.example.quizapp_fe.api.user.updateUserFriend.UpdateUserFriendApi;
 import com.example.quizapp_fe.api.user.updateUserUnfriend.UpdateUserUnfriendApi;
 import com.example.quizapp_fe.entities.User;
@@ -31,20 +32,22 @@ public class UserCardViewHolder extends RecyclerView.ViewHolder {
     TextView userCardItemName;
     TextView userCardItemEmail;
     ImageView userCardItemFollowImageView;
-    private RecyclerView.Adapter adapter;
     ArrayList<String> myFriends;
+    private String myId;
+    boolean isFollowing;
 
     public UserCardViewHolder(@NonNull View itemView) {
         super(itemView);
+        viewHolderContext = itemView.getContext();
         userCardItemImageView = itemView.findViewById(R.id.userCardItemImageView);
         userCardItemName = itemView.findViewById(R.id.userCardItemNameTextView);
         userCardItemEmail = itemView.findViewById(R.id.userCardItemEmailTextView);
         userCardItemFollowImageView = itemView.findViewById(R.id.userCardItemFollowImageView);
-        myFriends = new ArrayList<>(CredentialToken.getInstance(viewHolderContext).getUserProfile().getFriends());
+        myId = CredentialToken.getInstance(viewHolderContext).getUserProfile().getId();
+        myFriends = new ArrayList<>();
+        callGetMyFriendList();
     }
-    public void bind(@NonNull UserCard userCard, Context context, RecyclerView.Adapter adapter){
-        setAdapter(adapter);
-        viewHolderContext = context;
+    public void bind(@NonNull UserCard userCard, Context context){
         Glide.with(context)
              .asBitmap()
                      .load(userCard.getUserCardImage())
@@ -55,7 +58,9 @@ public class UserCardViewHolder extends RecyclerView.ViewHolder {
 
         String friendId = userCard.getUserCardId();
 
-        boolean isFollowing = myFriends.contains(friendId);
+        isFollowing = myFriends.contains(friendId);
+
+        updateUserCardFollowImageView();
 
         if(isFollowing){
             userCardItemFollowImageView.setImageResource(R.drawable.ic_delete_friend_512);
@@ -69,28 +74,24 @@ public class UserCardViewHolder extends RecyclerView.ViewHolder {
                 userCardItemFollowImageView.startAnimation(animation);
                 if (isFollowing) {
                     callApiUpdateUserUnFriend(friendId);
-                    myFriends.add(friendId);
+                    myFriends.remove(friendId);
                 } else {
                     callApiUpdateUserFriend(friendId);
-                    myFriends.remove(friendId);
+                    myFriends.add(friendId);
                 }
+
+                isFollowing = !isFollowing;
+                updateUserCardFollowImageView();
             }
         });
-        updateFollowStatus(isFollowing);
     }
-
     private void callApiUpdateUserFriend(String friendId) {
         UpdateUserFriendApi.putAPI(itemView.getContext()).updateUserFriend(friendId).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                boolean isFollowing = true;
-                updateFollowStatus(isFollowing);
-                adapter.notifyDataSetChanged();
             }
-
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                updateFollowStatus(false);
             }
         });
     }
@@ -98,25 +99,29 @@ public class UserCardViewHolder extends RecyclerView.ViewHolder {
         UpdateUserUnfriendApi.putAPI(itemView.getContext()).updateUserUnfriend(friendId).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                boolean isFollowing = false;
-                updateFollowStatus(isFollowing);
-                adapter.notifyDataSetChanged();
             }
-
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                updateFollowStatus(true);
             }
         });
     }
-    public void updateFollowStatus(boolean isFollowing) {
+    public void callGetMyFriendList() {
+        GetUserByIdApi.getAPI(itemView.getContext()).getUserById(myId).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                User me = response.body();
+                myFriends = me.getFriends();
+            }
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+            }
+        });
+    }
+    private void updateUserCardFollowImageView() {
         if (isFollowing) {
             userCardItemFollowImageView.setImageResource(R.drawable.ic_delete_friend_512);
         } else {
             userCardItemFollowImageView.setImageResource(R.drawable.ic_follow_512);
         }
-    }
-    public void setAdapter(RecyclerView.Adapter adapter) {
-        this.adapter = adapter;
     }
 }

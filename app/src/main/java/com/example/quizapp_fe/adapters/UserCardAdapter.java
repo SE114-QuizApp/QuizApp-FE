@@ -27,14 +27,13 @@ public class UserCardAdapter extends RecyclerView.Adapter<UserCardViewHolder> {
     public UserCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_user_card, parent, false);
         UserCardViewHolder viewHolder = new UserCardViewHolder(view);
-        viewHolder.setAdapter(this);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull UserCardViewHolder holder, int position) {
         UserCard userCard = dataList.get(position);
-        holder.bind(userCard, context, this);
+        holder.bind(userCard, context);
     }
 
     @Override
