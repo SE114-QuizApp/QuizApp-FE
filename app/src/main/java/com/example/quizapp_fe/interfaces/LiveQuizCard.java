@@ -5,10 +5,20 @@ public class LiveQuizCard {
     private String liveQuizCardTitle;
     private String liveQuizCardSubTitle;
 
-    public LiveQuizCard(String liveQuizCardImage, String liveQuizCardTitle, String liveQuizCardSubTitle) {
+    private String liveQuizCardId;
+
+    public LiveQuizCard(String liveQuizCardImage, String liveQuizCardTitle, String liveQuizCardId) {
+        this.liveQuizCardImage = liveQuizCardImage;
+        this.liveQuizCardTitle = liveQuizCardTitle;
+        this.liveQuizCardId = liveQuizCardId;
+        this.liveQuizCardSubTitle = "";
+    }
+
+    public LiveQuizCard(String liveQuizCardImage, String liveQuizCardTitle, String liveQuizCardSubTitle, String liveQuizCardId) {
         this.liveQuizCardImage = liveQuizCardImage;
         this.liveQuizCardTitle = liveQuizCardTitle;
         this.liveQuizCardSubTitle = liveQuizCardSubTitle;
+        this.liveQuizCardId = liveQuizCardId;
     }
 
     public String getLiveQuizCardImage() {
@@ -23,6 +33,10 @@ public class LiveQuizCard {
         return liveQuizCardSubTitle;
     }
 
+    public String getLiveQuizCardId() {
+        return liveQuizCardId;
+    }
+
     public void setLiveQuizCardImage(String liveQuizCardImage) {
         this.liveQuizCardImage = liveQuizCardImage;
     }
@@ -33,5 +47,9 @@ public class LiveQuizCard {
 
     public void setLiveQuizCardSubTitle(String liveQuizCardSubTitle) {
         this.liveQuizCardSubTitle = liveQuizCardSubTitle;
+    }
+
+    public void setLiveQuizCardId(String liveQuizCardId) {
+        this.liveQuizCardId = liveQuizCardId;
     }
 }

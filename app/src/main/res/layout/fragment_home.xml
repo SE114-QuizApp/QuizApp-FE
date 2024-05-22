@@ -9,9 +9,12 @@
 
     <!-- TODO: Update blank fragment layout -->
     <ScrollView
+        android:id="@+id/homeFragScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/homeFragMainConstraintLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -29,11 +32,14 @@
                 android:id="@+id/homeFragAvatarImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="25dp"
+                android:clickable="true"
                 android:src="@drawable/ic_avatar"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintHeight_max="80dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_max="80dp" />
 
             <TextView
                 android:id="@+id/homeFragDayTimeTextView"
@@ -60,75 +66,83 @@
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/homeFragDayTimeImageView" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/homeFragRecentQuizSectionConstraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp"
-                android:background="@drawable/border_20dp_pastel_pink"
                 android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
                 android:layout_marginTop="25dp"
-                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/border_20dp_pastel_pink"
+                android:padding="20dp"
                 app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/homeFragUserNameTextView">
+
                 <TextView
                     android:id="@+id/homeFragRecentQuizTitleTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="RECENT QUIZ"
-                    android:textStyle="bold"
-                    android:textSize="20dp"
-                    android:layout_marginTop="0dp"
                     android:layout_marginLeft="0dp"
-                    android:textColor="@color/antique_ruby"
+                    android:layout_marginTop="0dp"
                     android:alpha="0.6"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"/>
+                    android:text="RECENT QUIZ"
+                    android:textColor="@color/antique_ruby"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <ImageView
                     android:id="@+id/homeFragRecentQuizIconImageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_headphones_32"
-                    android:layout_marginTop="15dp"
                     android:layout_marginStart="5dp"
-                    app:layout_constraintTop_toBottomOf="@id/homeFragRecentQuizTitleTextView"
-                    app:layout_constraintStart_toStartOf="@id/homeFragRecentQuizTitleTextView"/>
+                    android:layout_marginTop="15dp"
+                    android:src="@drawable/ic_headphones_32"
+                    app:layout_constraintStart_toStartOf="@id/homeFragRecentQuizTitleTextView"
+                    app:layout_constraintTop_toBottomOf="@id/homeFragRecentQuizTitleTextView" />
+
                 <TextView
+                    android:id="@+id/homeFragRecentQuizContentTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="A Basic Music Quiz"
-                    android:textSize="24dp"
-                    android:textColor="@color/antique_ruby"
-                    android:textStyle="bold"
-                    android:layout_marginTop="15dp"
                     android:layout_marginStart="10dp"
+                    android:layout_marginTop="15dp"
+                    android:text="A Basic Music Quiz"
+                    android:textColor="@color/antique_ruby"
+                    android:textSize="24dp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@id/homeFragRecentQuizIconImageView"
-                    app:layout_constraintTop_toBottomOf="@id/homeFragRecentQuizTitleTextView"/>
+                    app:layout_constraintTop_toBottomOf="@id/homeFragRecentQuizTitleTextView" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/homeFragFeatureSectionConstraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="260dp"
-                android:layout_marginTop="30dp"
                 android:layout_marginLeft="15dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginRight="15dp"
-                app:layout_constraintTop_toBottomOf="@id/homeFragRecentQuizSectionConstraintLayout"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent">
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/homeFragRecentQuizSectionConstraintLayout">
+
                 <FrameLayout
                     android:id="@+id/homeFragFeatureSectionFrameLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:layout_constraintTop_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent">
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent">
+
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/homeFragFeatureSectionInnerConstraintLayout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/border_20dp_white"
-                        android:alpha="0.4"/>
+                        android:alpha="0.4"
+                        android:background="@drawable/border_20dp_white" />
                 </FrameLayout>
 
                 <ImageView
@@ -140,112 +154,120 @@
                     android:src="@drawable/ic_friend_avatar_1"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
                 <ImageView
+                    android:id="@+id/imageView5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_friend_avatar_2"
-                    android:layout_marginBottom="15dp"
                     android:layout_marginRight="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:src="@drawable/ic_friend_avatar_2"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"/>
+                    app:layout_constraintRight_toRightOf="parent" />
+
                 <TextView
                     android:id="@+id/homeFragFeatureTitleTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginRight="0dp"
+                    android:alpha="0.7"
                     android:text="FEATURED"
                     android:textColor="@color/white"
-                    android:textStyle="bold"
                     android:textSize="20dp"
-                    android:alpha="0.7"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginRight="0dp"
-                    android:layout_marginTop="30dp"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:textStyle="bold"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"/>
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <TextView
                     android:id="@+id/homeFragFeatureContentTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Take part in challenges \n with friends or other \n players"
-                    android:textSize="20dp"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginRight="0dp"
                     android:gravity="center"
                     android:lineSpacingExtra="5dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginRight="0dp"
-                    app:layout_constraintTop_toBottomOf="@id/homeFragFeatureTitleTextView"
+                    android:text="Take part in challenges \n with friends or other \n players"
+                    android:textColor="@color/white"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"/>
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/homeFragFeatureTitleTextView" />
+
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/homeFragFindFriendButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginRight="0dp"
+                    android:background="@drawable/border_20dp_white"
+                    android:clickable="true"
                     android:padding="15dp"
                     android:text="Find Friends"
                     android:textColor="@color/purple_hue"
-                    android:textStyle="bold"
                     android:textSize="18dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginRight="0dp"
-                    app:layout_constraintTop_toBottomOf="@id/homeFragFeatureContentTextView"
+                    android:textStyle="bold"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    android:background="@drawable/border_20dp_white"
-                    android:clickable="true"/>
+                    app:layout_constraintTop_toBottomOf="@id/homeFragFeatureContentTextView" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/homeFragMyQuizzesConstraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_20dp_white"
                 android:layout_marginTop="30dp"
+                android:background="@drawable/border_20dp_white"
                 android:padding="20dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/homeFragFeatureSectionConstraintLayout">
+
                 <TextView
                     android:id="@+id/homeFragLiveQuizzesTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Live Quizzes"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="0dp"
+                    android:text="My Quizzes"
+                    android:textColor="@color/black"
                     android:textSize="24dp"
                     android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginLeft="0dp"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    />
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <TextView
                     android:id="@+id/homeFragSeeAllTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="see all"
+                    android:layout_marginTop="-10dp"
+                    android:layout_marginRight="10dp"
+                    android:clickable="true"
+                    android:padding="15dp"
+                    android:text="SEE ALL"
+                    android:textColor="@color/purple_hue"
                     android:textSize="20dp"
                     android:textStyle="bold"
-                    android:textColor="@color/purple_hue"
-                    android:layout_marginTop="-10dp"
-                    android:layout_marginRight="-10dp"
-                    android:padding="15dp"
-                    android:clickable="true"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    />
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/homeFragLiveQuizzesRecylerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
                     android:layout_marginLeft="5dp"
+                    android:layout_marginTop="15dp"
                     android:layout_marginRight="5dp"
                     android:layout_marginBottom="100dp"
-                    app:layout_constraintTop_toBottomOf="@id/homeFragLiveQuizzesTextView"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintTop_toBottomOf="@id/homeFragLiveQuizzesTextView" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

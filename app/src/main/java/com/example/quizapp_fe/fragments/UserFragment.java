@@ -1,5 +1,6 @@
 package com.example.quizapp_fe.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -26,11 +27,24 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UserFragment extends Fragment implements SearchListener {
-
+    private Context context;
     RecyclerView recyclerView;
     ArrayList<UserCard> userCardArrayList;
     UserCardAdapter userCardAdapter;
     ArrayList<UserCard> originalUserCardArrayList;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        context = null;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -43,8 +57,13 @@ public class UserFragment extends Fragment implements SearchListener {
         return view;
     }
 
+
     public void callApi() {
-        GetAllUsersApi.getAPI(requireContext()).getAllUsers().enqueue(new Callback<ArrayList<User>>() {
+        if (context == null) {
+            return;
+        }
+
+        GetAllUsersApi.getAPI(context).getAllUsers().enqueue(new Callback<ArrayList<User>>() {
             @Override
             public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
                 if(response.isSuccessful()){
@@ -53,14 +72,15 @@ public class UserFragment extends Fragment implements SearchListener {
                         userCardArrayList.add(new UserCard(
                                 usersList.get(i).getAvatar(),
                                 usersList.get(i).getUserName(),
-                                usersList.get(i).getMail()));
+                                usersList.get(i).getMail(),
+                                usersList.get(i).get_id()));
                     }
 
                     originalUserCardArrayList = new ArrayList<>(userCardArrayList);
 
-                    userCardAdapter = new UserCardAdapter(requireContext(), userCardArrayList);
+                    userCardAdapter = new UserCardAdapter(context, userCardArrayList);
                     recyclerView.setAdapter(userCardAdapter);
-                    recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 1));
+                    recyclerView.setLayoutManager(new GridLayoutManager(context, 1));
                 }
             }
 

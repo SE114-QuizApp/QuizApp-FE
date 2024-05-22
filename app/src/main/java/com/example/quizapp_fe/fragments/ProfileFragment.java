@@ -6,6 +6,7 @@ import static java.lang.String.*;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -46,6 +47,8 @@ import java.util.Random;
 public class ProfileFragment extends Fragment {
     ImageView imgAvatar;
     TextView tvName;
+    TextView txtFollowing;
+    TextView txtPoints;
 
     // variable for our bar chart
     BarChart barChart;
@@ -63,6 +66,9 @@ public class ProfileFragment extends Fragment {
         loadingDialog = new LoadingDialog(requireContext());
         imgAvatar = view.findViewById(R.id.profile_image);
         tvName = view.findViewById(R.id.tvName);
+        txtFollowing = view.findViewById(R.id.txtFollowing);
+        txtPoints = view.findViewById(R.id.txtPoints);
+
         ImageView btnBack = view.findViewById(R.id.btnBack);
         ImageView btnSetting = view.findViewById(R.id.btnSetting);
 
@@ -77,7 +83,6 @@ public class ProfileFragment extends Fragment {
 
         setDataPieChart();
 
-        TextView txtPoints = view.findViewById(R.id.txtPoints);
 
 
         TextView txtRank = view.findViewById(R.id.txtRank);
@@ -88,10 +93,14 @@ public class ProfileFragment extends Fragment {
             txtPoints.setText(String.format("%d", RankingUsers.getInstance().getCurrentUser().getPoint()));
             txtRank.setText(String.format("%d", RankingUsers.getInstance().getCurrentUser().getRank()));
         }
-
-
-        TextView txtFollowing = view.findViewById(R.id.txtFollowing);
-        txtFollowing.setText(String.format("%d", (int) (Math.random() * 2) + 8));
+        if(CredentialToken.getInstance(requireContext()).getUserProfile() == null){
+            txtPoints.setText("0");
+            txtRank.setText("0");
+            txtFollowing.setText("0");
+        }else{
+            txtPoints.setText(String.format("%d", CredentialToken.getInstance(requireContext()).getUserProfile().getPoint()));
+            txtFollowing.setText(String.format("%d", CredentialToken.getInstance(requireContext()).getUserProfile().getFriends().size()));
+        }
 
 
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -248,7 +257,7 @@ public class ProfileFragment extends Fragment {
     private void getMe() {
         GetMeApi.getAPI(requireContext()).getMe().enqueue(new retrofit2.Callback<com.example.quizapp_fe.api.account.auth.LoginWithPasswordApiResult>() {
             @Override
-            public void onResponse(retrofit2.Call<com.example.quizapp_fe.api.account.auth.LoginWithPasswordApiResult> call, retrofit2.Response<com.example.quizapp_fe.api.account.auth.LoginWithPasswordApiResult> response) {
+            public void onResponse(@NonNull retrofit2.Call<com.example.quizapp_fe.api.account.auth.LoginWithPasswordApiResult> call, @NonNull retrofit2.Response<com.example.quizapp_fe.api.account.auth.LoginWithPasswordApiResult> response) {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
 
@@ -261,14 +270,15 @@ public class ProfileFragment extends Fragment {
                     } else {
                         tvName.setText(response.body().getUser().getUsername());
                     }
+                    txtPoints.setText(String.valueOf(response.body().getUser().getPoint()));
+                    txtFollowing.setText(String.valueOf(response.body().getUser().getFriends().size()));
+
 
                     if (response.body().getUser().getAvatar() != null) {
                         Glide.with(requireContext())
                              .load(response.body().getUser().getAvatar())
                              .circleCrop()
                              .into(imgAvatar);
-                    } else {
-                        imgAvatar.setImageResource(R.drawable.ic_user_24);
                     }
 
                 } else {

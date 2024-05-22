@@ -114,25 +114,38 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:textColor="@color/material_dynamic_neutral_variant70"
+                android:textColor="@color/mecha_metal"
                 android:text="QUESTION 7 OF 10"
                 android:layout_marginBottom="5dp"/>
 
             <LinearLayout
                 android:id="@+id/titleAndImageQuestion"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="120dp"
                 android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
                 <TextView
                     android:id="@+id/contentOfQuestion"
                     android:layout_width="220dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:textStyle="bold"
                     android:textSize="17dp"
                     android:textColor="@color/black"
                     android:text="Which three players shared the Premier League Golden Boot in 2018-19 ?"/>
-
+                <TextView
+                    android:id="@+id/pointAndChoice"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    android:textColor="@color/dark_yellow"
+                    android:text="(10 points - 1 choice)"/>
+                </LinearLayout>
                 <ImageView
                     android:id="@+id/questionImage"
                     android:layout_width="match_parent"
@@ -150,96 +163,191 @@
                 android:textSize="20dp"
                 android:textColor="@color/black"
                 android:text="Which three players shared the Premier League Golden Boot in 2018-19"/>
-
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/pointAndChoiceNoImage"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:textColor="@color/dark_yellow"
+                android:text="(10 points - 1 choice)"/>
             <LinearLayout
                 android:id="@+id/answerGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-            <LinearLayout
-                android:id="@+id/answerLayerNo0"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="30dp"
-                android:background="@drawable/answer_rounded_false">
-                <CheckBox
-                    android:id="@+id/checkBox_a"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:checked="false"
-                    android:text="Mohamed Salah"
-                    app:useMaterialThemeColors="true"
-                    app:buttonTint="@color/dull_lavender"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:layout_marginStart="10sp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/answerLayerNo1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/answer_rounded_false">
-                <CheckBox
-                    android:id="@+id/checkBox_b"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:checked="false"
-                    android:text="Marcus Rashford"
-                    app:useMaterialThemeColors="true"
-                    app:buttonTint="@color/dull_lavender"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:layout_marginStart="10sp"/>
-
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/answerLayerNo2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/answer_rounded_false">
-                <CheckBox
-                    android:id="@+id/checkBox_c"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:checked="false"
-                    android:text="Sadio Mane"
-                    android:textStyle="bold"
-                    app:useMaterialThemeColors="true"
-                    app:buttonTint="@color/dull_lavender"
-                    android:textSize="18sp"
-                    android:layout_marginStart="10sp"/>
-
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/answerLayerNo3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/answer_rounded_false">
-                <CheckBox
-                    android:id="@+id/checkBox_d"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:checked="false"
-                    android:text="Aubameyang"
-                    android:textStyle="bold"
-                    app:useMaterialThemeColors="true"
-                    app:buttonTint="@color/dull_lavender"
-                    android:textSize="18sp"
-                    android:layout_marginStart="10sp"/>
-            </LinearLayout>
+                android:orientation="vertical"
+                android:layout_marginTop="20dp">
+                <LinearLayout
+                    android:id="@+id/statusLinearA"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginHorizontal="10dp">
+                    <ImageView
+                        android:id="@+id/statusImageA"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/error_answer_ic"/>
+                    <TextView
+                        android:id="@+id/statusAnswerA"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/red_real"
+                        android:textSize="15sp"
+                        android:text="Unfortunately, your answer is wrong !"
+                        android:layout_marginLeft="7dp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/answerLayerNo0"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/answer_rounded_false">
+                    <CheckBox
+                        android:id="@+id/checkBox_a"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:checked="false"
+                        android:text="Mohamed Salah"
+                        app:useMaterialThemeColors="true"
+                        app:buttonTint="@color/dull_lavender"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_marginStart="10sp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/statusLinearB"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginHorizontal="10dp">
+                    <ImageView
+                        android:id="@+id/statusImageB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/error_answer_ic"/>
+                    <TextView
+                        android:id="@+id/statusAnswerB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/red_real"
+                        android:textSize="15sp"
+                        android:text="Unfortunately, your answer is wrong !"
+                        android:layout_marginLeft="7dp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/answerLayerNo1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/answer_rounded_false">
+                    <CheckBox
+                        android:id="@+id/checkBox_b"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:checked="false"
+                        android:text="Marcus Rashford"
+                        app:useMaterialThemeColors="true"
+                        app:buttonTint="@color/dull_lavender"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:layout_marginStart="10sp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/statusLinearC"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginHorizontal="10dp">
+                    <ImageView
+                        android:id="@+id/statusImageC"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/error_answer_ic"/>
+                    <TextView
+                        android:id="@+id/statusAnswerC"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/red_real"
+                        android:textSize="15sp"
+                        android:text="Unfortunately, your answer is wrong !"
+                        android:layout_marginLeft="7dp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/answerLayerNo2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/answer_rounded_false">
+                    <CheckBox
+                        android:id="@+id/checkBox_c"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:checked="false"
+                        android:text="Sadio Mane"
+                        android:textStyle="bold"
+                        app:useMaterialThemeColors="true"
+                        app:buttonTint="@color/dull_lavender"
+                        android:textSize="18sp"
+                        android:layout_marginStart="10sp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/statusLinearD"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginVertical="5dp"
+                    android:layout_marginHorizontal="10dp">
+                    <ImageView
+                        android:id="@+id/statusImageD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/error_answer_ic"/>
+                    <TextView
+                        android:id="@+id/statusAnswerD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/red_real"
+                        android:textSize="15sp"
+                        android:text="Unfortunately, your answer is wrong !"
+                        android:layout_marginLeft="7dp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/answerLayerNo3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/answer_rounded_false">
+                    <CheckBox
+                        android:id="@+id/checkBox_d"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:checked="false"
+                        android:text="Aubameyang"
+                        android:textStyle="bold"
+                        app:useMaterialThemeColors="true"
+                        app:buttonTint="@color/dull_lavender"
+                        android:textSize="18sp"
+                        android:layout_marginStart="10sp"/>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

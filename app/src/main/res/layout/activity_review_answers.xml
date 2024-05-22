@@ -11,7 +11,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="none">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -29,6 +30,22 @@
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 />
+
+            <Button
+                android:id="@+id/backToHome"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right"
+                android:backgroundTint="@color/dark_yellow"
+                android:paddingVertical="12dp"
+                android:textSize="14dp"
+                app:cornerRadius="5dp"
+                app:icon="@drawable/ic_home_black"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconSize="16dp"
+                app:strokeColor="@color/dark_yellow"
+                app:strokeWidth="1dp" />
         </FrameLayout>
 
         <LinearLayout
@@ -56,6 +73,7 @@
                         android:textSize="16sp"
                         android:text="QUIZ NAME"/>
                     <TextView
+                        android:id="@+id/quizName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="English Premier League Quiz"
@@ -218,9 +236,10 @@
             android:layout_height="wrap_content"
             android:background="@drawable/submit_answer_background">
             <Button
+                android:id="@+id/playQuizAgain"
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
-                android:text="Edit Answer"
+                android:text="Play again"
                 android:textColor="@color/medium_purple"
                 android:textStyle="bold"
                 android:backgroundTint="@color/medium_gray_purpil"
@@ -231,6 +250,7 @@
                 android:layout_marginVertical="20dp"
                 android:layout_marginLeft="15dp"/>
             <Button
+                android:id="@+id/submitAnswer"
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:text="Submit"

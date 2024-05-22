@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.adapters.LiveQuizAdapter;
-import com.example.quizapp_fe.api.quiz.get.GetPublicQuizzesApi;
+import com.example.quizapp_fe.api.quiz.get.GetTeacherQuizzesApi;
 import com.example.quizapp_fe.entities.Quiz;
 import com.example.quizapp_fe.interfaces.LiveQuizCard;
 import com.example.quizapp_fe.models.CredentialToken;
@@ -31,7 +31,7 @@ public class TeacherQuizActivity extends AppCompatActivity {
 
     ImageButton imgButtonBackArrow;
     String teacherId;
-
+    ImageButton examineImageButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,10 +52,9 @@ public class TeacherQuizActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
     private void callApiGetQuiz(String teacherId){
-        GetPublicQuizzesApi.getTeacherQuizAPI(TeacherQuizActivity.this).getTeacherQuiz(teacherId).enqueue(new Callback<ArrayList<Quiz>>() {
+        GetTeacherQuizzesApi.getTeacherQuizAPI(TeacherQuizActivity.this).getTeacherQuiz(teacherId).enqueue(new Callback<ArrayList<Quiz>>() {
             @Override
             public void onResponse(Call<ArrayList<Quiz>> call, Response<ArrayList<Quiz>> response) {
                 if (response.isSuccessful()) {
@@ -65,10 +64,12 @@ public class TeacherQuizActivity extends AppCompatActivity {
                         String quizTitle;
                         String quizSubTitle;
                         String quizImage;
+                        String quizId;
                         quizTitle = teacherQuizList.get(i).getName();
                         quizSubTitle = teacherQuizList.get(i).getDescription();
                         quizImage = teacherQuizList.get(i).getBackgroundImage();
-                        LiveQuizCard liveQuizCard = new LiveQuizCard(quizImage, quizTitle, quizSubTitle);
+                        quizId = teacherQuizList.get(i).get_id();
+                        LiveQuizCard liveQuizCard = new LiveQuizCard(quizImage, quizTitle, quizSubTitle,quizId);
                         quizCardList.add(liveQuizCard);
                         quizCardAdapter = new LiveQuizAdapter(getBaseContext(), quizCardList);
                         listQuizRecyclerView.setAdapter(quizCardAdapter);
