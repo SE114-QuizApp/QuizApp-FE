@@ -7,7 +7,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -172,7 +171,6 @@ public class HomeFragment extends Fragment {
                             liveQuizRecyclerView.setAdapter(liveQuizAdapter);
                             liveQuizRecyclerView.setLayoutManager(new LinearLayoutManager(context));
                         }
-                        Log.e("count my quiz size: ", Integer.toString(liveQuizCardList.size()));
                     }
                         else if (liveQuizCardList.size() == 0) {
                             seeAllButtonTextView.setVisibility(View.GONE);
@@ -242,7 +240,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(Call<ArrayList<Quiz>> call, Throwable t) {
                 Toast.makeText(context, "Call API Failed", Toast.LENGTH_SHORT).show();
-                Log.e("HomeFrament", "failed");
             }
         });
     }
