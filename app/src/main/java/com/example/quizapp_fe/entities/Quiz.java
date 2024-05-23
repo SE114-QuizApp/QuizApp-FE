@@ -146,4 +146,8 @@ public class Quiz implements Serializable {
     public void setBackgroundImage(String backgroundImage) {
         this.backgroundImage = backgroundImage;
     }
+
+    public boolean isDraft() {
+        return isDraft;
+    }
 }

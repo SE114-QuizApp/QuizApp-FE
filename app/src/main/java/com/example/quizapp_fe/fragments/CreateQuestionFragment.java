@@ -1,8 +1,10 @@
 package com.example.quizapp_fe.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -26,13 +29,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.activities.HomeActivity;
 import com.example.quizapp_fe.adapters.QuestionIndexAdapter;
+import com.example.quizapp_fe.api.ErrorResponse;
+import com.example.quizapp_fe.api.quiz.create.CreateQuizApi;
+import com.example.quizapp_fe.dialogs.AlertDialog;
+import com.example.quizapp_fe.dialogs.ConfirmationDialog;
+import com.example.quizapp_fe.dialogs.LoadingDialog;
 import com.example.quizapp_fe.entities.Answer;
 import com.example.quizapp_fe.entities.Question;
 import com.example.quizapp_fe.entities.Quiz;
 import com.example.quizapp_fe.models.CreateQuizViewModel;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CreateQuestionFragment extends Fragment {
     private RecyclerView questionIndexRecyclerView;
@@ -55,6 +69,10 @@ public class CreateQuestionFragment extends Fragment {
     private Quiz quiz;
     private Question question;
     private ArrayList<Question> questionList;
+    private LoadingDialog loadingDialog;
+    private ConfirmationDialog confirmationDialog;
+    private AlertDialog alertDialog;
+    private TextView tvCheckboxError;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,6 +92,17 @@ public class CreateQuestionFragment extends Fragment {
         cbCheckBoxD = view.findViewById(R.id.cbCheckBoxD);
         tvDurationQuestion = view.findViewById(R.id.tvDurationQuestion);
         tvQuestionType = view.findViewById(R.id.tvQuestionType);
+        btnMoreIcon = view.findViewById(R.id.btnMoreIcon);
+        llDurationQuestion = view.findViewById(R.id.durationQuestionContainer);
+        llQuestionType = view.findViewById(R.id.questionTypeContainer);
+        tvCheckboxError = view.findViewById(R.id.tvCheckboxError);
+        Button btnSave = view.findViewById(R.id.btnSave);
+        ImageView btnBack = view.findViewById(R.id.btnBackCreateQuestion);
+        Button btnAddQuestion = view.findViewById(R.id.btnAddQuestion);
+
+        loadingDialog = new LoadingDialog(requireActivity());
+        confirmationDialog = new ConfirmationDialog(getActivity());
+        alertDialog = new AlertDialog(getActivity());
 
         questionIndexRecyclerView = view.findViewById(R.id.questionIndexList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -87,7 +116,10 @@ public class CreateQuestionFragment extends Fragment {
             questionIndexAdapter.setSelectedPos(0);
         } else {
             questionIndexAdapter.setSelectedPos(questionList.size() - 1);
-            question = questionList.get(questionIndexAdapter.getSelectedPos().getValue());
+
+            int selectedQuestionPos = questionIndexAdapter.getSelectedPos().getValue();
+            question = questionList.get(selectedQuestionPos);
+            questionIndexRecyclerView.scrollToPosition(selectedQuestionPos);
         }
 
         questionIndexRecyclerView.setAdapter(questionIndexAdapter);
@@ -105,8 +137,11 @@ public class CreateQuestionFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 handleUpdateCurrentQuestion();
+                quiz = createQuizViewModel.getQuiz().getValue();
+                questionList = quiz.getQuestionList();
                 question = questionList.get(position);
                 handleUpdateInputs();
+                clearFocusFromInputs();
             }
         });
 
@@ -118,8 +153,6 @@ public class CreateQuestionFragment extends Fragment {
 //            }
 //        });
 
-        // get the durationQuestionContainer and set an onClickListener
-        llDurationQuestion = view.findViewById(R.id.durationQuestionContainer);
         llDurationQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,7 +160,6 @@ public class CreateQuestionFragment extends Fragment {
             }
         });
 
-        llQuestionType = view.findViewById(R.id.questionTypeContainer);
         llQuestionType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,7 +167,7 @@ public class CreateQuestionFragment extends Fragment {
             }
         });
 
-
+        // if question type is true / false, there should be only one checkbox checked
         CompoundButton.OnCheckedChangeListener checkListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -151,21 +183,33 @@ public class CreateQuestionFragment extends Fragment {
         cbCheckBoxA.setOnCheckedChangeListener(checkListener);
         cbCheckBoxB.setOnCheckedChangeListener(checkListener);
 
-        btnMoreIcon = view.findViewById(R.id.btnMoreIcon);
         btnMoreIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PopupMenu popup = new PopupMenu(getActivity(), btnMoreIcon);
-                popup.getMenuInflater().inflate(R.menu.popup_menu_more_icon_create_question_fragment, popup.getMenu());
+                popup.getMenuInflater().inflate(R.menu.more_options_create_question_menu, popup.getMenu());
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getTitle().toString()) {
                             case "Delete this question":
-                                deleteQuestion();
+                                int selectedQuestionIndex = questionIndexAdapter.getSelectedPos().getValue() + 1;
+                                confirmationDialog.show("Delete question", "Are you sure you want to delete question " + selectedQuestionIndex + "?", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        deleteQuestion();
+                                    }
+                                }, null);
+
                                 return true;
                             case "Discard changes":
-                                discardChanges();
+                                confirmationDialog.show("Discard changes", "All changes will be discarded. Are you sure you want to exit?", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        discardChanges();
+                                    }
+                                }, null);
+
                                 return true;
                             default:
                                 return false;
@@ -176,8 +220,6 @@ public class CreateQuestionFragment extends Fragment {
             }
         });
 
-        ImageView btnBack = view.findViewById(R.id.btnBackCreateQuestion);
-
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,7 +228,6 @@ public class CreateQuestionFragment extends Fragment {
             }
         });
 
-        Button btnAddQuestion = view.findViewById(R.id.btnAddQuestion);
         btnAddQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,7 +235,6 @@ public class CreateQuestionFragment extends Fragment {
             }
         });
 
-        Button btnSave = view.findViewById(R.id.btnSave);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -206,22 +246,58 @@ public class CreateQuestionFragment extends Fragment {
                     return;
                 }
 
-                questionList = quiz.getQuestionList();
-                quiz.setNumberOfQuestions(questionList.size());
-                quiz.setDraft(false);
+                confirmationDialog.show("Save quiz", "Are you sure you want to save quiz?", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        quiz = createQuizViewModel.getQuiz().getValue();
+                        questionList = quiz.getQuestionList();
+                        quiz.setNumberOfQuestions(questionList.size());
+                        quiz.setDraft(false);
 
-//                createQuizViewModel.clearQuiz();
+                        Gson gson = new Gson();
+                        String jsonQuiz = gson.toJson(quiz);
+                        Log.d("CreateQuestionFragment", jsonQuiz);
 
-                Intent intent = new Intent(getActivity(), HomeActivity.class);
-                startActivity(intent);
+                        loadingDialog.showLoading("Creating quiz...");
 
-                getActivity().finish();
+                        CreateQuizApi.getAPI(getActivity()).createQuiz(new CreateQuizApi.API.CreateQuizRequest(quiz)).enqueue(new Callback<CreateQuizApi.API.CreateQuizResponse>() {
+                            @Override
+                            public void onResponse(@NonNull Call<CreateQuizApi.API.CreateQuizResponse> call, @NonNull Response<CreateQuizApi.API.CreateQuizResponse> response) {
+                                if (response.isSuccessful()) {
+                                    CreateQuizApi.API.CreateQuizResponse createQuizResponse = response.body();
+                                    assert createQuizResponse != null;
+                                    Quiz quiz = createQuizResponse.getQuiz();
 
-                Toast.makeText(getActivity(), "Create quiz successfully", Toast.LENGTH_LONG).show();
+                                    Intent intent = new Intent(getActivity(), HomeActivity.class);
+                                    startActivity(intent);
+
+                                    getActivity().finish();
+
+                                    loadingDialog.dismiss();
+                                    Toast.makeText(getActivity(), "Create quiz successfully", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Gson gson = new GsonBuilder().create();
+                                    assert response.errorBody() != null;
+                                    ErrorResponse error = gson.fromJson(response.errorBody().charStream(), ErrorResponse.class);
+                                    Log.d("CreateQuestionFragment", String.valueOf(error));
+                                    loadingDialog.showError(error.getMessage());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<CreateQuizApi.API.CreateQuizResponse> call, @NonNull Throwable t) {
+                                Toast.makeText(getActivity(), "Create quiz failed", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }, null);
             }
         });
 
         return view;
+    }
+
+    private void handleCreateQuizApi() {
     }
 
     private void deleteQuestion() {
@@ -236,8 +312,6 @@ public class CreateQuestionFragment extends Fragment {
         }
 
         questionIndexAdapter.notifyDataSetChanged();
-
-        Toast.makeText(getActivity(), "Delete question successfully", Toast.LENGTH_SHORT).show();
 
         if (questionList.isEmpty()) {
             handleAddNewQuestion();
@@ -261,13 +335,11 @@ public class CreateQuestionFragment extends Fragment {
         startActivity(intent);
 
         getActivity().finish();
-
-        Toast.makeText(getActivity(), "Exit creating quiz", Toast.LENGTH_SHORT).show();
     }
 
     private void showDurationMenu() {
         PopupMenu popup = new PopupMenu(getActivity(), llDurationQuestion);
-        popup.getMenuInflater().inflate(R.menu.popup_menu_duration_question, popup.getMenu());
+        popup.getMenuInflater().inflate(R.menu.duration_question_menu, popup.getMenu());
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
                 tvDurationQuestion.setText(item.getTitle());
@@ -279,7 +351,7 @@ public class CreateQuestionFragment extends Fragment {
 
     private void showQuestionTypeMenu() {
         PopupMenu popup = new PopupMenu(getActivity(), llQuestionType);
-        popup.getMenuInflater().inflate(R.menu.popup_menu_question_type, popup.getMenu());
+        popup.getMenuInflater().inflate(R.menu.question_type_menu, popup.getMenu());
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
                 tvQuestionType.setText(item.getTitle());
@@ -338,6 +410,9 @@ public class CreateQuestionFragment extends Fragment {
         questionIndexAdapter.setSelectedPos(quiz.getQuestionList().size() - 1);
 
         handleUpdateInputs();
+        clearFocusFromInputs();
+        int selectedQuestionPos = questionIndexAdapter.getSelectedPos().getValue();
+        questionIndexRecyclerView.scrollToPosition(selectedQuestionPos);
     }
 
     private void handleUpdateCurrentQuestion() {
@@ -452,8 +527,9 @@ public class CreateQuestionFragment extends Fragment {
         }
 
         createQuizViewModel.addQuestion(question);
+        quiz = createQuizViewModel.getQuiz().getValue();
         questionList = quiz.getQuestionList();
-        Toast.makeText(getActivity(), "Question " + questionList.size() + " is added", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Added question " + questionList.size(), Toast.LENGTH_SHORT).show();
     }
 
     private void handleUpdateInputs() {
@@ -503,29 +579,11 @@ public class CreateQuestionFragment extends Fragment {
         }
     }
 
-    private void resetInputs() {
-        String questtionType = "Quiz";
-        tvQuestionType.setText(questtionType);
-        updateAnswerOptions(questtionType);
-
-        tvDurationQuestion.setText("5 sec");
-
-        etContent.setText("");
-
-        etAnswerA.setText("");
-        etAnswerB.setText("");
-        etAnswerC.setText("");
-        etAnswerD.setText("");
-
-        cbCheckBoxA.setChecked(false);
-        cbCheckBoxB.setChecked(false);
-        cbCheckBoxC.setChecked(false);
-        cbCheckBoxD.setChecked(false);
-    }
-
     private boolean isValidQuestions() {
-        List<Integer> invalidQuestionIndexes = new ArrayList<>();
+        ArrayList<Integer> invalidQuestionIndexes = new ArrayList<>();
+        quiz = createQuizViewModel.getQuiz().getValue();
         questionList = quiz.getQuestionList();
+
         for (int i = 0; i < questionList.size(); i++) {
             Question question = questionList.get(i);
 
@@ -549,18 +607,16 @@ public class CreateQuestionFragment extends Fragment {
 
         if (!invalidQuestionIndexes.isEmpty()) {
             // convert the list of invalid question indexes to a string and show a toast
-            String invalidQuestionIndexesString = "";
-            for (int i = 0; i < invalidQuestionIndexes.size(); i++) {
-                invalidQuestionIndexesString += invalidQuestionIndexes.get(i);
+            String invalidQuestionIndexesString = convertArrayToString(invalidQuestionIndexes);
 
-                if (i < invalidQuestionIndexes.size() - 1) {
-                    invalidQuestionIndexesString += ", ";
-                }
-            }
-            Toast.makeText(getActivity(), "Invalid questions: " + invalidQuestionIndexesString, Toast.LENGTH_SHORT).show();
+            String strMoreThanOneInvalidQues = invalidQuestionIndexes.size() > 1 ? "are" : "is";
+
+            alertDialog.show("Invalid questions", "Questions " + invalidQuestionIndexesString + " " + strMoreThanOneInvalidQues + " invalid. Please fill in all required fields.", null);
 
             int invalidQuestionIndex = invalidQuestionIndexes.get(0) - 1;
             questionIndexAdapter.setSelectedPos(invalidQuestionIndex);
+            quiz = createQuizViewModel.getQuiz().getValue();
+            questionList = quiz.getQuestionList();
             question = questionList.get(invalidQuestionIndex);
             handleUpdateInputs();
 
@@ -570,7 +626,9 @@ public class CreateQuestionFragment extends Fragment {
 
             boolean isAnyCheckboxChecked = cbCheckBoxA.isChecked() || cbCheckBoxB.isChecked() || cbCheckBoxC.isChecked() || cbCheckBoxD.isChecked();
             if (!isAnyCheckboxChecked) {
-                Toast.makeText(getActivity(), "At least one checkbox needs to be checked", Toast.LENGTH_SHORT).show();
+                tvCheckboxError.setVisibility(View.VISIBLE);
+            } else {
+                tvCheckboxError.setVisibility(View.GONE);
             }
 
             for (Answer answer : question.getAnswerList()) {
@@ -596,5 +654,27 @@ public class CreateQuestionFragment extends Fragment {
         }
 
         return true;
+    }
+
+    private String convertArrayToString(ArrayList<Integer> list) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < list.size(); i++) {
+            stringBuilder.append(list.get(i));
+
+            if (i < list.size() - 1) {
+                stringBuilder.append(", ");
+            }
+        }
+
+        return stringBuilder.toString();
+    }
+
+    private void clearFocusFromInputs() {
+        etContent.clearFocus();
+        etAnswerA.clearFocus();
+        etAnswerB.clearFocus();
+        etAnswerC.clearFocus();
+        etAnswerD.clearFocus();
     }
 }
