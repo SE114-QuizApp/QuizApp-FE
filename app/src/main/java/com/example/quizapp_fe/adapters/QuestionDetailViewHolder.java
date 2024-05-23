@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quizapp_fe.R;
@@ -43,16 +44,20 @@ public class QuestionDetailViewHolder extends RecyclerView.ViewHolder {
 
         ArrayList<Answer> answersFromQuestion = new ArrayList<>(question.getAnswerList());
 
+        if(!answerArrayList.isEmpty()) {
+            answerArrayList.clear();
+        }
         for (int i = 0; i < answersFromQuestion.size(); i++) {
             Answer answer = answersFromQuestion.get(i);
-            if (answer.getBody().equals("")) {
+            if (answer.getBody().isEmpty()) {
                 continue;
             }
             answerArrayList.add(answer);
         }
 
+
         answerDetailAdapter = new AnswerDetailAdapter(context, answerArrayList);
         questionDetailAnswerListRecyclerView.setAdapter(answerDetailAdapter);
-        questionDetailAnswerListRecyclerView.setLayoutManager(new GridLayoutManager(context, 1));
+        questionDetailAnswerListRecyclerView.setLayoutManager(new LinearLayoutManager(context));
     }
 }
