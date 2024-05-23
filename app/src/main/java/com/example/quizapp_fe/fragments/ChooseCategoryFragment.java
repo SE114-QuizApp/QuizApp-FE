@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +27,7 @@ import com.example.quizapp_fe.models.CreateQuizViewModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ChooseCategoryFragment extends Fragment {
@@ -39,13 +39,13 @@ public class ChooseCategoryFragment extends Fragment {
 
     private Quiz quiz;
     private ConfirmationDialog confirmationDialog;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Initialize categories here
-        categories = new HashMap<>();
-        categories.put("All", new CategoryCard("All", R.drawable.ic_all_24));
+        categories = new LinkedHashMap<>();
+        categories.put("Other", new CategoryCard("Other", R.drawable.ic_other_24));
         categories.put("Math", new CategoryCard("Math", R.drawable.ic_math_24));
         categories.put("English", new CategoryCard("English", R.drawable.ic_english_24));
         categories.put("Sports", new CategoryCard("Sports", R.drawable.ic_sports_24));
@@ -63,7 +63,7 @@ public class ChooseCategoryFragment extends Fragment {
         View view = binding.getRoot();
 
         createQuizViewModel = new ViewModelProvider(requireActivity()).get(CreateQuizViewModel.class);
-
+        quiz = createQuizViewModel.getQuiz().getValue();
 
         CategoryCreateQuizAdapter categoryAdapter = new CategoryCreateQuizAdapter(new ArrayList<>(categories.values()));
         binding.categoryRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
@@ -71,17 +71,15 @@ public class ChooseCategoryFragment extends Fragment {
 
         confirmationDialog = new ConfirmationDialog(requireActivity());
 
-        quiz = createQuizViewModel.getQuiz().getValue();
-
         // select the first category by default
-        categories.get("All").setSelected(true);
+        categories.get("Other").setSelected(true);
 
         // set the selected category if the quiz object is not null
         if (quiz != null && quiz.getCategory() != null && !quiz.getCategory().getName().isEmpty()) {
             String selectedCategoryName = quiz.getCategory().getName();
             CategoryCard selectedCategory = categories.get(selectedCategoryName);
             if (selectedCategory != null) {
-                categories.get("All").setSelected(false);
+                categories.get("Other").setSelected(false);
                 selectedCategory.setSelected(true);
             }
         }
