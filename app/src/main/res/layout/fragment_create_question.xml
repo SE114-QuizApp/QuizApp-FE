@@ -235,12 +235,23 @@
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
+                        <TextView
+                            android:id="@+id/tvCheckboxError"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="At least one checkbox needs to be checked"
+                            android:textColor="@android:color/holo_red_dark"
+                            android:visibility="gone"
+                            android:textSize="15sp" />
+
                         <LinearLayout
                             android:id="@+id/answersContainer"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:orientation="vertical">
+
 
                             <LinearLayout
                                 android:layout_width="match_parent"

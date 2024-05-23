@@ -11,12 +11,12 @@ public class ConfirmationDialog {
         this.context = context;
     }
 
-    public void show(String title, String message, DialogInterface.OnClickListener confirmListener) {
+    public void show(String title, String message, DialogInterface.OnClickListener confirmListener, DialogInterface.OnClickListener cancelListener) {
         new AlertDialog.Builder(context)
                 .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton("Yes", confirmListener)
-                .setNegativeButton("No", null)
+                .setNegativeButton("No", cancelListener)
                 .show();
     }
 }
