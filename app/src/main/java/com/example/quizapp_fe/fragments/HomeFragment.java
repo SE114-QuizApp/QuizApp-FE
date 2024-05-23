@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.quizapp_fe.R;
+import com.example.quizapp_fe.activities.CreatorQuizActivity;
 import com.example.quizapp_fe.activities.DiscoverySearchActivity;
 import com.example.quizapp_fe.activities.TeacherQuizActivity;
 import com.example.quizapp_fe.adapters.LiveQuizAdapter;
@@ -95,15 +96,12 @@ public class HomeFragment extends Fragment {
         userNameTextView = view.findViewById(R.id.homeFragUserNameTextView);
         myQuizzesConstraintLayout = view.findViewById(R.id.homeFragMyQuizzesConstraintLayout);
         findFriendButton = view.findViewById(R.id.homeFragFindFriendButton);
+        noQuizReminderTextView = new TextView(context);
+        addNewQuizLinearLayout = new LinearLayout(context);
+        addNewQuizImageButton = new ImageButton(context);
+        addNewQuizTextView = new TextView(context);
         liveQuizCardList = new ArrayList<>();
         teacherId = CredentialToken.getInstance(context).getUserProfile().getId();
-        callAPIGetQuiz(teacherId);
-        Log.e("Test HomeFrag", teacherId);
-        setAvatar(teacherId);
-        setUserName(teacherId);
-        if (checkListEmpty(liveQuizCardList)) {
-            seeAllButtonTextView.setVisibility(View.GONE);
-        }
 
         seeAllButtonTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +122,7 @@ public class HomeFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
+
         findFriendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,7 +131,25 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        if (liveQuizCardList.isEmpty()) {
+            addNewQuizLinearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, CreatorQuizActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        callAPIGetQuiz(teacherId);
+        setAvatar(teacherId);
+        setUserName(teacherId);
+
     }
 
     private void callAPIGetQuiz(String teacherId) {
@@ -154,30 +171,10 @@ public class HomeFragment extends Fragment {
                             liveQuizAdapter = new LiveQuizAdapter(context, liveQuizCardList);
                             liveQuizRecyclerView.setAdapter(liveQuizAdapter);
                             liveQuizRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-
-//                            addNewQuizImageButton = new ImageButton(context);
-//                            addNewQuizImageButton.setImageResource(R.drawable.ic_add_24);
-//                            ShapeDrawable shapeDrawable = new ShapeDrawable(new OvalShape());
-//                            shapeDrawable.getPaint().setColor(ContextCompat.getColor(context, R.color.salmon_pink));
-//                            addNewQuizImageButton.setBackground(shapeDrawable);
-//                            addNewQuizImageButton.setId(View.generateViewId());
-//                            addNewQuizImageButton.setPadding(5,5,5,5);
-//                            ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//                            layoutParams.width = 150;
-//                            layoutParams.height = 150;
-//                            addNewQuizImageButton.setLayoutParams(layoutParams);
-//                            myQuizzesConstraintLayout.addView(addNewQuizImageButton);
-//                            ConstraintSet constraintSet = new ConstraintSet();
-//                            constraintSet.clone(myQuizzesConstraintLayout);
-//                            constraintSet.connect(addNewQuizImageButton.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, 10);
-//                            constraintSet.connect(addNewQuizImageButton.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, 10);
-//                            constraintSet.connect(addNewQuizImageButton.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 150);
-//                            constraintSet.applyTo(myQuizzesConstraintLayout);
                         }
                     }
                         else if (liveQuizCardList.size() == 0) {
-
-                            noQuizReminderTextView = new TextView(context);
+                            seeAllButtonTextView.setVisibility(View.GONE);
                             noQuizReminderTextView.setText("You have no Quiz");
                             noQuizReminderTextView.setTextSize(20);
                             noQuizReminderTextView.setId(View.generateViewId());
@@ -187,7 +184,6 @@ public class HomeFragment extends Fragment {
                             noQuizReminderTextView.setTextColor(Color.BLACK);
                             myQuizzesConstraintLayout.addView(noQuizReminderTextView);
 
-                            addNewQuizLinearLayout = new LinearLayout(context);
                             addNewQuizLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
                             addNewQuizLinearLayout.setId(View.generateViewId());
 //                            addNewQuizLinearLayout.setPadding(10,10,10,10);
@@ -197,8 +193,6 @@ public class HomeFragment extends Fragment {
                             addNewQuizLinearLayout.setLayoutParams(layoutParamsAddNewLinearLayout);
                             myQuizzesConstraintLayout.addView(addNewQuizLinearLayout);
 
-
-                            addNewQuizImageButton = new ImageButton(context);
                             addNewQuizImageButton.setImageResource(R.drawable.ic_add_24);
                             ShapeDrawable shapeDrawableAddNewImageButton = new ShapeDrawable(new OvalShape());
                             shapeDrawableAddNewImageButton.getPaint().setColor(ContextCompat.getColor(context, R.color.salmon_pink));
@@ -210,7 +204,6 @@ public class HomeFragment extends Fragment {
                             addNewQuizImageButton.setLayoutParams(layoutParamsAddNewImageButton);
                             addNewQuizLinearLayout.addView(addNewQuizImageButton);
 
-                            addNewQuizTextView = new TextView(context);
                             addNewQuizTextView.setId(View.generateViewId());
                             addNewQuizTextView.setText("Create Now");
                             addNewQuizTextView.setTypeface(typeface);
@@ -256,13 +249,5 @@ public class HomeFragment extends Fragment {
         lastName = CredentialToken.getInstance(context).getUserProfile().getLastName();
         userName = firstName + " "  + lastName;
         userNameTextView.setText(userName);
-    }
-    private boolean checkListEmpty(ArrayList<LiveQuizCard> listQuiz ) {
-        if (listQuiz.isEmpty()) {
-            return true;
-        }
-        else {
-            return false;
-        }
     }
 }
