@@ -80,6 +80,25 @@ public class DiscoveryFragment extends Fragment {
             }
         });
 
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), DiscoverySearchActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    // Trường tìm kiếm đã nhận trạng thái tập trung
+                    Intent intent = new Intent(getContext(), DiscoverySearchActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+
         discoveryFragExploreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
