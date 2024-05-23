@@ -101,6 +101,9 @@ public class HomeFragment extends Fragment {
         addNewQuizTextView = new TextView(context);
         liveQuizCardList = new ArrayList<>();
         teacherId = CredentialToken.getInstance(context).getUserProfile().getId();
+        callAPIGetQuiz(teacherId);
+        setAvatar(teacherId);
+        setUserName(teacherId);
 
         seeAllButtonTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,10 +148,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        callAPIGetQuiz(teacherId);
-        setAvatar(teacherId);
-        setUserName(teacherId);
-
     }
 
     private void callAPIGetQuiz(String teacherId) {
