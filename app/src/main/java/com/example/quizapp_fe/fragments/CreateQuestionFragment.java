@@ -65,6 +65,7 @@ public class CreateQuestionFragment extends Fragment {
     private CheckBox cbCheckBoxB;
     private CheckBox cbCheckBoxC;
     private CheckBox cbCheckBoxD;
+    private LinearLayout answersContainer;
     ImageView btnMoreIcon;
     private Quiz quiz;
     private Question question;
@@ -96,6 +97,7 @@ public class CreateQuestionFragment extends Fragment {
         llDurationQuestion = view.findViewById(R.id.durationQuestionContainer);
         llQuestionType = view.findViewById(R.id.questionTypeContainer);
         tvCheckboxError = view.findViewById(R.id.tvCheckboxError);
+        answersContainer = view.findViewById(R.id.answersContainer);
         Button btnSave = view.findViewById(R.id.btnSave);
         ImageView btnBack = view.findViewById(R.id.btnBackCreateQuestion);
         Button btnAddQuestion = view.findViewById(R.id.btnAddQuestion);
@@ -110,6 +112,7 @@ public class CreateQuestionFragment extends Fragment {
 
         questionList = quiz.getQuestionList();
         questionIndexAdapter = new QuestionIndexAdapter(questionList);
+        questionIndexRecyclerView.setAdapter(questionIndexAdapter);
 
         if (questionList == null || questionList.isEmpty()) {
             handleAddNewQuestion();
@@ -119,10 +122,16 @@ public class CreateQuestionFragment extends Fragment {
 
             int selectedQuestionPos = questionIndexAdapter.getSelectedPos().getValue();
             question = questionList.get(selectedQuestionPos);
+
+            // log json question
+            Gson gson = new Gson();
+            String jsonQuestion = gson.toJson(question);
+            Log.d("CreateQuestionFragment", jsonQuestion);
+
+            handleUpdateInputs();
+
             questionIndexRecyclerView.scrollToPosition(selectedQuestionPos);
         }
-
-        questionIndexRecyclerView.setAdapter(questionIndexAdapter);
 
         createQuizViewModel.getQuiz().observe(getViewLifecycleOwner(), new Observer<Quiz>() {
             @SuppressLint("NotifyDataSetChanged")
@@ -255,7 +264,7 @@ public class CreateQuestionFragment extends Fragment {
                         quiz.setDraft(false);
 
                         Gson gson = new Gson();
-                        String jsonQuiz = gson.toJson(quiz);
+                        String jsonQuiz = gson.toJson(new CreateQuizApi.API.CreateQuizRequest(quiz));
                         Log.d("CreateQuestionFragment", jsonQuiz);
 
                         loadingDialog.showLoading("Creating quiz...");
@@ -364,12 +373,15 @@ public class CreateQuestionFragment extends Fragment {
     }
 
     private void updateAnswerOptions(String questionType) {
-        LinearLayout answersContainer = getView().findViewById(R.id.answersContainer);
-
         cbCheckBoxA.setChecked(false);
         cbCheckBoxB.setChecked(false);
         cbCheckBoxC.setChecked(false);
         cbCheckBoxD.setChecked(false);
+
+        etAnswerA.setText("");
+        etAnswerB.setText("");
+        etAnswerC.setText("");
+        etAnswerD.setText("");
 
         for (int i = 0; i < answersContainer.getChildCount(); i++) {
             LinearLayout answerOption = (LinearLayout) answersContainer.getChildAt(i);
@@ -380,27 +392,22 @@ public class CreateQuestionFragment extends Fragment {
                 } else {
                     answerOption.setVisibility(View.VISIBLE);
                     if (i == 0) {
-                        etAnswerA.setText("True");
-                        etAnswerA.setEnabled(false);
-                    } else if (i == 1) {
-                        etAnswerB.setText("False");
-                        etAnswerB.setEnabled(false);
+                        etAnswerA.setHint("True");
+                    } else {
+                        etAnswerB.setHint("False");
                     }
                 }
             } else {
                 answerOption.setVisibility(View.VISIBLE);
 
-                if (i < 2) {
-                    etAnswerA.setText("");
-                    etAnswerA.setEnabled(true);
-                    etAnswerB.setText("");
-                    etAnswerB.setEnabled(true);
+                if (i == 0) {
+                    etAnswerA.setHint("Add answer A");
+
+                } else if (i == 1) {
+                    etAnswerB.setHint("Add answer B");
                 }
             }
         }
-
-        etAnswerC.setText("");
-        etAnswerD.setText("");
     }
 
     private void handleAddQuestion() {
@@ -436,8 +443,10 @@ public class CreateQuestionFragment extends Fragment {
         // add answer list and set correct answers, max correct answers, and correct answer count
         if (questionType.equals("True/False")) {
             // name, body, íCorrect
-            Answer answerA = new Answer("a", "True", false);
-            Answer answerB = new Answer("b", "False", false);
+            Answer answerA = new Answer("a", etAnswerA.getText().toString().trim(), false);
+            Answer answerB = new Answer("b", etAnswerB.getText().toString().trim(), false);
+            Answer answerC = new Answer("c", "", false);
+            Answer answerD = new Answer("d", "", false);
 
             if (cbCheckBoxA.isChecked()) {
                 answerA.setCorrect(true);
@@ -449,6 +458,8 @@ public class CreateQuestionFragment extends Fragment {
 
             answers.add(answerA);
             answers.add(answerB);
+            answers.add(answerC);
+            answers.add(answerD);
 
             question.setAnswerList(answers);
             question.setOptionQuestion("Single");
@@ -510,7 +521,6 @@ public class CreateQuestionFragment extends Fragment {
         question.setPointType("Standard");
         question.setBackgroundImage("");
 
-
         int questionIndex = question.getQuestionIndex();
         createQuizViewModel.updateQuestion(questionIndex - 1, question);
     }
@@ -553,7 +563,7 @@ public class CreateQuestionFragment extends Fragment {
             etContent.setText("");
         }
 
-        List<Answer> answers = question.getAnswerList();
+        ArrayList<Answer> answers = question.getAnswerList();
 
         if (answers != null && !answers.isEmpty()) {
             for (Answer answer : answers) {
@@ -591,7 +601,14 @@ public class CreateQuestionFragment extends Fragment {
             boolean isAtLeastOneCheckboxChecked = question.getAnswerList().stream().anyMatch(Answer::isCorrect);
             boolean areAllEditTextsFilled = true;
 
-            if (question.getQuestionType().equals("Quiz")) {
+            if (question.getQuestionType().equals("True/False")) {
+                for (int j = 0; j < 2; j++) {
+                    if (question.getAnswerList().get(j).getBody().isEmpty()) {
+                        areAllEditTextsFilled = false;
+                        break;
+                    }
+                }
+            } else if (question.getQuestionType().equals("Quiz")) {
                 for (Answer answer : question.getAnswerList()) {
                     if (answer.getBody().isEmpty()) {
                         areAllEditTextsFilled = false;
@@ -631,21 +648,37 @@ public class CreateQuestionFragment extends Fragment {
                 tvCheckboxError.setVisibility(View.GONE);
             }
 
-            for (Answer answer : question.getAnswerList()) {
-                if (answer.getBody().isEmpty()) {
-                    switch (answer.getName()) {
-                        case "a":
-                            etAnswerA.setError("Answer A is required");
-                            break;
-                        case "b":
-                            etAnswerB.setError("Answer B is required");
-                            break;
-                        case "c":
-                            etAnswerC.setError("Answer C is required");
-                            break;
-                        case "d":
-                            etAnswerD.setError("Answer D is required");
-                            break;
+            if (question.getQuestionType().equals("True/False")) {
+                for (int i = 0; i < 2; i++) { // Only check the first two answers
+                    Answer answer = question.getAnswerList().get(i);
+                    if (answer.getBody().isEmpty()) {
+                        switch (answer.getName()) {
+                            case "a":
+                                etAnswerA.setError("Answer A is required");
+                                break;
+                            case "b":
+                                etAnswerB.setError("Answer B is required");
+                                break;
+                        }
+                    }
+                }
+            } else if (question.getQuestionType().equals("Quiz")) {
+                for (Answer answer : question.getAnswerList()) { // Check all answers
+                    if (answer.getBody().isEmpty()) {
+                        switch (answer.getName()) {
+                            case "a":
+                                etAnswerA.setError("Answer A is required");
+                                break;
+                            case "b":
+                                etAnswerB.setError("Answer B is required");
+                                break;
+                            case "c":
+                                etAnswerC.setError("Answer C is required");
+                                break;
+                            case "d":
+                                etAnswerD.setError("Answer D is required");
+                                break;
+                        }
                     }
                 }
             }
