@@ -14,6 +14,7 @@ import com.example.quizapp_fe.api.user.getUserById.GetUserByIdApi;
 import com.example.quizapp_fe.api.user.updateUserFriend.UpdateUserFriendApi;
 import com.example.quizapp_fe.api.user.updateUserUnfriend.UpdateUserUnfriendApi;
 import com.example.quizapp_fe.entities.User;
+import com.example.quizapp_fe.entities.UserProfile;
 import com.example.quizapp_fe.interfaces.UserCard;
 import com.example.quizapp_fe.models.CredentialToken;
 
@@ -27,7 +28,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UserCardViewHolder extends RecyclerView.ViewHolder {
-    private Context viewHolderContext;
+    private final Context viewHolderContext;
     ImageView userCardItemImageView;
     TextView userCardItemName;
     TextView userCardItemEmail;
@@ -43,11 +44,18 @@ public class UserCardViewHolder extends RecyclerView.ViewHolder {
         userCardItemName = itemView.findViewById(R.id.userCardItemNameTextView);
         userCardItemEmail = itemView.findViewById(R.id.userCardItemEmailTextView);
         userCardItemFollowImageView = itemView.findViewById(R.id.userCardItemFollowImageView);
-        myId = CredentialToken.getInstance(viewHolderContext).getUserProfile().getId();
-        myFriends = new ArrayList<>();
+        myId = CredentialToken.getInstance(viewHolderContext).getUserId();
+        myFriends = CredentialToken.getInstance(viewHolderContext).getUserProfile().getFriends();
         callGetMyFriendList();
     }
+
     public void bind(@NonNull UserCard userCard, Context context){
+        if (userCard.getUserCardId().equals(myId)) {
+            userCardItemFollowImageView.setVisibility(View.GONE);
+        } else {
+            userCardItemFollowImageView.setVisibility(View.VISIBLE);
+        }
+
         Glide.with(context)
              .asBitmap()
                      .load(userCard.getUserCardImage())
@@ -81,22 +89,30 @@ public class UserCardViewHolder extends RecyclerView.ViewHolder {
         });
     }
     private void callApiUpdateUserFriend(String friendId) {
-        UpdateUserFriendApi.putAPI(itemView.getContext()).updateUserFriend(friendId).enqueue(new Callback<User>() {
+        UpdateUserFriendApi.putAPI(itemView.getContext()).updateUserFriend(friendId).enqueue(new Callback<UserProfile>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
+                if (!response.isSuccessful()) return;
+                UserProfile user = response.body();
+                myFriends = user.getFriends();
+                CredentialToken.getInstance(viewHolderContext).setUserProfile(user);
             }
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(Call<UserProfile> call, Throwable t) {
             }
         });
     }
     private void callApiUpdateUserUnFriend(String friendId) {
-        UpdateUserUnfriendApi.putAPI(itemView.getContext()).updateUserUnfriend(friendId).enqueue(new Callback<User>() {
+        UpdateUserUnfriendApi.putAPI(itemView.getContext()).updateUserUnfriend(friendId).enqueue(new Callback<UserProfile>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(Call<UserProfile> call, Response<UserProfile> response) {
+                if (!response.isSuccessful()) return;
+                UserProfile user = response.body();
+                myFriends = user.getFriends();
+                CredentialToken.getInstance(viewHolderContext).setUserProfile(user);
             }
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(Call<UserProfile> call, Throwable t) {
             }
         });
     }
@@ -106,6 +122,7 @@ public class UserCardViewHolder extends RecyclerView.ViewHolder {
             public void onResponse(Call<User> call, Response<User> response) {
                 User me = response.body();
                 myFriends = me.getFriends();
+                myId = me.get_id();
             }
             @Override
             public void onFailure(Call<User> call, Throwable t) {
@@ -114,9 +131,10 @@ public class UserCardViewHolder extends RecyclerView.ViewHolder {
     }
     private void updateUserCardFollowImageView() {
         if (isFollowing) {
-            userCardItemFollowImageView.setImageResource(R.drawable.ic_delete_friend_512);
+            userCardItemFollowImageView.setImageResource(R.drawable.ic_user_x);
+
         } else {
-            userCardItemFollowImageView.setImageResource(R.drawable.ic_follow_512);
+            userCardItemFollowImageView.setImageResource(R.drawable.ic_user_plus);
         }
     }
 }
