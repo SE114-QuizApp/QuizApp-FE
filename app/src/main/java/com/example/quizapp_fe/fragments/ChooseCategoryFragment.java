@@ -88,15 +88,14 @@ public class ChooseCategoryFragment extends Fragment {
 
         // handle the click event of the Back button
         binding.btnBackChooseCategory.setOnClickListener(v -> {
-            confirmationDialog.show("Discard changes", "Are you sure you want to exit creating quiz?", new DialogInterface.OnClickListener() {
+            confirmationDialog.show("Discard changes", "Are you sure you want to exit?", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Intent intent = new Intent(getActivity(), HomeActivity.class);
                     startActivity(intent);
                     getActivity().finish();
-                    Toast.makeText(getActivity(), "Exit creating quiz", Toast.LENGTH_SHORT).show();
                 }
-            });
+            }, null);
         });
 
         // handle the click event of the Next button
