@@ -32,6 +32,7 @@ public class QuestionDetailViewHolder extends RecyclerView.ViewHolder {
         questionDetailOptionQuestionTextView = itemView.findViewById(R.id.questionDetailOptionQuestionTextView);
         questionDetailAnswerTime = itemView.findViewById(R.id.questionDetailAnswerTime);
         questionDetailAnswerListRecyclerView = itemView.findViewById(R.id.questionDetailAnswerListRecyclerView);
+        answerArrayList = new ArrayList<>();
     }
 
     public void bind(Question question, Context context) {
@@ -40,10 +41,10 @@ public class QuestionDetailViewHolder extends RecyclerView.ViewHolder {
         questionDetailOptionQuestionTextView.setText(question.getOptionQuestion() + " Option");
         questionDetailAnswerTime.setText(Integer.toString(question.getAnswerTime()) + " Seconds");
 
-        answerArrayList = new ArrayList<>();
+        ArrayList<Answer> answersFromQuestion = new ArrayList<>(question.getAnswerList());
 
-        for (int i = 0; i < question.getAnswerList().size(); i++) {
-            Answer answer = question.getAnswerList().get(i);
+        for (int i = 0; i < answersFromQuestion.size(); i++) {
+            Answer answer = answersFromQuestion.get(i);
             if (answer.getBody().equals("")) {
                 continue;
             }

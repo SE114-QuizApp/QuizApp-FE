@@ -112,8 +112,10 @@ public class QuizDetailActivity extends AppCompatActivity {
 
                     quizDetailCreatorNameTextView.setText(quiz.getCreator().getFullName());
 
-                    for (int i = 0; i < quiz.getQuestionList().size(); i++) {
-                        Question question = quiz.getQuestionList().get(i);
+                    ArrayList<Question> questionsFromQuiz = new ArrayList<>(quiz.getQuestionList());
+
+                    for (int i = 0; i < questionsFromQuiz.size(); i++) {
+                        Question question = questionsFromQuiz.get(i);
                         questionArrayList.add(question);
                     }
                     questionDetailAdapter = new QuestionDetailAdapter(QuizDetailActivity.this, questionArrayList);
