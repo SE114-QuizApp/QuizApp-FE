@@ -150,4 +150,20 @@ public class Quiz implements Serializable {
     public boolean isDraft() {
         return isDraft;
     }
+
+    public ArrayList<String> getLikesCount() {
+        return likesCount;
+    }
+
+    public ArrayList<String> getComments() {
+        return comments;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
 }

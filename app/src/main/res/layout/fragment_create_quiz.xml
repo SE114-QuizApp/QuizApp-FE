@@ -29,6 +29,7 @@
                 android:src="@drawable/ic_arrow_back_24_white" />
 
             <TextView
+                android:id="@+id/tvHeading"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
@@ -281,12 +282,12 @@
                 android:paddingVertical="8dp">
 
                 <Button
-                    android:id="@+id/btnAddQuestions"
+                    android:id="@+id/btnNext"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:backgroundTint="@color/purple_hue"
                     android:paddingVertical="18dp"
-                    android:text="Add Questions"
+                    android:text="Next"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="16sp"
