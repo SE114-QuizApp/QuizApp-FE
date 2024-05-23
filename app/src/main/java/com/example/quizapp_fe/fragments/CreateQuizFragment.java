@@ -32,6 +32,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.quizapp_fe.R;
@@ -60,8 +61,8 @@ public class CreateQuizFragment extends Fragment {
     private EditText etQuizDescription;
     private ImageView btnMoreIcon;
     private LoadingDialog loadingDialog;
-    private Uri selectedImageUri;
     private ConfirmationDialog confirmationDialog;
+    private TextView tvHeading;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,8 +77,9 @@ public class CreateQuizFragment extends Fragment {
         tvGrade = view.findViewById(R.id.tvGrade);
         gradeContainer = view.findViewById(R.id.gradeContainer);
         btnMoreIcon = view.findViewById(R.id.btnMoreIcon);
+        tvHeading = view.findViewById(R.id.tvHeading);
         ImageView btnBack = view.findViewById(R.id.btnBackCreateQuiz);
-        Button btnAddQuestions = view.findViewById(R.id.btnAddQuestions);
+        Button btnNext = view.findViewById(R.id.btnNext);
         quizBackgroundImage = view.findViewById(R.id.quizBackgroundImage);
         Button btnChooseQuizBackgroundImage = view.findViewById(R.id.btnChooseQuizBackgroundImage);
 
@@ -91,21 +93,31 @@ public class CreateQuizFragment extends Fragment {
         if (quiz != null) {
             etQuizName.setText(quiz.getName());
             switchPublicQuiz.setChecked(quiz.isPublic());
-            tvGrade.setText(String.valueOf(quiz.getGrade().getName()));
-            etQuizTags.setText(String.join(", ", quiz.getTags()));
-            etQuizDescription.setText(quiz.getDescription());
+
+            if (quiz.getGrade() != null && quiz.getGrade().getName() != null && !quiz.getGrade().getName().isEmpty()) {
+                tvGrade.setText(quiz.getGrade().getName());
+            } else {
+                tvGrade.setText("All");
+            }
 
             if (quiz.getPointsPerQuestion() > 0) {
                 etQuizPointsPerQuestion.setText(String.valueOf(quiz.getPointsPerQuestion()));
             }
 
-            // set the background image of the quiz if it exists
-            if (quiz.getBackgroundImage() != null && !quiz.getBackgroundImage().isEmpty()) {
-                byte[] decodedString = Base64.decode(quiz.getBackgroundImage(), Base64.DEFAULT);
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                quizBackgroundImage.setImageBitmap(decodedByte);
-            }
+            etQuizTags.setText(String.join(", ", quiz.getTags()));
+            etQuizDescription.setText(quiz.getDescription());
         }
+
+        createQuizViewModel.isUpdate().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isUpdate) {
+                if (isUpdate) {
+                    tvHeading.setText("Update Quiz");
+                } else {
+                    tvHeading.setText("Create Quiz");
+                }
+            }
+        });
 
         gradeContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,7 +165,7 @@ public class CreateQuizFragment extends Fragment {
             }
         });
 
-        btnAddQuestions.setOnClickListener(new View.OnClickListener() {
+        btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean isValid = checkValidation();
@@ -166,7 +178,7 @@ public class CreateQuizFragment extends Fragment {
 
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.creatorQuizMainContainerFrameLayout, new CreateQuestionFragment());
+                fragmentTransaction.replace(R.id.creatorQuizContainer, new CreateQuestionFragment());
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
@@ -184,7 +196,7 @@ public class CreateQuizFragment extends Fragment {
         btnChooseQuizBackgroundImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkAndRequestPermission();
+
             }
         });
 
@@ -193,22 +205,14 @@ public class CreateQuizFragment extends Fragment {
 
     // update the quiz object
     private void updateQuiz() {
-        if (selectedImageUri != null) {
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), selectedImageUri);
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-                byte[] byteArray = outputStream.toByteArray();
-                String encodedImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                quiz.setBackgroundImage(encodedImage);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
         quiz.setName(etQuizName.getText().toString().trim());
         quiz.setPublic(switchPublicQuiz.isChecked());
-        quiz.setGrade(new Grade(tvGrade.getText().toString().trim()));
+
+        if (quiz.getGrade() != null) {
+            quiz.getGrade().setName(tvGrade.getText().toString().trim());
+        } else {
+            quiz.setGrade(new Grade(tvGrade.getText().toString().trim()));
+        }
 
         if (!etQuizPointsPerQuestion.getText().toString().isEmpty()) {
             quiz.setPointsPerQuestion(Integer.parseInt(etQuizPointsPerQuestion.getText().toString().trim()));
@@ -245,44 +249,4 @@ public class CreateQuizFragment extends Fragment {
 
         return isValid;
     }
-
-    private void checkAndRequestPermission() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
-        } else {
-            pickImage();
-        }
-    }
-
-    private void pickImage() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        pickImageLauncher.launch(intent);
-    }
-
-    ActivityResultLauncher<Intent> pickImageLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        selectedImageUri = result.getData().getData();
-                        quizBackgroundImage.setImageURI(selectedImageUri);
-                    }
-                }
-            }
-    );
-
-    ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
-            new ActivityResultContracts.RequestPermission(),
-            new ActivityResultCallback<Boolean>() {
-                @Override
-                public void onActivityResult(Boolean isGranted) {
-                    if (isGranted) {
-                        pickImage();
-                    } else {
-                        Toast.makeText(requireContext(), "Permission denied", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-    );
 }

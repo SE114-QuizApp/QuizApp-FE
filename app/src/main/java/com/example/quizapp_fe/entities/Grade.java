@@ -15,8 +15,14 @@ public class Grade implements Serializable {
         this.name = name;
     }
 
+    public Grade() {
+    }
+
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 }

@@ -31,12 +31,14 @@ import com.example.quizapp_fe.activities.HomeActivity;
 import com.example.quizapp_fe.adapters.QuestionIndexAdapter;
 import com.example.quizapp_fe.api.ErrorResponse;
 import com.example.quizapp_fe.api.quiz.create.CreateQuizApi;
+import com.example.quizapp_fe.api.quiz.update.UpdateQuizApi;
 import com.example.quizapp_fe.dialogs.AlertDialog;
 import com.example.quizapp_fe.dialogs.ConfirmationDialog;
 import com.example.quizapp_fe.dialogs.LoadingDialog;
 import com.example.quizapp_fe.entities.Answer;
 import com.example.quizapp_fe.entities.Question;
 import com.example.quizapp_fe.entities.Quiz;
+import com.example.quizapp_fe.entities.UserProfile;
 import com.example.quizapp_fe.models.CreateQuizViewModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -74,6 +76,11 @@ public class CreateQuestionFragment extends Fragment {
     private ConfirmationDialog confirmationDialog;
     private AlertDialog alertDialog;
     private TextView tvCheckboxError;
+    private TextView tvHeading;
+    private Button btnSave;
+    private Boolean isUpdateMode;
+    private String headingTypeAction;
+    private String textTypeAction;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -81,6 +88,7 @@ public class CreateQuestionFragment extends Fragment {
 
         createQuizViewModel = new ViewModelProvider(requireActivity()).get(CreateQuizViewModel.class);
         quiz = createQuizViewModel.getQuiz().getValue();
+        isUpdateMode = createQuizViewModel.isUpdate().getValue();
 
         etContent = view.findViewById(R.id.etContent);
         etAnswerA = view.findViewById(R.id.etAnswerA);
@@ -98,7 +106,8 @@ public class CreateQuestionFragment extends Fragment {
         llQuestionType = view.findViewById(R.id.questionTypeContainer);
         tvCheckboxError = view.findViewById(R.id.tvCheckboxError);
         answersContainer = view.findViewById(R.id.answersContainer);
-        Button btnSave = view.findViewById(R.id.btnSave);
+        tvHeading = view.findViewById(R.id.tvHeading);
+        btnSave = view.findViewById(R.id.btnSave);
         ImageView btnBack = view.findViewById(R.id.btnBackCreateQuestion);
         Button btnAddQuestion = view.findViewById(R.id.btnAddQuestion);
 
@@ -123,11 +132,6 @@ public class CreateQuestionFragment extends Fragment {
             int selectedQuestionPos = questionIndexAdapter.getSelectedPos().getValue();
             question = questionList.get(selectedQuestionPos);
 
-            // log json question
-            Gson gson = new Gson();
-            String jsonQuestion = gson.toJson(question);
-            Log.d("CreateQuestionFragment", jsonQuestion);
-
             handleUpdateInputs();
 
             questionIndexRecyclerView.scrollToPosition(selectedQuestionPos);
@@ -139,6 +143,23 @@ public class CreateQuestionFragment extends Fragment {
             public void onChanged(Quiz quiz) {
                 questionIndexAdapter.setQuestions(quiz.getQuestionList());
                 questionIndexAdapter.notifyDataSetChanged();
+            }
+        });
+
+        createQuizViewModel.isUpdate().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isUpdate) {
+                if (isUpdate) {
+                    tvHeading.setText("Update Quiz");
+                    btnSave.setText("Update");
+                    headingTypeAction = "Update";
+                    textTypeAction = "update";
+                } else {
+                    tvHeading.setText("Create Quiz");
+                    btnSave.setText("Save");
+                    headingTypeAction = "Create";
+                    textTypeAction = "create";
+                }
             }
         });
 
@@ -249,55 +270,100 @@ public class CreateQuestionFragment extends Fragment {
             public void onClick(View v) {
                 handleUpdateCurrentQuestion();
 
+                quiz = createQuizViewModel.getQuiz().getValue();
+                questionList = quiz.getQuestionList();
+                quiz.setNumberOfQuestions(questionList.size());
+
+//                Gson gson = new Gson();
+//                Log.d("CreateQuestionFragment", gson.toJson(createQuizViewModel.getQuiz().getValue()));
+
                 boolean isValidQuiz = isValidQuestions();
 
                 if (!isValidQuiz) {
                     return;
                 }
 
-                confirmationDialog.show("Save quiz", "Are you sure you want to save quiz?", new DialogInterface.OnClickListener() {
+                confirmationDialog.show(headingTypeAction + " quiz", "Are you sure you want to " + textTypeAction + " this quiz?", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        quiz = createQuizViewModel.getQuiz().getValue();
-                        questionList = quiz.getQuestionList();
-                        quiz.setNumberOfQuestions(questionList.size());
+                        loadingDialog.showLoading("Loading...");
+
                         quiz.setDraft(false);
 
                         Gson gson = new Gson();
-                        String jsonQuiz = gson.toJson(new CreateQuizApi.API.CreateQuizRequest(quiz));
-                        Log.d("CreateQuestionFragment", jsonQuiz);
+                        String jsonQuiz = gson.toJson(new UpdateQuizApi.API.UpdateQuizRequest(quiz));
+                        Log.d("CreateQuestionFragmentAPI", jsonQuiz);
 
-                        loadingDialog.showLoading("Creating quiz...");
+                        if (isUpdateMode) {
+                            // update quiz
+                            UpdateQuizApi.getAPI(getActivity()).updateQuiz(quiz.get_id(), new UpdateQuizApi.API.UpdateQuizRequest(quiz)).enqueue(new Callback<UpdateQuizApi.API.UpdateQuizResponse>() {
+                                @Override
+                                public void onResponse(@NonNull Call<UpdateQuizApi.API.UpdateQuizResponse> call, @NonNull Response<UpdateQuizApi.API.UpdateQuizResponse> response) {
+                                    if (response.isSuccessful()) {
+                                        Intent intent = new Intent(getActivity(), HomeActivity.class);
+                                        loadingDialog.dismiss();
+                                        startActivity(intent);
 
-                        CreateQuizApi.getAPI(getActivity()).createQuiz(new CreateQuizApi.API.CreateQuizRequest(quiz)).enqueue(new Callback<CreateQuizApi.API.CreateQuizResponse>() {
-                            @Override
-                            public void onResponse(@NonNull Call<CreateQuizApi.API.CreateQuizResponse> call, @NonNull Response<CreateQuizApi.API.CreateQuizResponse> response) {
-                                if (response.isSuccessful()) {
-                                    CreateQuizApi.API.CreateQuizResponse createQuizResponse = response.body();
-                                    assert createQuizResponse != null;
-                                    Quiz quiz = createQuizResponse.getQuiz();
+                                        getActivity().finish();
 
+                                        Toast.makeText(getActivity(), "Update quiz successfully", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Gson gson = new GsonBuilder().create();
+                                        assert response.errorBody() != null;
+                                        ErrorResponse error = gson.fromJson(response.errorBody().charStream(), ErrorResponse.class);
+                                        Log.d("CreateQuestionFragment", String.valueOf(error));
+                                        loadingDialog.showError(error.getMessage());
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(@NonNull Call<UpdateQuizApi.API.UpdateQuizResponse> call, @NonNull Throwable t) {
                                     Intent intent = new Intent(getActivity(), HomeActivity.class);
+                                    loadingDialog.dismiss();
                                     startActivity(intent);
 
                                     getActivity().finish();
 
-                                    loadingDialog.dismiss();
-                                    Toast.makeText(getActivity(), "Create quiz successfully", Toast.LENGTH_LONG).show();
-                                } else {
-                                    Gson gson = new GsonBuilder().create();
-                                    assert response.errorBody() != null;
-                                    ErrorResponse error = gson.fromJson(response.errorBody().charStream(), ErrorResponse.class);
-                                    Log.d("CreateQuestionFragment", String.valueOf(error));
-                                    loadingDialog.showError(error.getMessage());
-                                }
-                            }
+                                    Log.e("CreateQuestionFragment", "onFailure: ", t);
+                                    Log.d("CreateQuestionFragment", t.getMessage());
 
-                            @Override
-                            public void onFailure(@NonNull Call<CreateQuizApi.API.CreateQuizResponse> call, @NonNull Throwable t) {
-                                Toast.makeText(getActivity(), "Create quiz failed", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                                    Toast.makeText(getActivity(), "Update quiz failed", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            CreateQuizApi.getAPI(getActivity()).createQuiz(new CreateQuizApi.API.CreateQuizRequest(quiz)).enqueue(new Callback<CreateQuizApi.API.CreateQuizResponse>() {
+                                @Override
+                                public void onResponse(@NonNull Call<CreateQuizApi.API.CreateQuizResponse> call, @NonNull Response<CreateQuizApi.API.CreateQuizResponse> response) {
+                                    if (response.isSuccessful()) {
+                                        CreateQuizApi.API.CreateQuizResponse createQuizResponse = response.body();
+                                        assert createQuizResponse != null;
+                                        Quiz quiz = createQuizResponse.getQuiz();
+
+                                        Intent intent = new Intent(getActivity(), HomeActivity.class);
+                                        loadingDialog.dismiss();
+                                        startActivity(intent);
+
+                                        getActivity().finish();
+
+
+                                        Toast.makeText(getActivity(), "Create quiz successfully", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Gson gson = new GsonBuilder().create();
+                                        assert response.errorBody() != null;
+                                        ErrorResponse error = gson.fromJson(response.errorBody().charStream(), ErrorResponse.class);
+                                        Log.d("CreateQuestionFragment", String.valueOf(error));
+                                        loadingDialog.showError(error.getMessage());
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(@NonNull Call<CreateQuizApi.API.CreateQuizResponse> call, @NonNull Throwable t) {
+                                    Toast.makeText(getActivity(), "Create quiz failed", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+
+
                     }
                 }, null);
             }
@@ -440,13 +506,29 @@ public class CreateQuestionFragment extends Fragment {
         ArrayList<Answer> answers = new ArrayList<>();
         ArrayList<String> answerCorrect = new ArrayList<>();
 
+        ArrayList<Answer> currentAnswers = question.getAnswerList();
+
+        Answer answerA;
+        Answer answerB;
+        Answer answerC;
+        Answer answerD;
+
+        if (currentAnswers != null && !currentAnswers.isEmpty()) {
+            answerA = currentAnswers.get(0);
+            answerB = currentAnswers.get(1);
+            answerC = currentAnswers.get(2);
+            answerD = currentAnswers.get(3);
+        } else {
+            answerA = new Answer("a", "", false);
+            answerB = new Answer("b", "", false);
+            answerC = new Answer("c", "", false);
+            answerD = new Answer("d", "", false);
+        }
+
         // add answer list and set correct answers, max correct answers, and correct answer count
         if (questionType.equals("True/False")) {
-            // name, body, íCorrect
-            Answer answerA = new Answer("a", etAnswerA.getText().toString().trim(), false);
-            Answer answerB = new Answer("b", etAnswerB.getText().toString().trim(), false);
-            Answer answerC = new Answer("c", "", false);
-            Answer answerD = new Answer("d", "", false);
+            answerA.setBody(etAnswerA.getText().toString().trim());
+            answerB.setBody(etAnswerB.getText().toString().trim());
 
             if (cbCheckBoxA.isChecked()) {
                 answerA.setCorrect(true);
@@ -467,12 +549,10 @@ public class CreateQuestionFragment extends Fragment {
             question.setCorrectAnswerCount(1);
         } else {
             int checkedCount = 0;
-
-            // name, body, íCorrect
-            Answer answerA = new Answer("a", etAnswerA.getText().toString().trim(), false);
-            Answer answerB = new Answer("b", etAnswerB.getText().toString().trim(), false);
-            Answer answerC = new Answer("c", etAnswerC.getText().toString().trim(), false);
-            Answer answerD = new Answer("d", etAnswerD.getText().toString().trim(), false);
+            answerA.setBody(etAnswerA.getText().toString().trim());
+            answerB.setBody(etAnswerB.getText().toString().trim());
+            answerC.setBody(etAnswerC.getText().toString().trim());
+            answerD.setBody(etAnswerD.getText().toString().trim());
 
             if (cbCheckBoxA.isChecked()) {
                 answerA.setCorrect(true);
@@ -519,7 +599,10 @@ public class CreateQuestionFragment extends Fragment {
         question.setTags(new ArrayList<String>());
         question.setPublic(true);
         question.setPointType("Standard");
-        question.setBackgroundImage("");
+
+        if (question.getBackgroundImage() == null || question.getBackgroundImage().isEmpty()) {
+            question.setBackgroundImage("");
+        }
 
         int questionIndex = question.getQuestionIndex();
         createQuizViewModel.updateQuestion(questionIndex - 1, question);
@@ -685,6 +768,8 @@ public class CreateQuestionFragment extends Fragment {
 
             return false;
         }
+
+        tvCheckboxError.setVisibility(View.GONE);
 
         return true;
     }
