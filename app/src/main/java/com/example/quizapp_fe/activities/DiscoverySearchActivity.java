@@ -36,6 +36,7 @@ public class DiscoverySearchActivity extends AppCompatActivity implements Search
         viewPager2 = findViewById(R.id.discoverySearchViewPager);
         viewPagerDiscoveryAdapter = new ViewPagerDiscoveryAdapter(this);
         viewPager2.setAdapter(viewPagerDiscoveryAdapter);
+        viewPager2.setCurrentItem(1);
         new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {

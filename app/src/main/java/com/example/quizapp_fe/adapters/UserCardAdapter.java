@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.interfaces.UserCard;
+import com.example.quizapp_fe.models.CredentialToken;
 
 import java.util.ArrayList;
 
@@ -26,7 +27,8 @@ public class UserCardAdapter extends RecyclerView.Adapter<UserCardViewHolder> {
     @Override
     public UserCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_user_card, parent, false);
-        return new UserCardViewHolder(view);
+        UserCardViewHolder viewHolder = new UserCardViewHolder(view);
+        return viewHolder;
     }
 
     @Override

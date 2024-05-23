@@ -1,9 +1,13 @@
 package com.example.quizapp_fe.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
@@ -20,17 +24,31 @@ import com.example.quizapp_fe.interfaces.UserCard;
 import com.example.quizapp_fe.services.SearchListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UserFragment extends Fragment implements SearchListener {
-
+    private Context context;
     RecyclerView recyclerView;
     ArrayList<UserCard> userCardArrayList;
     UserCardAdapter userCardAdapter;
     ArrayList<UserCard> originalUserCardArrayList;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        context = null;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,29 +56,36 @@ public class UserFragment extends Fragment implements SearchListener {
         View view = inflater.inflate(R.layout.fragment_user, container, false);
         recyclerView = view.findViewById(R.id.userFragRecyclerView);
         userCardArrayList = new ArrayList<>();
+
         callApi();
 
         return view;
     }
 
+
     public void callApi() {
-        GetAllUsersApi.getAPI(requireContext()).getAllUsers().enqueue(new Callback<ArrayList<User>>() {
+        if (context == null) {
+            return;
+        }
+
+        GetAllUsersApi.getAPI(context).getAllUsers().enqueue(new Callback<ArrayList<User>>() {
             @Override
-            public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
+            public void onResponse(@NonNull Call<ArrayList<User>> call, @NonNull Response<ArrayList<User>> response) {
                 if(response.isSuccessful()){
                     ArrayList<User> usersList = response.body();
-                    for (int i = 0; i < usersList.size(); i++) {
+                    for (int i = 0; i < Objects.requireNonNull(usersList).size(); i++) {
                         userCardArrayList.add(new UserCard(
                                 usersList.get(i).getAvatar(),
                                 usersList.get(i).getUserName(),
-                                usersList.get(i).getMail()));
+                                usersList.get(i).getMail(),
+                                usersList.get(i).get_id()));
                     }
 
                     originalUserCardArrayList = new ArrayList<>(userCardArrayList);
 
-                    userCardAdapter = new UserCardAdapter(requireContext(), userCardArrayList);
+                    userCardAdapter = new UserCardAdapter(context, userCardArrayList);
                     recyclerView.setAdapter(userCardAdapter);
-                    recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 1));
+                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
                 }
             }
 

@@ -60,8 +60,8 @@
                 app:layout_constraintTop_toBottomOf="@id/recyclerItemLiveQuizTitleTextView"/>
             <ImageButton
                 android:id="@+id/recyclerItemLiveQuizEditImageButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/ic_edit_64"
                 android:scaleType="fitCenter"
                 android:background="@null"
@@ -69,11 +69,11 @@
                 android:layout_marginTop="20dp"
                 android:clickable="true"
                 app:layout_constraintTop_toBottomOf="@id/recyclerItemLiveQuizSubTitleTextView"
-                app:layout_constraintStart_toEndOf="@id/recyclerItemLiveQuizImageView"/>
+                app:layout_constraintStart_toEndOf="@id/recyclerItemLiveQuizExamineImageButton"/>
             <ImageButton
                 android:id="@+id/recyclerItemLiveQuizDeleteImageButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_delete_64"
                 android:background="@null"
@@ -85,15 +85,15 @@
                 />
             <ImageButton
                 android:id="@+id/recyclerItemLiveQuizExamineImageButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_examine_64"
                 android:background="@null"
                 android:clickable="true"
                 android:layout_marginTop="20dp"
                 android:layout_marginStart="30dp"
-                app:layout_constraintStart_toEndOf="@id/recyclerItemLiveQuizDeleteImageButton"
+                app:layout_constraintStart_toEndOf="@id/recyclerItemLiveQuizImageView"
                 app:layout_constraintTop_toBottomOf="@id/recyclerItemLiveQuizSubTitleTextView"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>

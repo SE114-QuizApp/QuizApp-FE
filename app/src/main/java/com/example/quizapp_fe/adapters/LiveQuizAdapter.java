@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quizapp_fe.R;
+import com.example.quizapp_fe.dialogs.DeleteConfirmationDialog;
 import com.example.quizapp_fe.interfaces.LiveQuizCard;
 
 import java.util.ArrayList;
@@ -22,6 +23,12 @@ public class LiveQuizAdapter extends RecyclerView.Adapter<LiveQuizViewHolder> {
         this.liveQuizList = liveQuizList;
     }
 
+    public void setData(ArrayList<LiveQuizCard> list) {
+        this.liveQuizList = list;
+        notifyDataSetChanged();
+        
+    }
+
     @NonNull
     @Override
     public LiveQuizViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -33,11 +40,16 @@ public class LiveQuizAdapter extends RecyclerView.Adapter<LiveQuizViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull LiveQuizViewHolder holder, int position) {
         LiveQuizCard liveQuizCard = liveQuizList.get(position);
-        holder.bind(liveQuizCard, context);
-    }
-
+        holder.bind(liveQuizCard, context, liveQuizList, new DeleteConfirmationDialog.OnDeleteClickListener() {
+            @Override
+            public void onDelete(int position) {
+                notifyDataSetChanged();
+            }
+        });
+        };
     @Override
     public int getItemCount() {
         return liveQuizList.size();
-    }
+    };
+
 }

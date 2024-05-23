@@ -51,62 +51,6 @@ public class QuizFragment extends Fragment implements SearchListener {
         return view;
     }
 
-    public void callApi() {
-//        GetDiscoverQuizzesApi.getAPI(requireContext()).getDiscoverQuizzes().enqueue(new Callback<DiscoverQuizzes>() {
-//            @Override
-//            public void onResponse(Call<DiscoverQuizzes> call, Response<DiscoverQuizzes> response) {
-//                if (response.isSuccessful()){
-//                    DiscoverQuizzes discoverQuizzes = response.body();
-////                    English
-//                    for(int i =0 ;i< discoverQuizzes.getEnglish().size(); i++) {
-//                        String name = discoverQuizzes.getEnglish().get(i).getCreator().getFirstName() +
-//                                " " +
-//                                discoverQuizzes.getEnglish().get(i).getCreator().getLastName();
-//                        QuizCard quizCard = new QuizCard( discoverQuizzes.getEnglish().get(i).get_id(),
-//                                                          discoverQuizzes.getEnglish().get(i).getBackgroundImage(),
-//                                                          discoverQuizzes.getEnglish().get(i).getName(),
-//                                                          name,
-//                                                          "English");
-//                        quizCardArrayList.add(quizCard);
-//                    }
-////                    Math
-//                    for(int i =0 ;i< discoverQuizzes.getMath().size(); i++) {
-//                        String name = discoverQuizzes.getMath().get(i).getCreator().getFirstName() +
-//                                " " +
-//                                discoverQuizzes.getMath().get(i).getCreator().getLastName();
-//                        QuizCard quizCard = new QuizCard(discoverQuizzes.getMath().get(i).get_id(),
-//                                                         discoverQuizzes.getMath().get(i).getBackgroundImage(),
-//                                                         discoverQuizzes.getMath().get(i).getName(),
-//                                                         name,
-//                                                         "Math");
-//                        quizCardArrayList.add(quizCard);
-//                    }
-////                    Computer
-//                    for(int i =0 ;i< discoverQuizzes.getComputer().size(); i++) {
-//                        String name = discoverQuizzes.getComputer().get(i).getCreator().getFirstName() +
-//                                " " +
-//                                discoverQuizzes.getComputer().get(i).getCreator().getLastName();
-//                        QuizCard quizCard = new QuizCard(discoverQuizzes.getComputer().get(i).get_id(),
-//                                                         discoverQuizzes.getComputer().get(i).getBackgroundImage(),
-//                                                         discoverQuizzes.getComputer().get(i).getName(),
-//                                                         name,
-//                                                         "Computer");
-//                        quizCardArrayList.add(quizCard);
-//                    }
-//                    originalQuizCardArrayList = new ArrayList<>(quizCardArrayList);
-//                    quizCardAdapter = new QuizCardAdapter(requireContext(), quizCardArrayList);
-//                    recyclerView.setAdapter(quizCardAdapter);
-//                    recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 1));
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<DiscoverQuizzes> call, Throwable t) {
-//
-//            }
-//        });
-    }
-
 
     public void callPublicQuizzesApi() {
         GetPublicQuizzesApi.getAPI(requireContext()).getPublicQuizzes(sectionName, page , pageSize).enqueue(new Callback<PublicQuiz>() {
