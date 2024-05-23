@@ -122,25 +122,7 @@ public class QuizDetailActivity extends AppCompatActivity {
                     quizDetailQuestionListRecyclerView.setLayoutManager(new LinearLayoutManager(QuizDetailActivity.this));
 
                     // Sử dụng ViewTreeObserver để tính toán lại chiều cao của RecyclerView
-                    quizDetailQuestionListRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                        @Override
-                        public void onGlobalLayout() {
-                            RecyclerView.Adapter adapter = quizDetailQuestionListRecyclerView.getAdapter();
-                            if (adapter != null) {
-                                int totalHeight = 0;
-                                for (int i = 0; i < adapter.getItemCount(); i++) {
-                                    View listItem = adapter.onCreateViewHolder(quizDetailQuestionListRecyclerView, adapter.getItemViewType(i)).itemView;
-                                    listItem.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-                                    totalHeight += listItem.getMeasuredHeight();
-                                }
-
-                                ViewGroup.LayoutParams params = quizDetailQuestionListRecyclerView.getLayoutParams();
-                                params.height = totalHeight + (quizDetailQuestionListRecyclerView.getItemDecorationCount() * (adapter.getItemCount() - 1));
-                                quizDetailQuestionListRecyclerView.setLayoutParams(params);
-                                quizDetailQuestionListRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                            }
-                        }
-                    });
+                   
                     quizDetailPlaySoloButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
