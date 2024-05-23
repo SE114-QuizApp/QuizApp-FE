@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.activities.QuizDetailActivity;
+import com.example.quizapp_fe.activities.UpdateQuizActivity;
 import com.example.quizapp_fe.interfaces.LiveQuizCard;
 
 
@@ -23,6 +24,7 @@ public class LiveQuizViewHolder extends RecyclerView.ViewHolder {
     ImageView imgViewQuizImage;
     TextView tvTitle, tvSubTitle;
     ImageButton imgButtonEdit, imgButtonDelete, imgButtonExamine;
+
     public LiveQuizViewHolder(@NonNull View itemView) {
         super(itemView);
         imgViewQuizImage = itemView.findViewById(R.id.recyclerItemLiveQuizImageView);
@@ -57,7 +59,12 @@ public class LiveQuizViewHolder extends RecyclerView.ViewHolder {
         imgButtonEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(context , UpdateQuizActivity.class);
+                if (!(context instanceof Activity)) {
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                }
+                intent.putExtra("quizId", liveQuizCard.getLiveQuizCardId());
+                context.startActivity(intent);
             }
         });
     }

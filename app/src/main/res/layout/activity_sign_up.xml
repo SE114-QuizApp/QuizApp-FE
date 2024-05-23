@@ -9,8 +9,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:scrollbars="none"
+        android:paddingBottom="20dp"
         android:orientation="vertical">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -356,6 +357,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/border_20dp_purple_hue"
                 android:gravity="center"
                 android:text="Sign Up"

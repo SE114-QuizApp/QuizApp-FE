@@ -6,6 +6,7 @@ import com.example.quizapp_fe.api.ApiClient;
 import com.example.quizapp_fe.api.user.updateUserFriend.UpdateUserFriendApi;
 import com.example.quizapp_fe.constants.ApiEndpoint;
 import com.example.quizapp_fe.entities.User;
+import com.example.quizapp_fe.entities.UserProfile;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -20,7 +21,7 @@ public class UpdateUserUnfriendApi {
 
     public interface UserUnfriendApi {
         @PUT(ApiEndpoint.UserApiEndpoint.UNFRIEND)
-        Call<User> updateUserUnfriend(@Path("friendId") String friendId);
+        Call<UserProfile> updateUserUnfriend(@Path("friendId") String friendId);
     }
 
     public static UserUnfriendApi putAPI(Context context) {
