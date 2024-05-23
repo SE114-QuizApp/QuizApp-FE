@@ -133,16 +133,14 @@ public class CreateQuizFragment extends Fragment {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getTitle().toString()) {
                             case "Discard changes":
-                                confirmationDialog.show("Discard changes", "Are you sure you want to exit creating quiz?", new DialogInterface.OnClickListener() {
+                                confirmationDialog.show("Discard changes", "All changes will be discarded. Are you sure you want to exit?", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         Intent intent = new Intent(getActivity(), HomeActivity.class);
                                         startActivity(intent);
                                         getActivity().finish();
-
-                                        Toast.makeText(getActivity(), "Exit creating quiz", Toast.LENGTH_SHORT).show();
                                     }
-                                });
+                                }, null);
 
                                 return true;
                             default:

@@ -31,6 +31,7 @@ import com.example.quizapp_fe.activities.HomeActivity;
 import com.example.quizapp_fe.adapters.QuestionIndexAdapter;
 import com.example.quizapp_fe.api.ErrorResponse;
 import com.example.quizapp_fe.api.quiz.create.CreateQuizApi;
+import com.example.quizapp_fe.dialogs.AlertDialog;
 import com.example.quizapp_fe.dialogs.ConfirmationDialog;
 import com.example.quizapp_fe.dialogs.LoadingDialog;
 import com.example.quizapp_fe.entities.Answer;
@@ -70,6 +71,8 @@ public class CreateQuestionFragment extends Fragment {
     private ArrayList<Question> questionList;
     private LoadingDialog loadingDialog;
     private ConfirmationDialog confirmationDialog;
+    private AlertDialog alertDialog;
+    private TextView tvCheckboxError;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,12 +95,14 @@ public class CreateQuestionFragment extends Fragment {
         btnMoreIcon = view.findViewById(R.id.btnMoreIcon);
         llDurationQuestion = view.findViewById(R.id.durationQuestionContainer);
         llQuestionType = view.findViewById(R.id.questionTypeContainer);
+        tvCheckboxError = view.findViewById(R.id.tvCheckboxError);
         Button btnSave = view.findViewById(R.id.btnSave);
         ImageView btnBack = view.findViewById(R.id.btnBackCreateQuestion);
         Button btnAddQuestion = view.findViewById(R.id.btnAddQuestion);
 
         loadingDialog = new LoadingDialog(requireActivity());
         confirmationDialog = new ConfirmationDialog(getActivity());
+        alertDialog = new AlertDialog(getActivity());
 
         questionIndexRecyclerView = view.findViewById(R.id.questionIndexList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -194,16 +199,16 @@ public class CreateQuestionFragment extends Fragment {
                                     public void onClick(DialogInterface dialog, int which) {
                                         deleteQuestion();
                                     }
-                                });
+                                }, null);
 
                                 return true;
                             case "Discard changes":
-                                confirmationDialog.show("Discard changes", "All changes will be discarded. Are you sure you want to exit creating quiz?", new DialogInterface.OnClickListener() {
+                                confirmationDialog.show("Discard changes", "All changes will be discarded. Are you sure you want to exit?", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         discardChanges();
                                     }
-                                });
+                                }, null);
 
                                 return true;
                             default:
@@ -285,7 +290,7 @@ public class CreateQuestionFragment extends Fragment {
                             }
                         });
                     }
-                });
+                }, null);
             }
         });
 
@@ -330,8 +335,6 @@ public class CreateQuestionFragment extends Fragment {
         startActivity(intent);
 
         getActivity().finish();
-
-        Toast.makeText(getActivity(), "Exit creating quiz", Toast.LENGTH_SHORT).show();
     }
 
     private void showDurationMenu() {
@@ -526,7 +529,7 @@ public class CreateQuestionFragment extends Fragment {
         createQuizViewModel.addQuestion(question);
         quiz = createQuizViewModel.getQuiz().getValue();
         questionList = quiz.getQuestionList();
-        Toast.makeText(getActivity(), "Question " + questionList.size() + " is added", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Added question " + questionList.size(), Toast.LENGTH_SHORT).show();
     }
 
     private void handleUpdateInputs() {
@@ -577,9 +580,10 @@ public class CreateQuestionFragment extends Fragment {
     }
 
     private boolean isValidQuestions() {
-        List<Integer> invalidQuestionIndexes = new ArrayList<>();
+        ArrayList<Integer> invalidQuestionIndexes = new ArrayList<>();
         quiz = createQuizViewModel.getQuiz().getValue();
         questionList = quiz.getQuestionList();
+
         for (int i = 0; i < questionList.size(); i++) {
             Question question = questionList.get(i);
 
@@ -603,15 +607,11 @@ public class CreateQuestionFragment extends Fragment {
 
         if (!invalidQuestionIndexes.isEmpty()) {
             // convert the list of invalid question indexes to a string and show a toast
-            String invalidQuestionIndexesString = "";
-            for (int i = 0; i < invalidQuestionIndexes.size(); i++) {
-                invalidQuestionIndexesString += invalidQuestionIndexes.get(i);
+            String invalidQuestionIndexesString = convertArrayToString(invalidQuestionIndexes);
 
-                if (i < invalidQuestionIndexes.size() - 1) {
-                    invalidQuestionIndexesString += ", ";
-                }
-            }
-            Toast.makeText(getActivity(), "Invalid questions: " + invalidQuestionIndexesString, Toast.LENGTH_SHORT).show();
+            String strMoreThanOneInvalidQues = invalidQuestionIndexes.size() > 1 ? "are" : "is";
+
+            alertDialog.show("Invalid questions", "Questions " + invalidQuestionIndexesString + " " + strMoreThanOneInvalidQues + " invalid. Please fill in all required fields.", null);
 
             int invalidQuestionIndex = invalidQuestionIndexes.get(0) - 1;
             questionIndexAdapter.setSelectedPos(invalidQuestionIndex);
@@ -626,7 +626,9 @@ public class CreateQuestionFragment extends Fragment {
 
             boolean isAnyCheckboxChecked = cbCheckBoxA.isChecked() || cbCheckBoxB.isChecked() || cbCheckBoxC.isChecked() || cbCheckBoxD.isChecked();
             if (!isAnyCheckboxChecked) {
-                Toast.makeText(getActivity(), "At least one checkbox needs to be checked", Toast.LENGTH_LONG).show();
+                tvCheckboxError.setVisibility(View.VISIBLE);
+            } else {
+                tvCheckboxError.setVisibility(View.GONE);
             }
 
             for (Answer answer : question.getAnswerList()) {
@@ -652,6 +654,20 @@ public class CreateQuestionFragment extends Fragment {
         }
 
         return true;
+    }
+
+    private String convertArrayToString(ArrayList<Integer> list) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < list.size(); i++) {
+            stringBuilder.append(list.get(i));
+
+            if (i < list.size() - 1) {
+                stringBuilder.append(", ");
+            }
+        }
+
+        return stringBuilder.toString();
     }
 
     private void clearFocusFromInputs() {

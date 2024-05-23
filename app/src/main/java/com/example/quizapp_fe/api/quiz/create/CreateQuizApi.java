@@ -4,9 +4,14 @@ import android.content.Context;
 
 import com.example.quizapp_fe.api.ApiClient;
 import com.example.quizapp_fe.constants.ApiEndpoint;
+import com.example.quizapp_fe.entities.Category;
+import com.example.quizapp_fe.entities.Grade;
+import com.example.quizapp_fe.entities.Question;
 import com.example.quizapp_fe.entities.Quiz;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -19,10 +24,30 @@ public class CreateQuizApi {
 
     public interface API {
         class CreateQuizRequest {
-            Quiz quiz;
+            String backgroundImage;
+            Category category;
+            String description;
+            Grade grade;
+            boolean isDraft;
+            boolean isPublic;
+            String name;
+            int numberOfQuestions;
+            int pointsPerQuestion;
+            ArrayList<Question> questionList;
+            ArrayList<String> tags;
 
             public CreateQuizRequest(Quiz quiz) {
-                this.quiz = quiz;
+                this.backgroundImage = quiz.getBackgroundImage();
+                this.category = quiz.getCategory();
+                this.description = quiz.getDescription();
+                this.grade = quiz.getGrade();
+                this.isDraft = quiz.isDraft();
+                this.isPublic = quiz.isPublic();
+                this.name = quiz.getName();
+                this.numberOfQuestions = quiz.getNumberOfQuestions();
+                this.pointsPerQuestion = quiz.getPointsPerQuestion();
+                this.questionList = quiz.getQuestionList();
+                this.tags = quiz.getTags();
             }
         }
 
