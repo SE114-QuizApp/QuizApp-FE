@@ -20,17 +20,16 @@ import java.util.ArrayList;
 
 public class CreatorQuizActivity extends AppCompatActivity {
     private ActivityCreatorQuizBinding binding;
-    private CreateQuizViewModel model;
+    private CreateQuizViewModel createQuizViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_creator_quiz);
-        model = new ViewModelProvider(this).get(CreateQuizViewModel.class);
-        binding.setViewModel(model);
+        createQuizViewModel = new ViewModelProvider(this).get(CreateQuizViewModel.class);
 
         // initialize the quiz object
-        if (model.getQuiz().getValue() == null) {
+        if (createQuizViewModel.getQuiz().getValue() == null) {
             Quiz quiz = new Quiz();
             quiz.setName("");
             quiz.setDescription("");
@@ -43,7 +42,7 @@ public class CreatorQuizActivity extends AppCompatActivity {
             quiz.setQuestionList(new ArrayList<>());
             quiz.setGrade(new Grade("All"));
             quiz.setCategory(new Category(""));
-            model.setQuiz(quiz);
+            createQuizViewModel.setQuiz(quiz);
         }
 
         // add the ChooseCategoryFragment to the activity
@@ -58,6 +57,6 @@ public class CreatorQuizActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        model.clearQuiz();
+        createQuizViewModel.clearQuiz();
     }
 }
