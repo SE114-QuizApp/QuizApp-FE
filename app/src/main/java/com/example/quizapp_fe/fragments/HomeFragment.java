@@ -203,6 +203,15 @@ public class HomeFragment extends Fragment {
                             layoutParamsAddNewImageButton.gravity = Gravity.CENTER;
                             addNewQuizImageButton.setLayoutParams(layoutParamsAddNewImageButton);
                             addNewQuizLinearLayout.addView(addNewQuizImageButton);
+                            addNewQuizImageButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(context, CreatorQuizActivity.class);
+                                    startActivity(intent);
+                                }
+                            });
+
+
 
                             addNewQuizTextView.setId(View.generateViewId());
                             addNewQuizTextView.setText("Create Now");
