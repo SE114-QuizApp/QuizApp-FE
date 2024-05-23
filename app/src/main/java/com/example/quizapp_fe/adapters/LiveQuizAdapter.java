@@ -1,6 +1,7 @@
 package com.example.quizapp_fe.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,17 @@ public class LiveQuizAdapter extends RecyclerView.Adapter<LiveQuizViewHolder> {
     public void onBindViewHolder(@NonNull LiveQuizViewHolder holder, int position) {
         LiveQuizCard liveQuizCard = liveQuizList.get(position);
         holder.bind(liveQuizCard, context);
+        holder.imgButtonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (position != RecyclerView.NO_POSITION) {
+                    liveQuizList.remove(position);
+                    Log.e("count my quiz size: ", Integer.toString(liveQuizList.size()));
+
+                    notifyDataSetChanged();
+                }
+            }
+        });
     }
 
     @Override
