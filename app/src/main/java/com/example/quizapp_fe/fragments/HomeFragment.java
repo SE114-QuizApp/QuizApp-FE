@@ -172,6 +172,7 @@ public class HomeFragment extends Fragment {
                             liveQuizRecyclerView.setAdapter(liveQuizAdapter);
                             liveQuizRecyclerView.setLayoutManager(new LinearLayoutManager(context));
                         }
+                        Log.e("count my quiz size: ", Integer.toString(liveQuizCardList.size()));
                     }
                         else if (liveQuizCardList.size() == 0) {
                             seeAllButtonTextView.setVisibility(View.GONE);

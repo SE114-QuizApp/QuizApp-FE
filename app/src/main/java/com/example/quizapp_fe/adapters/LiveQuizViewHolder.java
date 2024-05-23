@@ -24,6 +24,7 @@ public class LiveQuizViewHolder extends RecyclerView.ViewHolder {
     ImageView imgViewQuizImage;
     TextView tvTitle, tvSubTitle;
     ImageButton imgButtonEdit, imgButtonDelete, imgButtonExamine;
+
     public LiveQuizViewHolder(@NonNull View itemView) {
         super(itemView);
         imgViewQuizImage = itemView.findViewById(R.id.recyclerItemLiveQuizImageView);
@@ -64,15 +65,6 @@ public class LiveQuizViewHolder extends RecyclerView.ViewHolder {
                 }
                 intent.putExtra("quizId", liveQuizCard.getLiveQuizCardId());
                 context.startActivity(intent);
-            }
-        });
-        imgButtonDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int position = getBindingAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-
-                }
             }
         });
     }
