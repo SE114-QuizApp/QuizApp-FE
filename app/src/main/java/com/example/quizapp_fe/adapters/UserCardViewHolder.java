@@ -70,15 +70,10 @@ public class UserCardViewHolder extends RecyclerView.ViewHolder {
 
         updateUserCardFollowImageView();
 
-        if(isFollowing){
-            userCardItemFollowImageView.setImageResource(R.drawable.ic_user_x);
-        } else  {
-            userCardItemFollowImageView.setImageResource(R.drawable.ic_user_plus);
-        }
         userCardItemFollowImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.animation_normal);
+                Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.animation_fade_in);
                 userCardItemFollowImageView.startAnimation(animation);
                 if (isFollowing) {
                     callApiUpdateUserUnFriend(friendId);
