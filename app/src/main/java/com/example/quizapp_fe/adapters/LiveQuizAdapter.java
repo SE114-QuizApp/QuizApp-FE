@@ -22,6 +22,12 @@ public class LiveQuizAdapter extends RecyclerView.Adapter<LiveQuizViewHolder> {
         this.liveQuizList = liveQuizList;
     }
 
+    public void setData(ArrayList<LiveQuizCard> list) {
+        this.liveQuizList = list;
+        notifyDataSetChanged();
+        
+    }
+
     @NonNull
     @Override
     public LiveQuizViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

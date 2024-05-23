@@ -1,7 +1,5 @@
 package com.example.quizapp_fe.activities;
 
-import static java.lang.String.format;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,7 +8,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
 import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.api.account.profile.GetMeApi;
 import com.example.quizapp_fe.models.CredentialToken;
@@ -23,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
-
         new MediaMangerObject().init(this);
 
         new Handler().postDelayed(() -> {
