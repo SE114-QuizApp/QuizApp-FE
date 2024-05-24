@@ -13,6 +13,16 @@ import java.util.ArrayList;
 public class CreateQuizViewModel extends ViewModel {
     private final MutableLiveData<Quiz> currentQuiz = new MutableLiveData<>();
 
+    private final MutableLiveData<Boolean> isUpdate = new MutableLiveData<>(false);
+
+    public LiveData<Boolean> isUpdate() {
+        return isUpdate;
+    }
+
+    public void setIsUpdate(boolean isUpdate) {
+        this.isUpdate.setValue(isUpdate);
+    }
+
     public LiveData<Quiz> getQuiz() {
         return currentQuiz;
     }

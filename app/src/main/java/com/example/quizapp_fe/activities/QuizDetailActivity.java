@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -15,7 +17,6 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -112,16 +113,16 @@ public class QuizDetailActivity extends AppCompatActivity {
 
                     quizDetailCreatorNameTextView.setText(quiz.getCreator().getFullName());
 
-                    ArrayList<Question> questionsFromQuiz = new ArrayList<>(quiz.getQuestionList());
-
-                    for (int i = 0; i < questionsFromQuiz.size(); i++) {
-                        Question question = questionsFromQuiz.get(i);
-                        questionArrayList.add(question);
+                    if (!questionArrayList.isEmpty()) {
+                        questionArrayList.clear();
                     }
+                    questionArrayList.addAll(quiz.getQuestionList());
                     questionDetailAdapter = new QuestionDetailAdapter(QuizDetailActivity.this, questionArrayList);
                     quizDetailQuestionListRecyclerView.setAdapter(questionDetailAdapter);
-                    quizDetailQuestionListRecyclerView.setLayoutManager(new GridLayoutManager(QuizDetailActivity.this, 1));
+                    quizDetailQuestionListRecyclerView.setLayoutManager(new LinearLayoutManager(QuizDetailActivity.this));
 
+                    // Sử dụng ViewTreeObserver để tính toán lại chiều cao của RecyclerView
+                   
                     quizDetailPlaySoloButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
