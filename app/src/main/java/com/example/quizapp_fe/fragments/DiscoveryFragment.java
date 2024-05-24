@@ -23,11 +23,13 @@ import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.activities.DiscoverySearchActivity;
 import com.example.quizapp_fe.adapters.CategoryCardAdapter;
 import com.example.quizapp_fe.api.quiz.get.GetDiscoverQuizzesApi;
+import com.example.quizapp_fe.entities.DiscoverQuiz;
 import com.example.quizapp_fe.interfaces.CategoryCard;
 import com.example.quizapp_fe.models.CredentialToken;
 import com.example.quizapp_fe.models.DiscoverQuizzes;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -68,7 +70,11 @@ public class DiscoveryFragment extends Fragment {
         teacherId = CredentialToken.getInstance(context).getUserId();
 
         setPoint(teacherId);
+        categoryCardList = new ArrayList<>();
 
+        categoryCardAdapter = new CategoryCardAdapter(context, categoryCardList);
+        categoryRecyclerView.setLayoutManager(new GridLayoutManager(context, 2));
+        categoryRecyclerView.setAdapter(categoryCardAdapter);
 
         callApi();
 
@@ -123,54 +129,84 @@ public class DiscoveryFragment extends Fragment {
             return;
         }
 
-        GetDiscoverQuizzesApi.getAPI(requireContext()).getDiscoverQuizzes().enqueue(new Callback<DiscoverQuizzes>() {
+        GetDiscoverQuizzesApi.getAPI(requireContext()).getDiscoverQuizzes().enqueue(new Callback<Map<String, ArrayList<DiscoverQuiz>>>() {
             @Override
-            public void onResponse(@NonNull Call<DiscoverQuizzes> call, @NonNull Response<DiscoverQuizzes> response) {
-                Log.e("DISCOVER", "Success");
+            public void onResponse(@NonNull Call<Map<String, ArrayList<DiscoverQuiz>>> call, @NonNull Response<Map<String, ArrayList<DiscoverQuiz>>> response) {
+
                 if (response.isSuccessful()) {
-                    DiscoverQuizzes discoverQuizzes = response.body();
+                    Map<String, ArrayList<DiscoverQuiz>> quizMap = response.body();
+                    DiscoverQuizzes discoverQuizzes = GetDiscoverQuizzesApi.parseDiscoverQuizzes(quizMap);
                     categoryCardList = new ArrayList<>();
 
 
-                    assert discoverQuizzes != null;
-                    if(discoverQuizzes.getEnglish() != null){
-                            CategoryCard englishCategoryCard = new CategoryCard(
-                                    R.drawable.ic_english_24,
-                                    discoverQuizzes.getEnglish().get(0).getCategory().getName(),
-                                    discoverQuizzes.getEnglish().size() + " Quizzes"
-                            );
-                            categoryCardList.add(englishCategoryCard);
+                    for (Map.Entry<String, ArrayList<DiscoverQuiz>> entry : discoverQuizzes.getQuizzes().entrySet()) {
+                        String subject = entry.getKey();
+                        ArrayList<DiscoverQuiz> quizzes = entry.getValue();
+
+
+                        switch (subject) {
+                            case "Math":
+                                categoryCardList.add(new CategoryCard(R.drawable.ic_math_24, "Math", quizzes.size() + " Quizzes"));
+                                break;
+                            case "English":
+                                categoryCardList.add(new CategoryCard(R.drawable.ic_english_24, "English", quizzes.size() + " Quizzes"));
+                                break;
+                            case "Sports":
+                                categoryCardList.add(new CategoryCard(R.drawable.ic_sports_24, "Sports", quizzes.size() + " Quizzes"));
+                                break;
+                            case "Science":
+                                categoryCardList.add(new CategoryCard(R.drawable.ic_science_24, "Science", quizzes.size() + " Quizzes"));
+                                break;
+                            case "Art":
+                                categoryCardList.add(new CategoryCard(R.drawable.ic_art_24, "Art", quizzes.size() + " Quizzes"));
+                                break;
+                            case "History":
+                                categoryCardList.add(new CategoryCard(R.drawable.ic_history_24, "History", quizzes.size() + " Quizzes"));
+                                break;
+                            case "Geography":
+                                categoryCardList.add(new CategoryCard(R.drawable.ic_geography_24, "Geography", quizzes.size() + " Quizzes"));
+                                break;
+                            case "Biology":
+                                categoryCardList.add(new CategoryCard(R.drawable.ic_biology_24, "Biology", quizzes.size() + " Quizzes"));
+                                break;
+                            case "Philosophy":
+                                categoryCardList.add(new CategoryCard(R.drawable.ic_philosophy_24, "Philosophy", quizzes.size() + " Quizzes"));
+                                break;
+                            case "Computer":
+                                categoryCardList.add(new CategoryCard(R.drawable.ic_computer_24, "Computer", quizzes.size() + " Quizzes"));
+                                break;
+                            case "Chemistry":
+                                categoryCardList.add(new CategoryCard(R.drawable.ic_chemistry_24, "Chemistry", quizzes.size() + " Quizzes"));
+                                break;
+                            case "Fun":
+                                categoryCardList.add(new CategoryCard(R.drawable.ic_fun_24, "Fun", quizzes.size() + " Quizzes"));
+                                break;
+                            case "Exercise":
+                                categoryCardList.add(new CategoryCard(R.drawable.ic_exercise_24, "Exercise", quizzes.size() + " Quizzes"));
+                                break;
+                            default:
+                                categoryCardList.add(new CategoryCard(R.drawable.ic_other_24, "Other", quizzes.size() + " Quizzes"));
+                                break;
                         }
-                        if (discoverQuizzes.getMath() != null) {
-                            CategoryCard mathCategoryCard = new CategoryCard(
-                                R.drawable.ic_math_24_black,
-                                discoverQuizzes.getMath().get(0).getCategory().getName(),
-                                discoverQuizzes.getMath().size() + " Quizzes"
-                            );
-                            categoryCardList.add(mathCategoryCard);
-                        }
-                        if(discoverQuizzes.getComputer() != null){
-                            CategoryCard computerCategoryCard = new CategoryCard(
-                                    R.drawable.ic_computer_24,
-                                    discoverQuizzes.getComputer().get(0).getCategory().getName(),
-                                    discoverQuizzes.getComputer().size() + " Quizzes"
-                            );
-                            categoryCardList.add(computerCategoryCard);
-                        }
 
-
-
-
-                    if (context != null) {
-                        categoryCardAdapter = new CategoryCardAdapter(context, categoryCardList);
-                        categoryRecyclerView.setAdapter(categoryCardAdapter);
-                        categoryRecyclerView.setLayoutManager(new GridLayoutManager(context, 2));
                     }
+
+
+                    if (context != null && categoryCardList != null && !categoryCardList.isEmpty()) {
+                        categoryCardAdapter = new CategoryCardAdapter(context, categoryCardList);
+                        categoryRecyclerView.setLayoutManager(new GridLayoutManager(context, 2));
+                        categoryRecyclerView.setAdapter(categoryCardAdapter);
+                    }
+                    // Notify adapter about data changes
+                    if (categoryCardAdapter != null) {
+                        categoryCardAdapter.notifyDataSetChanged();
+                    }
+
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<DiscoverQuizzes> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<Map<String, ArrayList<DiscoverQuiz>>> call, @NonNull Throwable t) {
                 Log.e("DISCOVER", "Fail");
             }
         });
