@@ -58,6 +58,10 @@ public class ChooseCategoryFragment extends Fragment {
         categories.put("Geography", new CategoryCard("Geography", R.drawable.ic_geography_24));
         categories.put("Biology", new CategoryCard("Biology", R.drawable.ic_biology_24));
         categories.put("Philosophy", new CategoryCard("Philosophy", R.drawable.ic_philosophy_24));
+        categories.put("Computer", new CategoryCard("Computer", R.drawable.ic_computer_24));
+        categories.put("Chemistry", new CategoryCard("Chemistry", R.drawable.ic_chemistry_24));
+        categories.put("Fun", new CategoryCard("Fun", R.drawable.ic_fun_24));
+        categories.put("Exercise", new CategoryCard("Exercise", R.drawable.ic_exercise_24));
     }
 
     @Override
@@ -87,6 +91,8 @@ public class ChooseCategoryFragment extends Fragment {
             if (selectedCategory != null) {
                 categories.get("Other").setSelected(false);
                 selectedCategory.setSelected(true);
+
+                binding.categoryRecyclerView.scrollToPosition(new ArrayList<>(categories.values()).indexOf(selectedCategory));
             }
         }
 
