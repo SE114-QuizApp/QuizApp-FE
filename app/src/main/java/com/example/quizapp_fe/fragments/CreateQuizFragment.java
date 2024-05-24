@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
@@ -27,6 +28,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -35,6 +37,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
+import com.cloudinary.android.MediaManager;
+import com.cloudinary.android.callback.ErrorInfo;
+import com.cloudinary.android.callback.UploadCallback;
 import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.activities.HomeActivity;
 import com.example.quizapp_fe.dialogs.ConfirmationDialog;
@@ -47,10 +53,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 public class CreateQuizFragment extends Fragment {
     private Quiz quiz;
     private ImageView quizBackgroundImage;
+    private ImageView quizBackgroundIconImage;
     private TextView tvGrade;
     private LinearLayout gradeContainer;
     private CreateQuizViewModel createQuizViewModel;
@@ -63,12 +71,15 @@ public class CreateQuizFragment extends Fragment {
     private LoadingDialog loadingDialog;
     private ConfirmationDialog confirmationDialog;
     private TextView tvHeading;
+    String[] backgroundImageUpload;
+    private ActivityResultLauncher<String> requestPermissionLauncher;
+    private ActivityResultLauncher<Intent> pickImageLauncher;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_quiz, container, false);
-
+        loadingDialog = new LoadingDialog(requireContext());
         etQuizName = view.findViewById(R.id.etQuizName);
         switchPublicQuiz = view.findViewById(R.id.switchPublicQuiz);
         etQuizPointsPerQuestion = view.findViewById(R.id.etQuizPointsPerQuestion);
@@ -81,7 +92,9 @@ public class CreateQuizFragment extends Fragment {
         ImageView btnBack = view.findViewById(R.id.btnBackCreateQuiz);
         Button btnNext = view.findViewById(R.id.btnNext);
         quizBackgroundImage = view.findViewById(R.id.quizBackgroundImage);
+        quizBackgroundIconImage= view.findViewById(R.id.quizBackgroundIconImage);
         Button btnChooseQuizBackgroundImage = view.findViewById(R.id.btnChooseQuizBackgroundImage);
+        backgroundImageUpload = new String[1];
 
         confirmationDialog = new ConfirmationDialog(requireContext());
 
@@ -93,6 +106,17 @@ public class CreateQuizFragment extends Fragment {
         if (quiz != null) {
             etQuizName.setText(quiz.getName());
             switchPublicQuiz.setChecked(quiz.isPublic());
+            if(!quiz.getBackgroundImage().isEmpty()){
+                quizBackgroundImage.setVisibility(View.VISIBLE);
+                quizBackgroundIconImage.setVisibility(View.GONE);
+                Glide.with(requireContext())
+                     .load(quiz.getBackgroundImage())
+                     .into(quizBackgroundImage);
+            }
+            else {
+                quizBackgroundImage.setVisibility(View.GONE);
+                quizBackgroundIconImage.setVisibility(View.VISIBLE);
+            }
 
             if (quiz.getGrade() != null && quiz.getGrade().getName() != null && !quiz.getGrade().getName().isEmpty()) {
                 tvGrade.setText(quiz.getGrade().getName());
@@ -196,7 +220,62 @@ public class CreateQuizFragment extends Fragment {
         btnChooseQuizBackgroundImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkAndRequestPermission();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    checkAndRequestPermissionV33();
+                }
+            }
+        });
+        // Khởi tạo launcher để yêu cầu quyền
+        requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+            if (isGranted) {
+                pickImage();
+            }
+        });
+        // Khởi tạo launcher để chọn hình ảnh
+        pickImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                Uri selectedImageUri = result.getData().getData();
+                if (selectedImageUri != null) {
+                    System.out.println(selectedImageUri);
+                    MediaManager.get().upload(selectedImageUri).option("folder", "quiz").callback(new UploadCallback() {
+                        @Override
+                        public void onStart(String requestId) {
+                            loadingDialog.show();
+                        }
 
+                        @Override
+                        public void onProgress(String requestId, long bytes, long totalBytes) {
+
+                        }
+
+                        @Override
+                        public void onSuccess(String requestId, Map resultData) {
+                            loadingDialog.dismiss();
+                            String secureUrl = (String) resultData.get("secure_url");
+                            System.out.println(secureUrl);
+                            backgroundImageUpload[0] = secureUrl;
+                            Glide.with(requireContext())
+                                 .load(resultData.get("secure_url"))
+                                 .into(quizBackgroundImage);
+                            quizBackgroundImage.setVisibility(View.VISIBLE);
+                            quizBackgroundIconImage.setVisibility(View.GONE);
+                            Toast.makeText(requireContext(), "Upload success", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onError(String requestId, ErrorInfo error) {
+                            loadingDialog.dismiss();
+                            Toast.makeText(requireContext(), "Upload failed", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onReschedule(String requestId, ErrorInfo error) {
+
+                        }
+                    }).dispatch();
+                    quizBackgroundImage.setImageURI(selectedImageUri);
+                }
             }
         });
 
@@ -217,6 +296,7 @@ public class CreateQuizFragment extends Fragment {
         if (!etQuizPointsPerQuestion.getText().toString().isEmpty()) {
             quiz.setPointsPerQuestion(Integer.parseInt(etQuizPointsPerQuestion.getText().toString().trim()));
         }
+        quiz.setBackgroundImage(backgroundImageUpload[0]);
 
         // convert the tags from UI string to a list of tags
         String tagsString = etQuizTags.getText().toString().trim();
@@ -248,5 +328,26 @@ public class CreateQuizFragment extends Fragment {
         }
 
         return isValid;
+    }
+    private void checkAndRequestPermission() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
+        } else {
+            pickImage();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    private void checkAndRequestPermissionV33() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES);
+        } else {
+            pickImage();
+        }
+    }
+
+    private void pickImage() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickImageLauncher.launch(intent);
     }
 }
