@@ -6,6 +6,7 @@
     android:background="@drawable/border_20dp_lavender"
     android:layout_marginVertical="10dp"
     android:paddingVertical="20dp"
+    android:id="@+id/questionDetailCard"
     android:paddingHorizontal="10dp">
 
     <LinearLayout

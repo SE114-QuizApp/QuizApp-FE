@@ -3,6 +3,7 @@ package com.example.quizapp_fe.fragments;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,9 @@ import com.example.quizapp_fe.entities.Category;
 import com.example.quizapp_fe.entities.Quiz;
 import com.example.quizapp_fe.interfaces.CategoryCard;
 import com.example.quizapp_fe.models.CreateQuizViewModel;
+import com.google.gson.Gson;
 
+import java.lang.reflect.GenericSignatureFormatError;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -55,6 +58,10 @@ public class ChooseCategoryFragment extends Fragment {
         categories.put("Geography", new CategoryCard("Geography", R.drawable.ic_geography_24));
         categories.put("Biology", new CategoryCard("Biology", R.drawable.ic_biology_24));
         categories.put("Philosophy", new CategoryCard("Philosophy", R.drawable.ic_philosophy_24));
+        categories.put("Computer", new CategoryCard("Computer", R.drawable.ic_computer_24));
+        categories.put("Chemistry", new CategoryCard("Chemistry", R.drawable.ic_chemistry_24));
+        categories.put("Fun", new CategoryCard("Fun", R.drawable.ic_fun_24));
+        categories.put("Exercise", new CategoryCard("Exercise", R.drawable.ic_exercise_24));
     }
 
     @Override
@@ -64,6 +71,8 @@ public class ChooseCategoryFragment extends Fragment {
 
         createQuizViewModel = new ViewModelProvider(requireActivity()).get(CreateQuizViewModel.class);
         quiz = createQuizViewModel.getQuiz().getValue();
+        Gson gson = new Gson();
+        Log.d("ChooseCategoryFragment", gson.toJson(quiz));
 
         CategoryCreateQuizAdapter categoryAdapter = new CategoryCreateQuizAdapter(new ArrayList<>(categories.values()));
         binding.categoryRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
@@ -75,12 +84,15 @@ public class ChooseCategoryFragment extends Fragment {
         categories.get("Other").setSelected(true);
 
         // set the selected category if the quiz object is not null
-        if (quiz != null && quiz.getCategory() != null && !quiz.getCategory().getName().isEmpty()) {
+        if (quiz != null && quiz.getCategory() != null && quiz.getCategory().getName() != null && !quiz.getCategory().getName().isEmpty()) {
             String selectedCategoryName = quiz.getCategory().getName();
             CategoryCard selectedCategory = categories.get(selectedCategoryName);
+
             if (selectedCategory != null) {
                 categories.get("Other").setSelected(false);
                 selectedCategory.setSelected(true);
+
+                binding.categoryRecyclerView.scrollToPosition(new ArrayList<>(categories.values()).indexOf(selectedCategory));
             }
         }
 
@@ -109,14 +121,21 @@ public class ChooseCategoryFragment extends Fragment {
             }
 
             // update the Quiz object with the selected category
-            quiz.setCategory(new Category(selectedCategory.getCategoryCardTitle()));
+            if (quiz != null) {
+                if (quiz.getCategory() != null) {
+                    quiz.getCategory().setName(selectedCategory.getCategoryCardTitle());
+                } else {
+                    quiz.setCategory(new Category(selectedCategory.getCategoryCardTitle()));
+                }
+            }
+
             createQuizViewModel.setQuiz(quiz);
 
             // replace the current fragment with the CreateQuizFragment
             CreateQuizFragment createQuizFragment = new CreateQuizFragment();
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.creatorQuizMainContainerFrameLayout, createQuizFragment);
+            fragmentTransaction.replace(R.id.creatorQuizContainer, createQuizFragment);
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         });

@@ -55,7 +55,7 @@
         android:text="Choose Profile Pic"
         android:textAlignment="center"
         android:textColor="@android:color/white"
-        android:textSize="16sp" />
+        android:textSize="12sp" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -168,5 +168,5 @@
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:background="@drawable/rounded_corner"
-        android:textSize="16sp" />
+        android:textSize="20sp" />
 </LinearLayout>
