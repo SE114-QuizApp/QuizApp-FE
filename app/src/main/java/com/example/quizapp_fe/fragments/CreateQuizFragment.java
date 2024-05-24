@@ -112,6 +112,7 @@ public class CreateQuizFragment extends Fragment {
                 Glide.with(requireContext())
                      .load(quiz.getBackgroundImage())
                      .into(quizBackgroundImage);
+                backgroundImageUpload[0]= quiz.getBackgroundImage();
             }
             else {
                 quizBackgroundImage.setVisibility(View.GONE);

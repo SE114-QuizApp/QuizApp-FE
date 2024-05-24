@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
@@ -68,7 +69,7 @@ public class DiscoveryFragment extends Fragment {
 
         setPoint(teacherId);
 
-        categoryCardList = new ArrayList<>();
+
         callApi();
 
         searchView = view.findViewById(R.id.discoveryFragSearchView);
@@ -113,7 +114,7 @@ public class DiscoveryFragment extends Fragment {
     }
 
     private void setPoint(String teacherId) {
-        int points = CredentialToken.getInstance(context).getUserProfile().getPoint();
+        int points = CredentialToken.getInstance(requireContext()).getUserProfile().getPoint();
         discoveryFragYourScoreTextView.setText(Integer.toString(points));
     }
 
@@ -122,34 +123,43 @@ public class DiscoveryFragment extends Fragment {
             return;
         }
 
-        GetDiscoverQuizzesApi.getAPI(context).getDiscoverQuizzes().enqueue(new Callback<DiscoverQuizzes>() {
+        GetDiscoverQuizzesApi.getAPI(requireContext()).getDiscoverQuizzes().enqueue(new Callback<DiscoverQuizzes>() {
             @Override
-            public void onResponse(Call<DiscoverQuizzes> call, Response<DiscoverQuizzes> response) {
+            public void onResponse(@NonNull Call<DiscoverQuizzes> call, @NonNull Response<DiscoverQuizzes> response) {
                 Log.e("DISCOVER", "Success");
                 if (response.isSuccessful()) {
                     DiscoverQuizzes discoverQuizzes = response.body();
+                    categoryCardList = new ArrayList<>();
 
-                    CategoryCard englishCategoryCard = new CategoryCard(
-                            R.drawable.ic_english_24,
-                            discoverQuizzes.getEnglish().get(0).getCategory().getName(),
-                            discoverQuizzes.getEnglish().size() + " Quizzes"
-                    );
 
-                    CategoryCard mathCategoryCard = new CategoryCard(
-                            R.drawable.ic_math_24_black,
-                            discoverQuizzes.getMath().get(0).getCategory().getName(),
-                            discoverQuizzes.getMath().size() + " Quizzes"
-                    );
+                    assert discoverQuizzes != null;
+                    if(discoverQuizzes.getEnglish() != null){
+                            CategoryCard englishCategoryCard = new CategoryCard(
+                                    R.drawable.ic_english_24,
+                                    discoverQuizzes.getEnglish().get(0).getCategory().getName(),
+                                    discoverQuizzes.getEnglish().size() + " Quizzes"
+                            );
+                            categoryCardList.add(englishCategoryCard);
+                        }
+                        if (discoverQuizzes.getMath() != null) {
+                            CategoryCard mathCategoryCard = new CategoryCard(
+                                R.drawable.ic_math_24_black,
+                                discoverQuizzes.getMath().get(0).getCategory().getName(),
+                                discoverQuizzes.getMath().size() + " Quizzes"
+                            );
+                            categoryCardList.add(mathCategoryCard);
+                        }
+                        if(discoverQuizzes.getComputer() != null){
+                            CategoryCard computerCategoryCard = new CategoryCard(
+                                    R.drawable.ic_computer_24,
+                                    discoverQuizzes.getComputer().get(0).getCategory().getName(),
+                                    discoverQuizzes.getComputer().size() + " Quizzes"
+                            );
+                            categoryCardList.add(computerCategoryCard);
+                        }
 
-                    CategoryCard computerCategoryCard = new CategoryCard(
-                            R.drawable.ic_computer_24,
-                            discoverQuizzes.getComputer().get(0).getCategory().getName(),
-                            discoverQuizzes.getComputer().size() + " Quizzes"
-                    );
 
-                    categoryCardList.add(englishCategoryCard);
-                    categoryCardList.add(mathCategoryCard);
-                    categoryCardList.add(computerCategoryCard);
+
 
                     if (context != null) {
                         categoryCardAdapter = new CategoryCardAdapter(context, categoryCardList);
@@ -160,7 +170,7 @@ public class DiscoveryFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<DiscoverQuizzes> call, Throwable t) {
+            public void onFailure(@NonNull Call<DiscoverQuizzes> call, @NonNull Throwable t) {
                 Log.e("DISCOVER", "Fail");
             }
         });
