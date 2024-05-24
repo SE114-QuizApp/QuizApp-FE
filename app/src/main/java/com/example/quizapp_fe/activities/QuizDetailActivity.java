@@ -37,6 +37,7 @@ import retrofit2.Response;
 public class QuizDetailActivity extends AppCompatActivity {
 
     private ImageView backArrowImageView;
+    private ImageView quizDetailQuizBgImageView;
     private TextView quizDetailQuizCategoryTextView;
     private TextView quizDetailQuizTitleTextView;
     private TextView quizDetailNumberOfQuestions;
@@ -57,6 +58,7 @@ public class QuizDetailActivity extends AppCompatActivity {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
 
+            quizDetailQuizBgImageView = findViewById(R.id.quizDetailQuizBgImageView);
             quizDetailQuizCategoryTextView = findViewById(R.id.quizDetailQuizCategoryTextView);
             quizDetailQuizTitleTextView = findViewById(R.id.quizDetailQuizTitleTextView);
             quizDetailNumberOfQuestions = findViewById(R.id.quizDetailNumberOfQuestions);
@@ -104,6 +106,16 @@ public class QuizDetailActivity extends AppCompatActivity {
                     quizDetailNumberOfQuestions.setText(quiz.getNumberOfQuestions() + " Questions");
                     quizDetailTotalPointsTextView.setText(quiz.getTotalPoints() + " Points");
                     quizDetailDescriptionTextView.setText(quiz.getDescription());
+                    if (!quiz.getBackgroundImage().isEmpty()){
+                        quizDetailQuizBgImageView.setVisibility(View.VISIBLE);
+                        Glide.with(QuizDetailActivity.this)
+                                .asBitmap()
+                                .load(quiz.getBackgroundImage())
+                                .into(quizDetailQuizBgImageView);
+                    }
+                    else {
+                        quizDetailQuizBgImageView.setVisibility(View.GONE);
+                    }
 
                     Glide.with(QuizDetailActivity.this)
                             .asBitmap()

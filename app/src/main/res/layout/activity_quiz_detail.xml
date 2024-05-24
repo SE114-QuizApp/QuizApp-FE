@@ -48,6 +48,15 @@
                 android:layout_height="wrap_content"
                 android:paddingVertical="20sp"
                 android:paddingHorizontal="20sp">
+
+                <ImageView
+                    android:id="@+id/quizDetailQuizBgImageView"
+                    android:layout_width="160dp"
+                    android:layout_height="100dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
                 <TextView
                     android:id="@+id/quizDetailQuizCategoryTextView"
                     android:layout_width="wrap_content"
@@ -58,7 +67,7 @@
                     android:textSize="20sp"
                     android:text="Sports"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toBottomOf="@+id/quizDetailQuizBgImageView"/>
                 <TextView
                     android:id="@+id/quizDetailQuizTitleTextView"
                     android:layout_width="wrap_content"
