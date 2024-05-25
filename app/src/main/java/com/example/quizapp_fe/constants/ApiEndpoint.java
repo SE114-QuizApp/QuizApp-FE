@@ -1,7 +1,7 @@
 package com.example.quizapp_fe.constants;
 
 public class ApiEndpoint {
-    public static final String BASE_URL = "https://queezzybe.onrender.com/";
+    public static final String BASE_URL = "http://localhost:4000";
 
     public static class AuthApiEndpoint {
         public static final String AUTH = "/api/auth";
