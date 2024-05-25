@@ -3,13 +3,6 @@ package com.example.quizapp_fe.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.SearchView;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +10,12 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.activities.DiscoverySearchActivity;
@@ -68,7 +67,6 @@ public class DiscoveryFragment extends Fragment {
 
         setPoint(teacherId);
 
-        categoryCardList = new ArrayList<>();
         callApi();
 
         searchView = view.findViewById(R.id.discoveryFragSearchView);
@@ -127,6 +125,7 @@ public class DiscoveryFragment extends Fragment {
             public void onResponse(Call<DiscoverQuizzes> call, Response<DiscoverQuizzes> response) {
                 Log.e("DISCOVER", "Success");
                 if (response.isSuccessful()) {
+                    categoryCardList = new ArrayList<>();
                     DiscoverQuizzes discoverQuizzes = response.body();
 
                     CategoryCard englishCategoryCard = new CategoryCard(
