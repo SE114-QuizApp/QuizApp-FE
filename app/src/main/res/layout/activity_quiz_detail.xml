@@ -32,16 +32,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 <!--        />-->
-
-        <ScrollView
+    <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="60dp"
             android:layout_marginBottom="72dp"
             android:layout_marginHorizontal="6dp"
             android:scrollbars="none"
-            android:background="@drawable/border_20dp_white"
-      >
+            android:background="@drawable/border_20dp_white">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
