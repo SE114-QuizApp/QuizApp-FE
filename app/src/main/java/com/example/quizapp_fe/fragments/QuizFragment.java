@@ -12,18 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.quizapp_fe.R;
-import com.example.quizapp_fe.adapters.CategoryCardAdapter;
 import com.example.quizapp_fe.adapters.QuizCardAdapter;
-import com.example.quizapp_fe.api.quiz.get.GetDiscoverQuizzesApi;
 import com.example.quizapp_fe.api.quiz.get.GetPublicQuizzesApi;
 import com.example.quizapp_fe.entities.PublicQuiz;
-import com.example.quizapp_fe.entities.Quiz;
-import com.example.quizapp_fe.interfaces.CategoryCard;
 import com.example.quizapp_fe.interfaces.QuizCard;
-import com.example.quizapp_fe.interfaces.UserCard;
-import com.example.quizapp_fe.models.DiscoverQuizzes;
 import com.example.quizapp_fe.services.SearchListener;
-
 import java.util.ArrayList;
 
 import retrofit2.Call;

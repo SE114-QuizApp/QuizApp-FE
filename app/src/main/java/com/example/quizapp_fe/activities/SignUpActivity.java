@@ -137,6 +137,7 @@ public class SignUpActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<LoginWithPasswordApiResult> call, @NonNull Throwable t) {
                         System.out.println(t.getMessage());
+                        loadingDialog.dismiss();
                         Toast.makeText(SignUpActivity.this, "Call API failure", Toast.LENGTH_SHORT).show();
                     }
                 });

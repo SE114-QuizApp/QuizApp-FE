@@ -11,6 +11,7 @@
         android:layout_height="match_parent">
 <!--        Back Arrow  -->
         <ImageView
+            android:visibility="gone"
             android:id="@+id/discoveryFragBackArrowImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -110,7 +111,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/border_20dp_white"
-            app:layout_constraintHeight_percent="0.56"
+            app:layout_constraintHeight_percent="0.6"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/discoveryFragPinkCard"
@@ -127,45 +128,50 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
+
                     <LinearLayout
                         android:id="@+id/discoveryFragYourScoreRelLayout"
                         android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="20sp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
                         android:background="@drawable/border_60dp_icy_plains"
                         android:gravity="center_vertical"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:paddingVertical="16dp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintWidth_percent="0.95"
-                        app:layout_constraintHeight_percent="0.15">
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent="0.95">
 
                         <ImageView
-                            android:layout_marginLeft="20sp"
                             android:layout_width="50sp"
                             android:layout_height="50sp"
-                            android:src="@drawable/ic_student_hat"/>
+                            android:layout_marginLeft="20sp"
+                            android:src="@drawable/ic_student_hat" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="20sp"
                             android:text="Your Score:"
-                            android:textStyle="bold"
                             android:textSize="24sp"
-                            android:layout_marginLeft="20sp"/>
+                            android:textStyle="bold" />
+
                         <TextView
                             android:id="@+id/discoveryFragYourScoreTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="24sp"
-                            android:textStyle="bold"
+                            android:layout_marginLeft="30sp"
                             android:text="55"
-                            android:layout_marginLeft="30sp"/>
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
                         <ImageView
                             android:layout_width="50sp"
                             android:layout_height="50sp"
-                            android:src="@drawable/img_medal"
-                            android:layout_marginLeft="20sp"/>
+                            android:layout_marginLeft="20sp"
+                            android:src="@drawable/img_medal" />
                     </LinearLayout>
+
                     <TextView
                         android:id="@+id/discoveryFragTopCategoryTextView"
                         android:layout_width="wrap_content"
@@ -180,9 +186,10 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/discoveryFragCategoryRecyclerView"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="20sp"
-                        android:paddingBottom="100sp"
+                        android:paddingHorizontal="6dp"
+                        android:paddingBottom="80sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/discoveryFragTopCategoryTextView">

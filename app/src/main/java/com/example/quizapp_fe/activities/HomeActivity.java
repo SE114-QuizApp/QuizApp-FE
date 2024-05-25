@@ -28,7 +28,6 @@ import com.example.quizapp_fe.fragments.HomeFragment;
 import com.example.quizapp_fe.fragments.ProfileFragment;
 import com.example.quizapp_fe.fragments.RankingFragment;
 import com.example.quizapp_fe.models.CredentialToken;
-import com.example.quizapp_fe.models.DiscoverQuizzes;
 import com.example.quizapp_fe.models.RankingUsers;
 
 import java.util.ArrayList;
@@ -114,18 +113,5 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    void getDiscoveryData() {
-        GetDiscoverQuizzesApi.getAPI(HomeActivity.this).getDiscoverQuizzes().enqueue(new Callback<DiscoverQuizzes>() {
-            @Override
-            public void onResponse(Call<DiscoverQuizzes> call, Response<DiscoverQuizzes> response) {
-                Toast.makeText(HomeActivity.this, "Call Discover API Successful", Toast.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public void onFailure(Call<DiscoverQuizzes> call, Throwable t) {
-                Toast.makeText(HomeActivity.this, "Call Discover API Fail", Toast.LENGTH_SHORT).show();
-                Log.e("DISCOVER", "Call Discover API Fail");
-            }
-        });
-    }
 }
