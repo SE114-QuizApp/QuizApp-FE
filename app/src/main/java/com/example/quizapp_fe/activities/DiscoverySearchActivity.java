@@ -72,8 +72,6 @@ public class DiscoverySearchActivity extends AppCompatActivity implements Search
         backArrowImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_normal);
-                backArrowImageView.startAnimation(animation);
                 Intent intent = new Intent(DiscoverySearchActivity.this, HomeActivity.class);
                 startActivity(intent);
             }
