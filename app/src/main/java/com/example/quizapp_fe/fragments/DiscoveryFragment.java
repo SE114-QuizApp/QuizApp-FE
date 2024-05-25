@@ -68,7 +68,6 @@ public class DiscoveryFragment extends Fragment {
 
         setPoint(teacherId);
 
-        categoryCardList = new ArrayList<>();
         callApi();
 
         searchView = view.findViewById(R.id.discoveryFragSearchView);
@@ -127,6 +126,8 @@ public class DiscoveryFragment extends Fragment {
             public void onResponse(Call<DiscoverQuizzes> call, Response<DiscoverQuizzes> response) {
                 Log.e("DISCOVER", "Success");
                 if (response.isSuccessful()) {
+                    categoryCardList = new ArrayList<>();
+
                     DiscoverQuizzes discoverQuizzes = response.body();
 
                     CategoryCard englishCategoryCard = new CategoryCard(
