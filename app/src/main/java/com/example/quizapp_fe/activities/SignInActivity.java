@@ -122,6 +122,7 @@ public class SignInActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<LoginWithPasswordApiResult> call, @NonNull Throwable t) {
                         System.out.println(t.getMessage());
+                        loadingDialog.dismiss();
                         Toast.makeText(SignInActivity.this, "Call API failure",
                                 Toast.LENGTH_SHORT).show();
                     }

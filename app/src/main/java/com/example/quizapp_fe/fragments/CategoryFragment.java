@@ -2,6 +2,7 @@ package com.example.quizapp_fe.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,12 +17,14 @@ import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.adapters.CategoryCardAdapter;
 import com.example.quizapp_fe.api.quiz.get.GetDiscoverQuizzesApi;
 import com.example.quizapp_fe.api.user.getListRanking.GetListRankingApi;
+import com.example.quizapp_fe.entities.DiscoverQuiz;
 import com.example.quizapp_fe.interfaces.CategoryCard;
 import com.example.quizapp_fe.interfaces.QuizCard;
 import com.example.quizapp_fe.models.DiscoverQuizzes;
 import com.example.quizapp_fe.services.SearchListener;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,34 +49,63 @@ public class CategoryFragment extends Fragment implements SearchListener {
     }
 
     public void callApi() {
-        GetDiscoverQuizzesApi.getAPI(requireContext()).getDiscoverQuizzes().enqueue(new Callback<DiscoverQuizzes>() {
+        GetDiscoverQuizzesApi.getAPI(requireContext()).getDiscoverQuizzes().enqueue(new Callback<Map<String, ArrayList<DiscoverQuiz>>>() {
             @Override
-            public void onResponse(Call<DiscoverQuizzes> call, Response<DiscoverQuizzes> response) {
+            public void onResponse(@NonNull Call<Map<String, ArrayList<DiscoverQuiz>>> call, @NonNull Response<Map<String, ArrayList<DiscoverQuiz>>> response) {
 
                 if(response.isSuccessful()) {
-                    DiscoverQuizzes discoverQuizzes = response.body();
+                    Map<String, ArrayList<DiscoverQuiz>> quizMap = response.body();
+                    DiscoverQuizzes discoverQuizzes = GetDiscoverQuizzesApi.parseDiscoverQuizzes(quizMap);
 
-                    CategoryCard englishCategoryCard = new CategoryCard(
-                            R.drawable.ic_english_24,
-                            discoverQuizzes.getEnglish().get(0).getCategory().getName(),
-                            discoverQuizzes.getEnglish().size() + " Quizzes"
-                    );
+                    for (Map.Entry<String, ArrayList<DiscoverQuiz>> entry : discoverQuizzes.getQuizzes().entrySet()) {
+                        String subject = entry.getKey();
+                        ArrayList<DiscoverQuiz> quizzes = entry.getValue();
+                        switch (subject) {
+                            case "Math":
+                                categoryCardArrayList.add(new CategoryCard(R.drawable.ic_math_24, "Math", quizzes.size() + " Quizzes"));
+                                break;
+                            case "English":
+                                categoryCardArrayList.add(new CategoryCard(R.drawable.ic_english_24, "English", quizzes.size() + " Quizzes"));
+                                break;
+                            case "Sports":
+                                categoryCardArrayList.add(new CategoryCard(R.drawable.ic_sports_24, "Sports", quizzes.size() + " Quizzes"));
+                                break;
+                            case "Science":
+                                categoryCardArrayList.add(new CategoryCard(R.drawable.ic_science_24, "Science", quizzes.size() + " Quizzes"));
+                                break;
+                            case "Art":
+                                categoryCardArrayList.add(new CategoryCard(R.drawable.ic_art_24, "Art", quizzes.size() + " Quizzes"));
+                                break;
+                            case "History":
+                                categoryCardArrayList.add(new CategoryCard(R.drawable.ic_history_24, "History", quizzes.size() + " Quizzes"));
+                                break;
+                            case "Geography":
+                                categoryCardArrayList.add(new CategoryCard(R.drawable.ic_geography_24, "Geography", quizzes.size() + " Quizzes"));
+                                break;
+                            case "Biology":
+                                categoryCardArrayList.add(new CategoryCard(R.drawable.ic_biology_24, "Biology", quizzes.size() + " Quizzes"));
+                                break;
+                            case "Philosophy":
+                                categoryCardArrayList.add(new CategoryCard(R.drawable.ic_philosophy_24, "Philosophy", quizzes.size() + " Quizzes"));
+                                break;
+                            case "Computer":
+                                categoryCardArrayList.add(new CategoryCard(R.drawable.ic_computer_24, "Computer", quizzes.size() + " Quizzes"));
+                                break;
+                            case "Chemistry":
+                                categoryCardArrayList.add(new CategoryCard(R.drawable.ic_chemistry_24, "Chemistry", quizzes.size() + " Quizzes"));
+                                break;
+                            case "Fun":
+                                categoryCardArrayList.add(new CategoryCard(R.drawable.ic_fun_24, "Fun", quizzes.size() + " Quizzes"));
+                                break;
+                            case "Exercise":
+                                categoryCardArrayList.add(new CategoryCard(R.drawable.ic_exercise_24, "Exercise", quizzes.size() + " Quizzes"));
+                                break;
+                            default:
+                                categoryCardArrayList.add(new CategoryCard(R.drawable.ic_other_24, "Other", quizzes.size() + " Quizzes"));
+                                break;
+                        }
 
-                    CategoryCard mathCategoryCard = new CategoryCard(
-                            R.drawable.ic_math_24_black,
-                            discoverQuizzes.getMath().get(0).getCategory().getName(),
-                            discoverQuizzes.getMath().size() + " Quizzes"
-                    );
-
-                    CategoryCard computerCategoryCard = new CategoryCard(
-                            R.drawable.ic_computer_24,
-                            discoverQuizzes.getComputer().get(0).getCategory().getName(),
-                            discoverQuizzes.getComputer().size() + " Quizzes"
-                    );
-
-                    categoryCardArrayList.add(englishCategoryCard);
-                    categoryCardArrayList.add(mathCategoryCard);
-                    categoryCardArrayList.add(computerCategoryCard);
+                    }
 
                     originalCategoryCardArrayList = new ArrayList<>(categoryCardArrayList);
 
@@ -85,7 +117,7 @@ public class CategoryFragment extends Fragment implements SearchListener {
             }
 
             @Override
-            public void onFailure(Call<DiscoverQuizzes> call, Throwable t) {
+            public void onFailure(Call<Map<String, ArrayList<DiscoverQuiz>>> call, Throwable t) {
 
             }
         });

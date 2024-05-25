@@ -2,42 +2,23 @@ package com.example.quizapp_fe.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Map;
 
 import com.example.quizapp_fe.entities.DiscoverQuiz;
 import com.example.quizapp_fe.entities.Quiz;
 
 public class DiscoverQuizzes implements Serializable {
-    private ArrayList<DiscoverQuiz> English;
-    private ArrayList<DiscoverQuiz> Math;
-    private ArrayList<DiscoverQuiz> Computer;
+    private Map<String, ArrayList<DiscoverQuiz>> quizzes;
 
-    public DiscoverQuizzes(ArrayList<DiscoverQuiz> english, ArrayList<DiscoverQuiz> math, ArrayList<DiscoverQuiz> computer) {
-        English = english;
-        Math = math;
-        Computer = computer;
+    public DiscoverQuizzes(Map<String, ArrayList<DiscoverQuiz>> quizzes) {
+        this.quizzes = quizzes;
     }
 
-    public ArrayList<DiscoverQuiz> getEnglish() {
-        return English;
+    public Map<String, ArrayList<DiscoverQuiz>> getQuizzes() {
+        return quizzes;
     }
 
-    public void setEnglish(ArrayList<DiscoverQuiz> english) {
-        English = english;
-    }
-
-    public ArrayList<DiscoverQuiz> getMath() {
-        return Math;
-    }
-
-    public void setMath(ArrayList<DiscoverQuiz> math) {
-        Math = math;
-    }
-
-    public ArrayList<DiscoverQuiz> getComputer() {
-        return Computer;
-    }
-
-    public void setComputer(ArrayList<DiscoverQuiz> computer) {
-        Computer = computer;
+    public void setQuizzes(Map<String, ArrayList<DiscoverQuiz>> quizzes) {
+        this.quizzes = quizzes;
     }
 }
