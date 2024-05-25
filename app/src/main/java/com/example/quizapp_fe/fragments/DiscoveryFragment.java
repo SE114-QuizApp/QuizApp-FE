@@ -75,7 +75,6 @@ public class DiscoveryFragment extends Fragment {
         categoryCardAdapter = new CategoryCardAdapter(context, categoryCardList);
         categoryRecyclerView.setLayoutManager(new GridLayoutManager(context, 2));
         categoryRecyclerView.setAdapter(categoryCardAdapter);
-
         callApi();
 
         searchView = view.findViewById(R.id.discoveryFragSearchView);
@@ -137,7 +136,6 @@ public class DiscoveryFragment extends Fragment {
                     Map<String, ArrayList<DiscoverQuiz>> quizMap = response.body();
                     DiscoverQuizzes discoverQuizzes = GetDiscoverQuizzesApi.parseDiscoverQuizzes(quizMap);
                     categoryCardList = new ArrayList<>();
-
 
                     for (Map.Entry<String, ArrayList<DiscoverQuiz>> entry : discoverQuizzes.getQuizzes().entrySet()) {
                         String subject = entry.getKey();
