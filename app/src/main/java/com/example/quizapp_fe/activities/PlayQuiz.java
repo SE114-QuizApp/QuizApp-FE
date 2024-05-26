@@ -74,6 +74,7 @@ public class PlayQuiz extends AppCompatActivity {
 
 
     private Button btnPoint;
+    private Button btnNextQuestion;
 
     private CircularProgressIndicator pgTimeRemaining;
     private LinearProgressIndicator pgQuestionRemaining;
@@ -96,6 +97,8 @@ public class PlayQuiz extends AppCompatActivity {
     private LinearLayout lnStatusAnswerC;
     private LinearLayout lnStatusAnswerD;
     private LinearLayout lnAnswerGroup;
+
+    private CountDownTimer cntDownTimer;
 
 
     private Quiz quiz;
@@ -144,6 +147,7 @@ public class PlayQuiz extends AppCompatActivity {
         questionImage = findViewById(R.id.questionImage);
 
         btnPoint = findViewById((R.id.pointOfQuestion));
+        btnNextQuestion = findViewById(R.id.nextQuestion);
         lnAnswerGroup = findViewById(R.id.answerGroup);
 
         cbAnswerA = findViewById(R.id.checkBox_a);
@@ -191,6 +195,63 @@ public class PlayQuiz extends AppCompatActivity {
         lnAnswerB.setOnClickListener(v -> handleLinearLayoutClick(lnAnswerB, cbAnswerB, 2));
         lnAnswerC.setOnClickListener(v -> handleLinearLayoutClick(lnAnswerC, cbAnswerC, 4));
         lnAnswerD.setOnClickListener(v -> handleLinearLayoutClick(lnAnswerD, cbAnswerD, 6));
+
+        btnNextQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Hủy bộ đếm thời gian hiện tại nếu nó đang chạy
+                if (cntDownTimer != null) {
+                    cntDownTimer.cancel();
+                }
+
+                // Xử lý logic khi nhấn nút Next
+                if (currentQuestion.getOptionQuestion().equals("Single")) {
+                    // Kiểm tra xem người dùng đã chọn đáp án chưa
+                    boolean isAnswerSelected = false;
+                    if (cbAnswerA.isChecked() || cbAnswerB.isChecked() || cbAnswerC.isChecked() || cbAnswerD.isChecked()) {
+                        isAnswerSelected = true;
+                    }
+
+                    // Nếu người dùng chưa chọn đáp án nào, thêm một answer rỗng
+                    if (!isAnswerSelected) {
+                        Answer emptyAnswer = new Answer("", "", false);
+                        userAnswersPerQuestion.add(emptyAnswer);
+                    }
+                } else if (currentQuestion.getOptionQuestion().equals("Multiple")) {
+                    // Nếu câu hỏi có nhiều đáp án mà user chưa trả lời đủ số câu trả lời quy định
+                    if (numberOfAnswerSelection >= currentQuestion.getAnswerCorrect().size()) {
+                        // do nothing
+                    } else {
+                        int answerUnselected = currentQuestion.getAnswerCorrect().size() - numberOfAnswerSelection;
+                        if (answerUnselected > 0) {
+                            for (int i = 0; i < answerUnselected; i++) {
+                                boolean check = userAnswersPerQuestion.add(new Answer("", "", false));
+                            }
+                        }
+                    }
+                }
+                userQuestion.setAnswerList(userAnswersPerQuestion);
+                boolean check = userQuestionAnswer.add(userQuestion);
+
+                if (currentIndex < quiz.getNumberOfQuestions() - 1) {
+
+                    currentIndex += 1;
+                    displayQuestion(currentIndex);
+                    startCountdown(currentQuestion.getAnswerTime() + 1);
+                } else {
+                    // Nếu không còn câu hỏi nào navigate sang review answers
+                    Intent intent = new Intent(PlayQuiz.this, ReviewAnswers.class);
+
+                    UserAnswers model = new UserAnswers(userQuestionAnswer, totalPoints);
+                    intent.putExtra("quizId", quizId);
+                    intent.putExtra("userAnswers", model);
+                    intent.putExtra("quizName", quiz.getName());
+                    intent.putExtra("numberOfQuestions", quiz.getNumberOfQuestions());
+
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     public void renderQuizInformation(String inputQuizId, final Runnable callback) {
@@ -222,6 +283,7 @@ public class PlayQuiz extends AppCompatActivity {
         numberOfAnswerSelection = 0;
         userQuestion = new Question();
         userAnswersPerQuestion = new ArrayList<Answer>();
+        btnNextQuestion.setVisibility(View.GONE);
         resetCbChecked();
         resetCbState();
         txtContentQuestionNoImage.setVisibility(View.GONE);
@@ -323,12 +385,15 @@ public class PlayQuiz extends AppCompatActivity {
     }
 
     private void startCountdown(long seconds) {
+        if (cntDownTimer != null) {
+            cntDownTimer.cancel();
+        }
         pgTimeRemaining.setProgress(100, true);
         ObjectAnimator progressAnimator = ObjectAnimator.ofInt(pgTimeRemaining, "progress", 0);
 
         progressAnimator.setDuration(seconds * 1000);
         progressAnimator.start();
-        new CountDownTimer(seconds * 1000, 1000) {
+        cntDownTimer = new CountDownTimer(seconds * 1000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 // Cập nhật giá trị đếm ngược trên TextView
@@ -414,6 +479,7 @@ public class PlayQuiz extends AppCompatActivity {
                         } else {
                             if (numberOfAnswerSelection >= currentQuestion.getAnswerCorrect().size()) {
                                 disableAllCheckBoxes();
+                                // Xử lý nextQuestion
                             } else {
                                 cb.setEnabled(false);
                             }
@@ -455,8 +521,7 @@ public class PlayQuiz extends AppCompatActivity {
             } else {
                 if (numberOfAnswerSelection >= currentQuestion.getAnswerCorrect().size()) {
                     disableAllCheckBoxes();
-                }
-                else {
+                } else {
                     ln.setEnabled(false);
                     cb.setEnabled(false);
                 }
@@ -509,10 +574,12 @@ public class PlayQuiz extends AppCompatActivity {
         // Hiển thị đáp án đúng
         if (currentQuestion.getOptionQuestion().equals("Single")) {
             showCorrectAnswer();
+            btnNextQuestion.setVisibility(View.VISIBLE);
         } else if (currentQuestion.getOptionQuestion().equals("Multiple")) {
             numberOfAnswerSelection += 1;
             if (numberOfAnswerSelection >= currentQuestion.getAnswerCorrect().size()) {
                 showCorrectAnswer();
+                btnNextQuestion.setVisibility(View.VISIBLE);
             }
         }
     }
