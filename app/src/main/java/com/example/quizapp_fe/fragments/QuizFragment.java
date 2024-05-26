@@ -58,7 +58,8 @@ public class QuizFragment extends Fragment implements SearchListener {
                                                          publicQuiz.getData().get(i).getBackgroundImage(),
                                                          publicQuiz.getData().get(i).getName(),
                                                          name,
-                                                         publicQuiz.getData().get(i).getCategory().getName());
+                                                         publicQuiz.getData().get(i).getCategory().getName(),
+                                                         publicQuiz.getData().get(i).getNumberOfQuestions());
                         quizCardArrayList.add(quizCard);
                     }
                     originalQuizCardArrayList = new ArrayList<>(quizCardArrayList);

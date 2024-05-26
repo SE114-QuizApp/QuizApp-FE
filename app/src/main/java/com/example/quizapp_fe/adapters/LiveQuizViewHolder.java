@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -27,18 +28,21 @@ import java.util.ArrayList;
 
 public class LiveQuizViewHolder extends RecyclerView.ViewHolder {
     ImageView imgViewQuizImage;
-    TextView tvTitle, tvSubTitle;
+    TextView tvTitle, tvSubTitle, tvNumOfQuestions;
     ImageButton imgButtonEdit, imgButtonDelete, imgButtonExamine;
     ArrayList<LiveQuizCard> liveQuizList;
 
+
     public LiveQuizViewHolder(@NonNull View itemView) {
         super(itemView);
+
         imgViewQuizImage = itemView.findViewById(R.id.recyclerItemLiveQuizImageView);
         tvTitle = itemView.findViewById(R.id.recyclerItemLiveQuizTitleTextView);
         tvSubTitle = itemView.findViewById(R.id.recyclerItemLiveQuizSubTitleTextView);
+        tvNumOfQuestions = itemView.findViewById(R.id.recyclerItemLiveQuizNumOfQuestionTextView);
         imgButtonEdit = itemView.findViewById(R.id.recyclerItemLiveQuizEditImageButton);
         imgButtonDelete = itemView.findViewById(R.id.recyclerItemLiveQuizDeleteImageButton);
-        imgButtonExamine = itemView.findViewById(R.id.recyclerItemLiveQuizExamineImageButton);
+//        imgButtonExamine = itemView.findViewById(R.id.recyclerItemLiveQuizExamineImageButton);
     }
 
     public void bind (LiveQuizCard liveQuizCard, Context context, ArrayList<LiveQuizCard> liveQuizList, DeleteConfirmationDialog.OnDeleteClickListener listener) {
@@ -55,12 +59,11 @@ public class LiveQuizViewHolder extends RecyclerView.ViewHolder {
             tvSubTitle.setText(liveQuizCard.getLiveQuizCardSubTitle());
         }
         this.liveQuizList = liveQuizList;
+        tvNumOfQuestions.setText(String.format("%d questions", liveQuizCard.getLiveQuizCardNumOfQuestions()));
 
-        imgButtonExamine.setOnClickListener(new View.OnClickListener() {
+        imgViewQuizImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Animation animation = AnimationUtils.loadAnimation(context, R.anim.animation_normal);
-                imgButtonExamine.startAnimation(animation);
                 Intent intent = new Intent(context, QuizDetailActivity.class);
                 if (!(context instanceof Activity)) {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -69,6 +72,31 @@ public class LiveQuizViewHolder extends RecyclerView.ViewHolder {
                 context.startActivity(intent);
             }
         });
+
+        tvTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, QuizDetailActivity.class);
+                if (!(context instanceof Activity)) {
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                }
+                intent.putExtra("quizId", liveQuizCard.getLiveQuizCardId());
+                context.startActivity(intent);
+            }
+        });
+//        imgButtonExamine.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Animation animation = AnimationUtils.loadAnimation(context, R.anim.animation_normal);
+//                imgButtonExamine.startAnimation(animation);
+//                Intent intent = new Intent(context, QuizDetailActivity.class);
+//                if (!(context instanceof Activity)) {
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                }
+//                intent.putExtra("quizId", liveQuizCard.getLiveQuizCardId());
+//                context.startActivity(intent);
+//            }
+//        });
         imgButtonEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -3,9 +3,11 @@ package com.example.quizapp_fe.fragments;
 
 import static java.lang.String.*;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.quizapp_fe.R;
+import com.example.quizapp_fe.activities.HomeActivity;
 import com.example.quizapp_fe.api.account.profile.GetMeApi;
 import com.example.quizapp_fe.dialogs.LoadingDialog;
 import com.example.quizapp_fe.models.CredentialToken;
@@ -120,6 +123,15 @@ public class ProfileFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(requireActivity(), HomeActivity.class);
+                startActivity(intent);
+                requireActivity().finish();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
 
         // Inflate the layout for this fragment
         return view;
@@ -261,7 +273,6 @@ public class ProfileFragment extends Fragment {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
 
-                    CredentialToken.getInstance(requireContext()).setUserProfile(response.body().getUser());
                     System.out.println(response.body().getUser().getUsername());
                     System.out.printf("%s %s%n", response.body().getUser().getFirstName(), response.body().getUser().getLastName());
                     if (response.body().getUser().getFirstName() != null && response.body().getUser().getLastName() != null) {

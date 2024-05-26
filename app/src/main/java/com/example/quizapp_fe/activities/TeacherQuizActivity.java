@@ -65,11 +65,14 @@ public class TeacherQuizActivity extends AppCompatActivity {
                         String quizSubTitle;
                         String quizImage;
                         String quizId;
+                        int quizNumOfQuestions;
                         quizTitle = teacherQuizList.get(i).getName();
                         quizSubTitle = teacherQuizList.get(i).getDescription();
                         quizImage = teacherQuizList.get(i).getBackgroundImage();
                         quizId = teacherQuizList.get(i).get_id();
-                        LiveQuizCard liveQuizCard = new LiveQuizCard(quizImage, quizTitle, quizSubTitle,quizId);
+                        quizNumOfQuestions = teacherQuizList.get(i).getNumberOfQuestions();
+
+                        LiveQuizCard liveQuizCard = new LiveQuizCard(quizImage, quizTitle, quizSubTitle, quizId, quizNumOfQuestions);
                         quizCardList.add(liveQuizCard);
                         quizCardAdapter = new LiveQuizAdapter(getBaseContext(), quizCardList);
                         listQuizRecyclerView.setAdapter(quizCardAdapter);

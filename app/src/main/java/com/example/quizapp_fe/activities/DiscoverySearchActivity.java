@@ -1,5 +1,7 @@
 package com.example.quizapp_fe.activities;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -54,6 +56,14 @@ public class DiscoverySearchActivity extends AppCompatActivity implements Search
             }
         }).attach();
 
+        OnBackPressedDispatcher dispatcher = getOnBackPressedDispatcher();
+        dispatcher.addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(DiscoverySearchActivity.this, HomeActivity.class);
+                startActivity(intent);
+            }
+        });
         discoverySearchSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {

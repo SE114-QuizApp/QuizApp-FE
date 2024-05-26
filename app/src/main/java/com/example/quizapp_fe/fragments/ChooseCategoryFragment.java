@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -24,6 +25,7 @@ import com.example.quizapp_fe.dialogs.ConfirmationDialog;
 import com.example.quizapp_fe.entities.Category;
 import com.example.quizapp_fe.entities.Quiz;
 import com.example.quizapp_fe.interfaces.CategoryCard;
+import com.example.quizapp_fe.interfaces.OnBackPressedListener;
 import com.example.quizapp_fe.models.CreateQuizViewModel;
 import com.google.gson.Gson;
 
@@ -32,8 +34,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
-public class ChooseCategoryFragment extends Fragment {
+public class ChooseCategoryFragment extends Fragment  {
     private FragmentChooseCategoryBinding binding;
 
     private CreateQuizViewModel createQuizViewModel;
@@ -68,6 +71,21 @@ public class ChooseCategoryFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentChooseCategoryBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+        confirmationDialog = new ConfirmationDialog(requireActivity());
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                confirmationDialog.show("Discard changes", "Are you sure you want to exit?", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getActivity(), HomeActivity.class);
+                        startActivity(intent);
+                        requireActivity().finish();
+                    }
+                }, null);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
 
         createQuizViewModel = new ViewModelProvider(requireActivity()).get(CreateQuizViewModel.class);
         quiz = createQuizViewModel.getQuiz().getValue();
@@ -78,10 +96,9 @@ public class ChooseCategoryFragment extends Fragment {
         binding.categoryRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         binding.categoryRecyclerView.setAdapter(categoryAdapter);
 
-        confirmationDialog = new ConfirmationDialog(requireActivity());
 
         // select the first category by default
-        categories.get("Other").setSelected(true);
+        Objects.requireNonNull(categories.get("Other")).setSelected(true);
 
         // set the selected category if the quiz object is not null
         if (quiz != null && quiz.getCategory() != null && quiz.getCategory().getName() != null && !quiz.getCategory().getName().isEmpty()) {
@@ -89,7 +106,7 @@ public class ChooseCategoryFragment extends Fragment {
             CategoryCard selectedCategory = categories.get(selectedCategoryName);
 
             if (selectedCategory != null) {
-                categories.get("Other").setSelected(false);
+                Objects.requireNonNull(categories.get("Other")).setSelected(false);
                 selectedCategory.setSelected(true);
 
                 binding.categoryRecyclerView.scrollToPosition(new ArrayList<>(categories.values()).indexOf(selectedCategory));

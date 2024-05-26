@@ -1,12 +1,11 @@
 package com.example.quizapp_fe.activities;
 
-import static androidx.core.content.ContentProviderCompat.requireContext;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -18,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -26,8 +27,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.api.ErrorResponse;
-import com.example.quizapp_fe.api.account.profile.UpdateProfileApi;
 import com.example.quizapp_fe.api.user.updateUserPoint.UpdateUserPointApi;
+import com.example.quizapp_fe.dialogs.ConfirmationDialog;
 import com.example.quizapp_fe.dialogs.LoadingDialog;
 import com.example.quizapp_fe.entities.Answer;
 import com.example.quizapp_fe.entities.Question;
@@ -40,6 +41,8 @@ import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ReviewAnswers extends AppCompatActivity {
 
@@ -55,6 +58,7 @@ public class ReviewAnswers extends AppCompatActivity {
     private LinearLayout lnAnswerReviewGroup;
     private ArrayList<Question> userQuestionAnswerList;
     private int totalPoints;
+    private ConfirmationDialog confirmationDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,8 @@ public class ReviewAnswers extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        confirmationDialog = new ConfirmationDialog(this);
+
 
         // Init
         txtNoCorrect = findViewById(R.id.numberOfCorrectAnswer);
@@ -106,11 +112,28 @@ public class ReviewAnswers extends AppCompatActivity {
             lnAnswerReviewGroup.addView(rowLinearQuestion(userQuestionAnswerList.get(i), userQuestionAnswerList.get(i).getAnswerList()), i);
         }
 
+
         btnBackHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ReviewAnswers.this, HomeActivity.class);
                 startActivity(intent);
+            }
+        });
+        OnBackPressedDispatcher dispatcher = getOnBackPressedDispatcher();
+        dispatcher.addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                confirmationDialog.show("Quit Review", "Are you sure you want to exit?", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(ReviewAnswers.this, QuizDetailActivity.class);
+                        intent.putExtra("quizId", quizId);
+                        startActivity(intent);
+                    }
+                }, null);
+
+
             }
         });
 
@@ -129,9 +152,9 @@ public class ReviewAnswers extends AppCompatActivity {
                 UserProfile currentUser = CredentialToken.getInstance(ReviewAnswers.this).getUserProfile();
                 int pointUpdate = currentUser.getPoint() + 1;
                 currentUser.setPoint(pointUpdate);
-                UpdateUserPointApi.getAPI(ReviewAnswers.this).update(new UpdateUserPointApi.API.UpdatePointRequest(pointUpdate)).enqueue(new retrofit2.Callback<UpdateUserPointApi.API.UpdatePointResponse>() {
+                UpdateUserPointApi.getAPI(ReviewAnswers.this).update(new UpdateUserPointApi.API.UpdatePointRequest(pointUpdate)).enqueue(new Callback<UpdateUserPointApi.API.UpdatePointResponse>() {
                     @Override
-                    public void onResponse(@NonNull retrofit2.Call<UpdateUserPointApi.API.UpdatePointResponse> call, @NonNull retrofit2.Response<UpdateUserPointApi.API.UpdatePointResponse> response) {
+                    public void onResponse(@NonNull Call<UpdateUserPointApi.API.UpdatePointResponse> call, @NonNull Response<UpdateUserPointApi.API.UpdatePointResponse> response) {
                         if (response.isSuccessful()) {
                             UpdateUserPointApi.API.UpdatePointResponse result = response.body();
                             assert result != null;
@@ -160,28 +183,20 @@ public class ReviewAnswers extends AppCompatActivity {
 
     public LinearLayout rowLinearQuestion(Question question, ArrayList<Answer> userAnswer) {
         LinearLayout questionSummaryLinearLayout = new LinearLayout(this);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.setMargins(55, 70, 55, 70);
         questionSummaryLinearLayout.setLayoutParams(params);
         questionSummaryLinearLayout.setOrientation(LinearLayout.VERTICAL);
 
         // Tạo FrameLayout bên trong LinearLayout
         FrameLayout frameLayout = new FrameLayout(this);
-        LinearLayout.LayoutParams frameLayoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
+        LinearLayout.LayoutParams frameLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         frameLayout.setLayoutParams(frameLayoutParams);
         frameLayout.setPadding(0, 0, 0, 20);
 
         // Tạo Button
         Button btnOrder = new Button(this);
-        FrameLayout.LayoutParams btnLayoutParams = new FrameLayout.LayoutParams(
-                110, 110
-        );
+        FrameLayout.LayoutParams btnLayoutParams = new FrameLayout.LayoutParams(110, 110);
         btnLayoutParams.gravity = Gravity.START;
         btnOrder.setLayoutParams(btnLayoutParams);
         GradientDrawable gradientDrawable = new GradientDrawable();
@@ -197,10 +212,7 @@ public class ReviewAnswers extends AppCompatActivity {
 
         // Tạo TextView cho câu hỏi
         TextView txtQuestion = new TextView(this);
-        FrameLayout.LayoutParams txtLayoutParams = new FrameLayout.LayoutParams(
-                600,
-                FrameLayout.LayoutParams.WRAP_CONTENT
-        );
+        FrameLayout.LayoutParams txtLayoutParams = new FrameLayout.LayoutParams(600, FrameLayout.LayoutParams.WRAP_CONTENT);
         txtLayoutParams.leftMargin = 40;
         txtLayoutParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL; // Đặt vị trí của TextView
         txtQuestion.setLayoutParams(txtLayoutParams);
@@ -219,21 +231,14 @@ public class ReviewAnswers extends AppCompatActivity {
         // Tạo các TextView và ImageView cho các câu trả lời
         for (Answer answerRe : userAnswer) {
             LinearLayout answerLayout = new LinearLayout(this);
-            LinearLayout.LayoutParams answerLayoutParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            );
+            LinearLayout.LayoutParams answerLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             answerLayout.setLayoutParams(answerLayoutParams);
             answerLayout.setOrientation(LinearLayout.HORIZONTAL);
             answerLayout.setPadding(160, 10, 0, 10);
 
             // Tạo TextView cho đáp án
             TextView txtAnswer = new TextView(this);
-            LinearLayout.LayoutParams txtAnswerLayoutParams = new LinearLayout.LayoutParams(
-                    0,
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    1f
-            );
+            LinearLayout.LayoutParams txtAnswerLayoutParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
             txtAnswer.setLayoutParams(txtAnswerLayoutParams);
             txtAnswer.setText(answerRe.getBody().isEmpty() ? "-" : "- Answer: " + answerRe.getBody());
             txtAnswer.setTextSize(16);
@@ -241,10 +246,7 @@ public class ReviewAnswers extends AppCompatActivity {
 
             // Tạo ImageView cho trạng thái đúng/sai của đáp án
             ImageView imgResult = new ImageView(this);
-            LinearLayout.LayoutParams imgLayoutParams = new LinearLayout.LayoutParams(
-                    70,
-                    70
-            );
+            LinearLayout.LayoutParams imgLayoutParams = new LinearLayout.LayoutParams(70, 70);
             imgResult.setLayoutParams(imgLayoutParams);
             imgResult.setImageResource(answerRe.isCorrect() ? R.drawable.ic_true_answer : R.drawable.error_answer_ic);
 

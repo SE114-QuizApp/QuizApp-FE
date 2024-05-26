@@ -46,7 +46,7 @@ public class QuizCardViewHolder extends RecyclerView.ViewHolder {
                      .into(quizCardItemImageView);
         quizCardItemTitle.setText(quizCard.getTitleText());
         quizCardItemCreator.setText(quizCard.getCreatorText());
-        quizCardCategory.setText(quizCard.getCategoryText());
+        quizCardCategory.setText(String.format("Category: %s - %d Questions", quizCard.getCategoryText(), quizCard.getNumOfQuestions()));
 
         quizcardConstraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,6 +1,7 @@
 package com.example.quizapp_fe.activities;
 
 import android.animation.ObjectAnimator;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 
@@ -35,6 +36,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
@@ -45,6 +48,7 @@ import androidx.core.widget.CompoundButtonCompat;
 import com.bumptech.glide.Glide;
 import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.api.quiz.get.GetQuizByIdApi;
+import com.example.quizapp_fe.dialogs.ConfirmationDialog;
 import com.example.quizapp_fe.entities.Answer;
 import com.example.quizapp_fe.entities.Question;
 import com.example.quizapp_fe.entities.Quiz;
@@ -122,6 +126,7 @@ public class PlayQuiz extends AppCompatActivity {
     private ArrayList<Question> userQuestionAnswer;
 
     private boolean isCheckBoxListenerEnabled = true;
+    private ConfirmationDialog confirmationDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +138,8 @@ public class PlayQuiz extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        confirmationDialog = new ConfirmationDialog(this);
 
         // Init
         titleAndImageQuestion = findViewById(R.id.titleAndImageQuestion);
@@ -196,6 +203,23 @@ public class PlayQuiz extends AppCompatActivity {
         lnAnswerC.setOnClickListener(v -> handleLinearLayoutClick(lnAnswerC, cbAnswerC, 4));
         lnAnswerD.setOnClickListener(v -> handleLinearLayoutClick(lnAnswerD, cbAnswerD, 6));
 
+        OnBackPressedDispatcher dispatcher = getOnBackPressedDispatcher();
+        dispatcher.addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                confirmationDialog.show("Quit Review", "Are you sure you want to exit?", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        cntDownTimer.cancel();
+                        Intent intent = new Intent(PlayQuiz.this, QuizDetailActivity.class);
+                        intent.putExtra("quizId", quizId);
+                        startActivity(intent);
+                    }
+                }, null);
+
+
+            }
+        });
         btnNextQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

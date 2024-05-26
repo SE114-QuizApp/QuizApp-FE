@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
@@ -23,6 +24,7 @@ import com.example.quizapp_fe.entities.Category;
 import com.example.quizapp_fe.entities.Grade;
 import com.example.quizapp_fe.entities.Quiz;
 import com.example.quizapp_fe.fragments.ChooseCategoryFragment;
+import com.example.quizapp_fe.interfaces.OnBackPressedListener;
 import com.example.quizapp_fe.models.CreateQuizViewModel;
 import com.google.gson.Gson;
 
@@ -39,6 +41,7 @@ public class CreatorQuizActivity extends AppCompatActivity {
     private String quizId;
 
     private Quiz quiz;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

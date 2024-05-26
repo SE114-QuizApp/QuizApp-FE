@@ -1,5 +1,6 @@
 package com.example.quizapp_fe.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.graphics.Insets;
@@ -49,6 +52,7 @@ public class QuizDetailActivity extends AppCompatActivity {
     private RecyclerView quizDetailQuestionListRecyclerView;
     private ArrayList<Question> questionArrayList;
     private QuestionDetailAdapter questionDetailAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,11 +76,19 @@ public class QuizDetailActivity extends AppCompatActivity {
             questionArrayList = new ArrayList<>();
 
             Bundle bundle = getIntent().getExtras();
-            if(bundle != null) {
+            if (bundle != null) {
                 String quizId = bundle.getString("quizId");
                 Log.e("QuizDetail", quizId);
                 renderQuizInformation(quizId);
             }
+            OnBackPressedDispatcher dispatcher = getOnBackPressedDispatcher();
+            dispatcher.addCallback(this, new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    Intent intent = new Intent(QuizDetailActivity.this, DiscoverySearchActivity.class);
+                    startActivity(intent);
+                }
+            });
 
             backArrowImageView = findViewById(R.id.quizDetailBackArrowImageView);
             backArrowImageView.setOnClickListener(new View.OnClickListener() {
@@ -84,7 +96,7 @@ public class QuizDetailActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.animation_normal);
                     backArrowImageView.startAnimation(animation);
-                    Intent intent = new Intent( QuizDetailActivity.this, DiscoverySearchActivity.class);
+                    Intent intent = new Intent(QuizDetailActivity.this, DiscoverySearchActivity.class);
                     startActivity(intent);
                 }
             });
@@ -99,29 +111,28 @@ public class QuizDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Quiz> call, Response<Quiz> response) {
                 Log.e("QuizDetail", "Call API Success By " + inputQuizId);
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     Quiz quiz = response.body();
                     quizDetailQuizCategoryTextView.setText(quiz.getCategory().getName());
                     quizDetailQuizTitleTextView.setText(quiz.getName());
                     quizDetailNumberOfQuestions.setText(quiz.getNumberOfQuestions() + " Questions");
                     quizDetailTotalPointsTextView.setText(quiz.getTotalPoints() + " Points");
                     quizDetailDescriptionTextView.setText(quiz.getDescription());
-                    if (!quiz.getBackgroundImage().isEmpty()){
+                    if (!quiz.getBackgroundImage().isEmpty()) {
                         quizDetailQuizBgImageView.setVisibility(View.VISIBLE);
                         Glide.with(QuizDetailActivity.this)
-                                .asBitmap()
-                                .load(quiz.getBackgroundImage())
-                                .into(quizDetailQuizBgImageView);
-                    }
-                    else {
+                             .asBitmap()
+                             .load(quiz.getBackgroundImage())
+                             .into(quizDetailQuizBgImageView);
+                    } else {
                         quizDetailQuizBgImageView.setVisibility(View.GONE);
                     }
 
                     Glide.with(QuizDetailActivity.this)
-                            .asBitmap()
-                            .load(quiz.getCreator().getAvatar())
-                            .error(R.drawable.img_office_man_512)
-                            .into(quizDetailCreatorAvatarImageView);
+                         .asBitmap()
+                         .load(quiz.getCreator().getAvatar())
+                         .error(R.drawable.img_office_man_512)
+                         .into(quizDetailCreatorAvatarImageView);
 
                     quizDetailCreatorNameTextView.setText(quiz.getCreator().getFullName());
 
@@ -134,7 +145,7 @@ public class QuizDetailActivity extends AppCompatActivity {
                     quizDetailQuestionListRecyclerView.setLayoutManager(new LinearLayoutManager(QuizDetailActivity.this));
 
                     // Sử dụng ViewTreeObserver để tính toán lại chiều cao của RecyclerView
-                   
+
                     quizDetailPlaySoloButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

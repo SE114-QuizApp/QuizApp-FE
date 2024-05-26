@@ -8,94 +8,119 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="10dp"
-        android:padding="10dp">
+        app:layout_constraintTop_toTopOf="parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
             android:background="@drawable/border_20dp_white"
-            android:padding="10dp"
-            android:layout_gravity="center_horizontal">
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp">
+
             <ImageView
                 android:id="@+id/recyclerItemLiveQuizImageView"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:src="@drawable/ic_friend_avatar_2"
-                app:layout_constraintWidth_percent="0.3"
-                app:layout_constraintHeight_percent="0.8"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_margin="5dp"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginLeft="4dp"
+                android:scaleType="centerInside"
+                android:background="#D3D3D3"
+                android:src="@drawable/ic_friend_avatar_2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                />
+                app:layout_constraintTop_toTopOf="parent"
+
+ />
+
             <TextView
                 android:id="@+id/recyclerItemLiveQuizTitleTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
                 android:text="Example Text"
                 android:textColor="@color/black"
-                android:textSize="24dp"
+                android:textSize="22dp"
                 android:textStyle="bold"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="15dp"
-                app:layout_constraintWidth_percent="0.6"
-                app:layout_constraintTop_toTopOf="parent"
+                android:maxLines="2"
+                android:ellipsize="end"
                 app:layout_constraintStart_toEndOf="@id/recyclerItemLiveQuizImageView"
-                />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.65" />
+
             <TextView
                 android:id="@+id/recyclerItemLiveQuizSubTitleTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:text="Example Text"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="15dp"
-                app:layout_constraintWidth_percent="0.5"
+                android:textSize="14dp"
+                android:maxLines="1"
+                android:ellipsize="end"
                 app:layout_constraintStart_toEndOf="@id/recyclerItemLiveQuizImageView"
-                app:layout_constraintTop_toBottomOf="@id/recyclerItemLiveQuizTitleTextView"/>
+                app:layout_constraintTop_toBottomOf="@id/recyclerItemLiveQuizTitleTextView"
+                app:layout_constraintWidth_percent="0.6" />
+
+            <TextView
+                android:id="@+id/recyclerItemLiveQuizNumOfQuestionTextView"
+                android:layout_width="86dp"
+                android:layout_height="21dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="5 Questions"
+                android:textSize="14sp"
+                android:textStyle="bold"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/recyclerItemLiveQuizImageView"
+                app:layout_constraintWidth_percent="0.6" />
+
             <ImageButton
                 android:id="@+id/recyclerItemLiveQuizEditImageButton"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_edit_64"
-                android:scaleType="fitCenter"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="5dp"
                 android:background="@null"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="20dp"
                 android:clickable="true"
-                app:layout_constraintTop_toBottomOf="@id/recyclerItemLiveQuizSubTitleTextView"
-                app:layout_constraintStart_toEndOf="@id/recyclerItemLiveQuizExamineImageButton"/>
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_edit_64"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/recyclerItemLiveQuizDeleteImageButton" />
+
             <ImageButton
                 android:id="@+id/recyclerItemLiveQuizDeleteImageButton"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="5dp"
+                android:background="@null"
+                android:clickable="true"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_delete_64"
-                android:background="@null"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="30dp"
-                android:clickable="true"
-                app:layout_constraintTop_toBottomOf="@id/recyclerItemLiveQuizSubTitleTextView"
-                app:layout_constraintStart_toEndOf="@id/recyclerItemLiveQuizEditImageButton"
-                />
-            <ImageButton
-                android:id="@+id/recyclerItemLiveQuizExamineImageButton"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_examine_64"
-                android:background="@null"
-                android:clickable="true"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="30dp"
-                app:layout_constraintStart_toEndOf="@id/recyclerItemLiveQuizImageView"
-                app:layout_constraintTop_toBottomOf="@id/recyclerItemLiveQuizSubTitleTextView"
-                />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+            <!--            <ImageButton-->
+            <!--                android:id="@+id/recyclerItemLiveQuizExamineImageButton"-->
+            <!--                android:layout_width="30dp"-->
+            <!--                android:layout_height="30dp"-->
+            <!--                android:scaleType="fitCenter"-->
+            <!--                android:src="@drawable/ic_examine_64"-->
+            <!--                android:background="@null"-->
+            <!--                android:clickable="true"-->
+            <!--                android:layout_marginTop="20dp"-->
+            <!--                android:layout_marginStart="30dp"-->
+            <!--                app:layout_constraintStart_toEndOf="@id/recyclerItemLiveQuizImageView"-->
+            <!--                app:layout_constraintTop_toBottomOf="@id/recyclerItemLiveQuizSubTitleTextView"-->
+            <!--                />-->
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

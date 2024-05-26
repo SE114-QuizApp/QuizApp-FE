@@ -32,6 +32,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
+            android:textColor="@color/black"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textSize="18sp"
             android:layout_marginTop="10dp"
             android:text="Cau truc du lieu va giai thuat"/>

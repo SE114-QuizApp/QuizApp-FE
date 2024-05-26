@@ -359,7 +359,7 @@
                 android:id="@+id/nextQuestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Next -->"
+                android:text="Next >"
                 android:layout_gravity="right"
                 android:layout_marginBottom="10dp"/>
         </LinearLayout>

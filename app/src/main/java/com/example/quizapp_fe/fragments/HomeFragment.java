@@ -51,17 +51,13 @@ public class HomeFragment extends Fragment {
     RecyclerView liveQuizRecyclerView;
     ArrayList<LiveQuizCard> liveQuizCardList;
     LiveQuizAdapter liveQuizAdapter;
-    ImageButton editQuizImageButton;
-    TextView seeAllButtonTextView;
+    TextView seeAllButtonTextView, userNameTextView, noQuizReminderTextView, addNewQuizTextView;
     ConstraintLayout myQuizzesConstraintLayout;
     Button findFriendButton;
     String teacherId;
     ImageView avatarImageView;
-    TextView userNameTextView;
     ImageButton addNewQuizImageButton;
-    TextView noQuizReminderTextView;
     LinearLayout addNewQuizLinearLayout;
-    TextView addNewQuizTextView;
     Context context;
 
     @Override
@@ -156,22 +152,30 @@ public class HomeFragment extends Fragment {
             public void onResponse(Call<ArrayList<Quiz>> call, Response<ArrayList<Quiz>> response) {
                 if (response.isSuccessful()){
                     ArrayList<Quiz> teacherQuizList = response.body();
-                    if (teacherQuizList.size() > 0) {
-                        for (int i = 0; i < teacherQuizList.size(); i++) {
+                    assert teacherQuizList != null;
+                    if (!teacherQuizList.isEmpty()) {
+                        seeAllButtonTextView.setText(String.format("See All (%d)", teacherQuizList.size()));
+                        for (int i = 0; i < (Math.min(teacherQuizList.size(), 5)); i++) {
                             String quizTitle;
                             String quizImage;
                             String quizId;
+                            String quizSubTitle;
+                            int quizNumOfQuestions;
+
                             quizTitle = teacherQuizList.get(i).getName();
                             quizImage = teacherQuizList.get(i).getBackgroundImage();
                             quizId = teacherQuizList.get(i).get_id();
-                            LiveQuizCard liveQuizCard = new LiveQuizCard(quizImage, quizTitle, quizId);
+                            quizSubTitle = teacherQuizList.get(i).getDescription();
+                            quizNumOfQuestions = teacherQuizList.get(i).getNumberOfQuestions();
+
+                            LiveQuizCard liveQuizCard = new LiveQuizCard(quizImage, quizTitle, quizSubTitle, quizId, quizNumOfQuestions);
                             liveQuizCardList.add(liveQuizCard);
                             liveQuizAdapter = new LiveQuizAdapter(context, liveQuizCardList);
                             liveQuizRecyclerView.setAdapter(liveQuizAdapter);
                             liveQuizRecyclerView.setLayoutManager(new LinearLayoutManager(context));
                         }
                     }
-                        else if (liveQuizCardList.size() == 0) {
+                        else if (liveQuizCardList.isEmpty()) {
                             seeAllButtonTextView.setVisibility(View.GONE);
                             noQuizReminderTextView.setText("You have no Quiz");
                             noQuizReminderTextView.setTextSize(20);

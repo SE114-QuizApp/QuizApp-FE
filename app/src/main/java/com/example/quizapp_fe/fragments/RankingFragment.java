@@ -1,7 +1,9 @@
 package com.example.quizapp_fe.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.quizapp_fe.R;
+import com.example.quizapp_fe.activities.HomeActivity;
 import com.example.quizapp_fe.adapters.ViewPagerAdapter;
 import com.example.quizapp_fe.api.user.getListRanking.GetListRankingApi;
 import com.example.quizapp_fe.dialogs.LoadingDialog;
@@ -51,6 +54,16 @@ public class RankingFragment extends Fragment {
         viewPager.setAdapter(adapter);
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(titles[position])).attach();
 
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(requireActivity(), HomeActivity.class);
+                startActivity(intent);
+                requireActivity().finish();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
         return view;
     }
 

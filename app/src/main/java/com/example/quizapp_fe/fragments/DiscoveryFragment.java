@@ -1,9 +1,11 @@
 package com.example.quizapp_fe.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.SearchView;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 
 import com.example.quizapp_fe.R;
 import com.example.quizapp_fe.activities.DiscoverySearchActivity;
+import com.example.quizapp_fe.activities.HomeActivity;
 import com.example.quizapp_fe.adapters.CategoryCardAdapter;
 import com.example.quizapp_fe.api.quiz.get.GetDiscoverQuizzesApi;
 import com.example.quizapp_fe.entities.DiscoverQuiz;
@@ -114,6 +117,15 @@ public class DiscoveryFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(requireActivity(), HomeActivity.class);
+                startActivity(intent);
+                requireActivity().finish();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
 
         return view;
     }
